@@ -10,18 +10,14 @@ export const englishCrmMessages = {
         phone_number: "Phone number",
         created_at: "Created at",
         nb_contacts: "Number of contacts",
-        revenue: "Revenue",
         sector: "Sector",
         size: "Headcount",
         nb_sites: "Number of sites",
-        tax_identifier: "Tax Identifier",
         address: "Address",
         city: "City",
         zipcode: "Zip code",
-        state_abbr: "State",
         country: "Country",
         description: "Description",
-        context_links: "Context links",
         sales_id: "Account manager",
       },
       empty: {
@@ -88,7 +84,6 @@ export const englishCrmMessages = {
         phone_number: "Phone number",
         linkedin_url: "LinkedIn URL",
         background: "Background info (bio, how you met, etc)",
-        has_newsletter: "Has newsletter",
         sales_id: "Linked VitalÔréflex consultant / trainer",
       },
       action: {
@@ -187,7 +182,6 @@ export const englishCrmMessages = {
       fields: {
         name: "Name",
         reference: "Reference",
-        description: "Description",
         company_id: "Company",
         contact_ids: "Linked contacts",
         confidentiality: "Confidentiality",
@@ -195,7 +189,6 @@ export const englishCrmMessages = {
         objectives: "Stated objectives",
         motivation: "Reason for the request",
         other_expectations: "Other stated expectations",
-        category: "Category",
         amount: "Budget",
         expected_closing_date: "Expected closing date",
         stage: "Stage",
@@ -519,7 +512,6 @@ export const englishCrmMessages = {
       },
       dark_mode_logo: "Dark Mode Logo",
       deals: {
-        categories: "Categories",
         currency: "Currency",
         pipeline_help:
           "Select which deal stages should count as pipeline deals.",
@@ -549,7 +541,6 @@ export const englishCrmMessages = {
           "Cannot remove %{display_name} that are still used by deals: %{items}",
         validating: "Validating\u2026",
         entities: {
-          categories: "categories",
           stages: "stages",
         },
       },

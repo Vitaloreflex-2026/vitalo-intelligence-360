@@ -5,7 +5,6 @@ import { CRM } from "@/components/atomic-crm/root/CRM";
  *
  * Customize Atomic CRM by passing props to the CRM component:
  *  - darkTheme
- *  - dealCategories
  *  - dealPipelineStatuses
  *  - dealStages
  *  - lightTheme

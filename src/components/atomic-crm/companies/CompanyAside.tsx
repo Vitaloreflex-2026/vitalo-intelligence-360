@@ -107,7 +107,7 @@ export const CompanyInfo = ({ record }: { record: Company }) => {
 
 export const ContextInfo = ({ record }: { record: Company }) => {
   const translate = useTranslate();
-  if (!record.revenue && !record.id) {
+  if (!record.id) {
     return null;
   }
 
@@ -137,30 +137,13 @@ export const ContextInfo = ({ record }: { record: Company }) => {
           <TextField source="nb_sites" />
         </span>
       )}
-      {record.revenue && (
-        <span>
-          {translate("resources.companies.fields.revenue")}:{" "}
-          <TextField source="revenue" />
-        </span>
-      )}
-      {record.tax_identifier && (
-        <span>
-          {translate("resources.companies.fields.tax_identifier", {})}
-          : <TextField source="tax_identifier" />
-        </span>
-      )}
     </AsideSection>
   );
 };
 
 export const AddressInfo = ({ record }: { record: Company }) => {
   const translate = useTranslate();
-  if (
-    !record.address &&
-    !record.city &&
-    !record.zipcode &&
-    !record.state_abbr
-  ) {
+  if (!record.address && !record.city && !record.zipcode) {
     return null;
   }
 
@@ -172,7 +155,6 @@ export const AddressInfo = ({ record }: { record: Company }) => {
       <TextField source="address" />
       <TextField source="city" />
       <TextField source="zipcode" />
-      <TextField source="state_abbr" />
       <TextField source="country" />
     </AsideSection>
   );
@@ -186,18 +168,9 @@ export const AdditionalInfo = ({ record }: { record: Company }) => {
   const salesName = useGetSalesName(record.sales_id, {
     enabled: !isCurrentUser,
   });
-  if (
-    !record.created_at &&
-    !record.sales_id &&
-    !record.description &&
-    !record.context_links
-  ) {
+  if (!record.created_at && !record.sales_id && !record.description) {
     return null;
   }
-  const getBaseURL = (url: string) => {
-    const urlObject = new URL(url.startsWith("http") ? url : `https://${url}`);
-    return urlObject.hostname;
-  };
 
   return (
     <AsideSection
@@ -205,24 +178,6 @@ export const AdditionalInfo = ({ record }: { record: Company }) => {
     >
       {record.description && (
         <p className="text-sm  mb-1">{record.description}</p>
-      )}
-      {record.context_links && (
-        <div className="flex flex-col">
-          {record.context_links.map((link, index) =>
-            link ? (
-              <a
-                key={index}
-                className="text-sm underline hover:no-underline mb-1"
-                href={link.startsWith("http") ? link : `https://${link}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={link}
-              >
-                {getBaseURL(link)}
-              </a>
-            ) : null,
-          )}
-        </div>
       )}
       {record.sales_id !== null && (
         <div className="inline-flex text-sm text-muted-foreground mb-1">

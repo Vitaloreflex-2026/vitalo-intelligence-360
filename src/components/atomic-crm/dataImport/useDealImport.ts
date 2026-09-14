@@ -27,7 +27,7 @@ type DealRow = {
  * holds a company name: matching companies are reused, unknown ones are created.
  */
 export function useDealImport(): ProcessImportBatch {
-  const { dealCategories, dealStages } = useConfigurationContext();
+  const { dealStages } = useConfigurationContext();
   const { identity } = useGetIdentity();
   const dataProvider = useDataProvider();
   const getCompanies = useCompanyResolver();
@@ -62,9 +62,7 @@ export function useDealImport(): ProcessImportBatch {
                 ? companies.get(companyName)?.id
                 : undefined,
               contact_ids: [],
-              category: toConfiguredValue(row.category, dealCategories),
               stage,
-              description: toText(row.description),
               reference: toText(row.reference),
               confidentiality: toText(row.confidentiality),
               origin: toText(row.origin),
@@ -83,7 +81,7 @@ export function useDealImport(): ProcessImportBatch {
         ),
       );
     },
-    [dataProvider, dealCategories, dealStages, getCompanies, identity?.id],
+    [dataProvider, dealStages, getCompanies, identity?.id],
   );
 }
 

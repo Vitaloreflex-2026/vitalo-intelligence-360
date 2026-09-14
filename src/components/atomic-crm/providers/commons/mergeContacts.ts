@@ -149,8 +149,6 @@ export const mergeContacts = async (
       phone_jsonb: mergedPhones,
       linkedin_url: winnerContact.linkedin_url || loserContact.linkedin_url,
       background: winnerContact.background ?? loserContact.background,
-      has_newsletter:
-        winnerContact.has_newsletter ?? loserContact.has_newsletter,
       first_seen: winnerContact.first_seen ?? loserContact.first_seen,
       last_seen:
         winnerContact.last_seen > loserContact.last_seen

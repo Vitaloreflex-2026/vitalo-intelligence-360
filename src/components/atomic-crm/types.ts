@@ -71,14 +71,10 @@ export type Company = {
   address: string;
   zipcode: string;
   city: string;
-  state_abbr: string;
   sales_id?: Identifier;
   created_at: string;
   description: string;
-  revenue: string;
-  tax_identifier: string;
   country: string;
-  context_links?: string[];
   nb_contacts?: number;
   nb_deals?: number;
   nb_sites?: number | null;
@@ -104,7 +100,6 @@ export type Contact = {
   linkedin_url?: string | null;
   first_seen: string;
   last_seen: string;
-  has_newsletter: boolean;
   tags: number[];
   gender: string;
   sales_id?: Identifier;
@@ -132,9 +127,7 @@ export type Deal = {
   name: string;
   company_id: Identifier;
   contact_ids: Identifier[];
-  category: string;
   stage: string;
-  description: string;
   amount: number;
   created_at: string;
   updated_at: string;

@@ -35,7 +35,6 @@ const DealInfoInputs = () => {
     <div className="flex flex-col gap-4 flex-1">
       <TextInput source="name" validate={required()} helperText={false} />
       <TextInput source="reference" helperText={false} />
-      <TextInput source="description" multiline rows={3} helperText={false} />
       <TextInput source="motivation" multiline rows={4} helperText={false} />
       <TextInput
         source="other_expectations"
@@ -74,7 +73,7 @@ const DealLinkedToInputs = () => {
 };
 
 const DealMiscInputs = () => {
-  const { dealStages, dealCategories } = useConfigurationContext();
+  const { dealStages } = useConfigurationContext();
   const translate = useTranslate();
   return (
     <div className="flex flex-col gap-4 flex-1">
@@ -89,13 +88,6 @@ const DealMiscInputs = () => {
       />
       <ChoiceInput source="origin" category="deal_origin" />
       <ChoiceInput source="objectives" category="deal_objective" multiple />
-      <SelectInput
-        source="category"
-        choices={dealCategories}
-        optionText="label"
-        optionValue="value"
-        helperText={false}
-      />
       <NumberInput
         source="amount"
         defaultValue={0}

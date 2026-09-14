@@ -1,10 +1,7 @@
 import { add } from "date-fns";
 import { datatype, lorem, random } from "faker/locale/en_US";
 
-import {
-  defaultDealCategories,
-  defaultDealStages,
-} from "../../../root/defaultConfiguration";
+import { defaultDealStages } from "../../../root/defaultConfiguration";
 import type { Deal } from "../../../types";
 import { choiceLabels } from "./choices";
 import type { Db } from "./types";
@@ -33,7 +30,6 @@ export const generateDeals = (db: Db): Deal[] => {
       name: lowercaseName[0].toUpperCase() + lowercaseName.slice(1),
       company_id: company.id,
       contact_ids: contacts.map((contact) => contact.id),
-      category: random.arrayElement(defaultDealCategories).value,
       reference: `DOS-${String(id + 1).padStart(4, "0")}`,
       confidentiality: random.arrayElement([
         "prospect",
@@ -48,7 +44,6 @@ export const generateDeals = (db: Db): Deal[] => {
       motivation: lorem.paragraph(),
       other_expectations: lorem.sentence(),
       stage: random.arrayElement(defaultDealStages).value,
-      description: lorem.paragraphs(datatype.number({ min: 1, max: 4 })),
       amount: datatype.number(1000) * 100,
       created_at,
       updated_at: randomDate(new Date(created_at)).toISOString(),

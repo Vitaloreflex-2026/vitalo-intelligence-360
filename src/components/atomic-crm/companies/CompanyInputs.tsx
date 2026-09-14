@@ -3,8 +3,6 @@ import { ReferenceInput } from "@/components/admin/reference-input";
 import { TextInput } from "@/components/admin/text-input";
 import { SelectInput } from "@/components/admin/select-input";
 import { NumberInput } from "@/components/admin/number-input";
-import { ArrayInput } from "@/components/admin/array-input";
-import { SimpleFormIterator } from "@/components/admin/simple-form-iterator";
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -111,8 +109,6 @@ const CompanyContextInputs = () => {
       <ChoiceInput source="sector" category="company_sector" />
       <SelectInput source="size" choices={translatedSizes} helperText={false} />
       <NumberInput source="nb_sites" min={0} helperText={false} />
-      <TextInput source="revenue" helperText={false} />
-      <TextInput source="tax_identifier" helperText={false} />
     </div>
   );
 };
@@ -129,7 +125,6 @@ const CompanyAddressInputs = () => {
       <TextInput source="address" helperText={false} />
       <TextInput source="city" helperText={false} />
       <TextInput source="zipcode" helperText={false} />
-      <TextInput source="state_abbr" helperText={false} />
       <TextInput source="country" helperText={false} />
     </div>
   );
@@ -145,16 +140,6 @@ const CompanyAdditionalInformationInputs = () => {
         })}
       </h6>
       <TextInput source="description" multiline helperText={false} />
-      <ArrayInput source="context_links" helperText={false}>
-        <SimpleFormIterator disableReordering fullWidth getItemLabel={false}>
-          <TextInput
-            source=""
-            label={false}
-            helperText={false}
-            validate={isUrl}
-          />
-        </SimpleFormIterator>
-      </ArrayInput>
       <ReferenceInput
         source="sales_id"
         reference="sales"

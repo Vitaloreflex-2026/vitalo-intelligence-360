@@ -171,7 +171,6 @@ async function createContact({
       sales_id,
       first_seen: new Date().toISOString(),
       last_seen: new Date().toISOString(),
-      has_newsletter: false,
       tags: [],
       gender: "unknown",
       status: "cold",

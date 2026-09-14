@@ -2,7 +2,6 @@ import { Draggable } from "@hello-pangea/dnd";
 import { useRedirect, RecordContextProvider } from "ra-core";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { NumberField } from "@/components/admin/number-field";
-import { SelectField } from "@/components/admin/select-field";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { CompanyAvatar } from "../companies/CompanyAvatar";
@@ -30,7 +29,7 @@ export const DealCardContent = ({
   snapshot?: any;
   deal: Deal;
 }) => {
-  const { dealCategories, currency } = useConfigurationContext();
+  const { currency } = useConfigurationContext();
   const redirect = useRedirect();
   const handleClick = () => {
     redirect(`/deals/${deal.id}/show`, undefined, undefined, undefined, {
@@ -83,13 +82,6 @@ export const DealCardContent = ({
                   currencyDisplay: "narrowSymbol",
                   minimumSignificantDigits: 3,
                 }}
-              />
-              {deal.category && ", "}
-              <SelectField
-                source="category"
-                choices={dealCategories}
-                optionText="label"
-                optionValue="value"
               />
             </p>
           </CardContent>

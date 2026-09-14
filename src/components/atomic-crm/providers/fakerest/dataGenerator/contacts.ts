@@ -106,7 +106,6 @@ export const generateContacts = (db: Db, size = 500): Required<Contact>[] => {
       avatar,
       first_seen: first_seen,
       last_seen: last_seen,
-      has_newsletter: weightedBoolean(30),
       status: random.arrayElement(defaultNoteStatuses).value,
       tags: random
         .arrayElements(db.tags, random.arrayElement([0, 0, 0, 1, 1, 2]))

@@ -23,14 +23,6 @@ export const defaultDealStages = [
 
 export const defaultDealPipelineStatuses = ["won"];
 
-export const defaultDealCategories = [
-  { value: "other", label: "Other" },
-  { value: "copywriting", label: "Copywriting" },
-  { value: "print-project", label: "Print project" },
-  { value: "ui-design", label: "UI Design" },
-  { value: "website-design", label: "Website design" },
-];
-
 export const defaultNoteStatuses = [
   { value: "cold", label: "Cold", color: "#7dbde8" },
   { value: "warm", label: "Warm", color: "#e8cb7d" },
@@ -52,7 +44,6 @@ export const defaultTaskTypes = [
 
 export const defaultConfiguration: ConfigurationContextValue = {
   currency: defaultCurrency,
-  dealCategories: defaultDealCategories,
   dealPipelineStatuses: defaultDealPipelineStatuses,
   dealStages: defaultDealStages,
   noteStatuses: defaultNoteStatuses,
