@@ -29,7 +29,7 @@ test("user onboarding", async ({ page, isMobile, menu, dismissToast }) => {
   await page.getByLabel("Last name").fill("Smith");
   await page.getByLabel("Title").fill("CEO");
   await page.getByLabel("Company", { exact: true }).click();
-  await page.getByPlaceholder("Search").fill("Smith Corp");
+  await page.getByPlaceholder("Search", { exact: true }).fill("Smith Corp");
   await page.getByText("Create Smith Corp").click();
   await page
     .getByRole("group", { name: "Email addresses" })
@@ -89,7 +89,8 @@ test("user onboarding", async ({ page, isMobile, menu, dismissToast }) => {
   await dismissToast("Note added");
 
   await expect(
-    page.getByText(isMobile ? "Me" : "You added a note", { exact: false }),
+    // exact on mobile: the "0 meetings" tab label also contains "Me"
+    page.getByText(isMobile ? "Me" : "You added a note", { exact: isMobile }),
   ).toBeVisible();
   await expect(page.getByText("This is a note about Jane.")).toBeVisible();
 
