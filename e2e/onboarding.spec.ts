@@ -28,8 +28,9 @@ test("user onboarding", async ({ page, isMobile, menu, dismissToast }) => {
   await page.getByLabel("First name").fill("Jane");
   await page.getByLabel("Last name").fill("Smith");
   await page.getByLabel("Title").fill("CEO");
-  await page.getByLabel("Company", { exact: true }).click();
-  await page.getByPlaceholder("Search", { exact: true }).fill("Smith Corp");
+  await page.getByRole("combobox", { name: "Company" }).click();
+  // the company popover input; the plain "Search" one is the Linked contacts field
+  await page.getByPlaceholder("Search...").fill("Smith Corp");
   await page.getByText("Create Smith Corp").click();
   await page
     .getByRole("group", { name: "Email addresses" })
