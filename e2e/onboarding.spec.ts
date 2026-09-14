@@ -28,7 +28,7 @@ test("user onboarding", async ({ page, isMobile, menu, dismissToast }) => {
   await page.getByLabel("First name").fill("Jane");
   await page.getByLabel("Last name").fill("Smith");
   await page.getByLabel("Title").fill("CEO");
-  await page.getByLabel("Company").click();
+  await page.getByLabel("Company", { exact: true }).click();
   await page.getByPlaceholder("Search").fill("Smith Corp");
   await page.getByText("Create Smith Corp").click();
   await page
@@ -59,7 +59,9 @@ test("user onboarding", async ({ page, isMobile, menu, dismissToast }) => {
 
   await page.getByLabel("Has newsletter").check();
 
-  await expect(page.getByLabel("Account manager *")).toHaveText("John Doe");
+  await expect(
+    page.getByLabel("Linked VitalÔréflex consultant / trainer *"),
+  ).toHaveText("John Doe");
 
   await page.getByRole("button", { name: "Save" }).click();
 
