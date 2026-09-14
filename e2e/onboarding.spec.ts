@@ -28,8 +28,9 @@ test("user onboarding", async ({ page, isMobile, menu, dismissToast }) => {
   await page.getByLabel("First name").fill("Jane");
   await page.getByLabel("Last name").fill("Smith");
   await page.getByLabel("Title").fill("CEO");
-  await page.getByLabel("Company").click();
-  await page.getByPlaceholder("Search").fill("Smith Corp");
+  await page.getByRole("combobox", { name: "Company" }).click();
+  // the company popover input; the plain "Search" one is the Linked contacts field
+  await page.getByPlaceholder("Search...").fill("Smith Corp");
   await page.getByText("Create Smith Corp").click();
   await page
     .getByRole("group", { name: "Email addresses" })
@@ -59,7 +60,9 @@ test("user onboarding", async ({ page, isMobile, menu, dismissToast }) => {
 
   await page.getByLabel("Has newsletter").check();
 
-  await expect(page.getByLabel("Account manager *")).toHaveText("John Doe");
+  await expect(
+    page.getByLabel("Linked VitalÔréflex consultant / trainer *"),
+  ).toHaveText("John Doe");
 
   await page.getByRole("button", { name: "Save" }).click();
 
@@ -87,7 +90,8 @@ test("user onboarding", async ({ page, isMobile, menu, dismissToast }) => {
   await dismissToast("Note added");
 
   await expect(
-    page.getByText(isMobile ? "Me" : "You added a note", { exact: false }),
+    // exact on mobile: the "0 meetings" tab label also contains "Me"
+    page.getByText(isMobile ? "Me" : "You added a note", { exact: isMobile }),
   ).toBeVisible();
   await expect(page.getByText("This is a note about Jane.")).toBeVisible();
 
