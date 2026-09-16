@@ -25,6 +25,7 @@ import {
   FieldTitle,
   useEvent,
 } from "ra-core";
+import { cn } from "@/lib/utils";
 import { InputHelperText } from "./input-helper-text";
 import { useCallback } from "react";
 
@@ -195,34 +196,41 @@ export const AutocompleteArrayInput = (
           shouldFilter={!isFromReference}
           className="overflow-visible bg-transparent"
         >
-          <div className="group rounded-md bg-transparent dark:bg-input/30 border border-input px-3 py-1.75 text-sm transition-all ring-offset-background focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]">
+          <div
+            className={cn(
+              "group rounded-md bg-transparent dark:bg-input/30 border border-input px-3 py-1.75 text-sm transition-all ring-offset-background focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
+              field.disabled && "opacity-50 cursor-not-allowed",
+            )}
+          >
             <div className="flex flex-wrap gap-1">
               {selectedChoices.map((choice) => (
                 <Badge key={getChoiceValue(choice)} variant="outline">
                   {getInputText(choice)}
-                  <button
-                    className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
+                  {!field.disabled && (
+                    <button
+                      className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleUnselect(choice);
+                        }
+                      }}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
                         handleUnselect(choice);
-                      }
-                    }}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleUnselect(choice);
-                    }}
-                  >
-                    <span className="sr-only">
-                      {translate("ra.action.remove", {
-                        _: "Remove",
-                      })}
-                    </span>
-                    <X className="h-3 w-3" />
-                  </button>
+                      }}
+                    >
+                      <span className="sr-only">
+                        {translate("ra.action.remove", {
+                          _: "Remove",
+                        })}
+                      </span>
+                      <X className="h-3 w-3" />
+                    </button>
+                  )}
                 </Badge>
               ))}
               {/* Avoid having the "Search" Icon by not using CommandInput */}
@@ -243,7 +251,8 @@ export const AutocompleteArrayInput = (
                 onBlur={() => setOpen(false)}
                 onFocus={() => setOpen(true)}
                 placeholder={placeholder}
-                className="ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
+                disabled={field.disabled}
+                className="ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
               />
             </div>
           </div>

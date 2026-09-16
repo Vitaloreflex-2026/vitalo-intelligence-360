@@ -1,4 +1,5 @@
 import { required, useTranslate } from "ra-core";
+import { useWatch } from "react-hook-form";
 import { AutocompleteArrayInput } from "@/components/admin/autocomplete-array-input";
 import { ReferenceArrayInput } from "@/components/admin/reference-array-input";
 import { ReferenceInput } from "@/components/admin/reference-input";
@@ -49,6 +50,7 @@ const DealInfoInputs = () => {
 
 const DealLinkedToInputs = () => {
   const translate = useTranslate();
+  const companyId = useWatch({ name: "company_id" });
   return (
     <div className="flex flex-col gap-4 flex-1">
       <h3 className="text-base font-medium">
@@ -62,11 +64,16 @@ const DealLinkedToInputs = () => {
         />
       </ReferenceInput>
 
-      <ReferenceArrayInput source="contact_ids" reference="contacts_summary">
+      <ReferenceArrayInput
+        source="contact_ids"
+        reference="contacts_summary"
+        filter={companyId ? { company_id: companyId } : undefined}
+      >
         <AutocompleteArrayInput
           label="resources.deals.fields.contact_ids"
           optionText={contactOptionText}
           helperText={false}
+          disabled={!companyId}
         />
       </ReferenceArrayInput>
     </div>
