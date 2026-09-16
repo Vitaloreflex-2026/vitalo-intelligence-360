@@ -24,10 +24,12 @@ export const TasksListByDueDate = ({
   filterByContact,
   emptyPlaceholder,
   pendingPlaceholder,
+  hideDueLater,
 }: {
   filterByContact?: Identifier;
   emptyPlaceholder?: React.ReactNode;
   pendingPlaceholder?: React.ReactNode;
+  hideDueLater?: boolean;
 }) => {
   const { identity } = useGetIdentity();
   const isMobile = useIsMobile();
@@ -127,12 +129,14 @@ export const TasksListByDueDate = ({
           isMobile={isMobile}
         />
       )}
-      <TaskListFilter
-        tasks={dueLaterTasks}
-        title={translate("resources.tasks.filters.later")}
-        showContact={showContact}
-        isMobile={isMobile}
-      />
+      {!hideDueLater && (
+        <TaskListFilter
+          tasks={dueLaterTasks}
+          title={translate("resources.tasks.filters.later")}
+          showContact={showContact}
+          isMobile={isMobile}
+        />
+      )}
     </div>
   );
 };
