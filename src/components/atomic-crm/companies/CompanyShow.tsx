@@ -25,13 +25,10 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { ActivityLog } from "../activity/ActivityLog";
 import { Avatar } from "../contacts/Avatar";
 import { TagsList } from "../contacts/TagsList";
-import { findDealLabel } from "../deals/dealUtils";
 import { MobileContent } from "../layout/MobileContent";
 import MobileHeader from "../layout/MobileHeader";
 import { MobileBackButton } from "../misc/MobileBackButton";
 import { formatRelativeDate } from "../misc/RelativeDate";
-import { Status } from "../misc/Status";
-import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Company, Contact, Deal } from "../types";
 import {
   AdditionalInfo,
@@ -229,7 +226,6 @@ const ContactsIterator = () => {
                     {translate("crm.common.last_activity_with_date", {
                       date: formatRelativeDate(contact.last_seen, locale),
                     })}{" "}
-                    <Status status={contact.status} />
                   </div>
                 </div>
               )}
@@ -262,7 +258,6 @@ const DealsIterator = () => {
   const translate = useTranslate();
   const [locale = "en"] = useLocaleState();
   const { data: deals, error, isPending } = useListContext<Deal>();
-  const { dealStages, currency } = useConfigurationContext();
   if (isPending || error) return null;
   return (
     <div>
@@ -274,17 +269,14 @@ const DealsIterator = () => {
               className="flex items-center justify-between hover:bg-muted py-2 px-4 transition-colors"
             >
               <div className="flex-1 min-w-0">
-                <div className="font-medium">{deal.name}</div>
-                <div className="text-sm text-muted-foreground">
-                  {findDealLabel(dealStages, deal.stage)},{" "}
-                  {deal.amount.toLocaleString("en-US", {
-                    notation: "compact",
-                    style: "currency",
-                    currency,
-                    currencyDisplay: "narrowSymbol",
-                    minimumSignificantDigits: 3,
-                  })}
+                <div className="font-medium">
+                  {deal.reference || `#${deal.id}`}
                 </div>
+                {deal.origin && (
+                  <div className="text-sm text-muted-foreground">
+                    {deal.origin}
+                  </div>
+                )}
               </div>
               <div className="text-right">
                 <div className="text-sm text-muted-foreground">

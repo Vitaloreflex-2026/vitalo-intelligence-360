@@ -1,11 +1,4 @@
-import {
-  email,
-  required,
-  useRecordContext,
-  useTranslate,
-  useUpdate,
-  useNotify,
-} from "ra-core";
+import { email, required, useTranslate } from "ra-core";
 import type { FocusEvent, ClipboardEventHandler } from "react";
 import { useFormContext } from "react-hook-form";
 import { Separator } from "@/components/ui/separator";
@@ -21,8 +14,7 @@ import { AutocompleteArrayInput } from "@/components/admin/autocomplete-array-in
 import { ReferenceArrayInput } from "@/components/admin/reference-array-input";
 
 import { isLinkedinUrl } from "../misc/isLinkedInUrl";
-import { StatusSelector } from "../notes";
-import type { Sale, Contact } from "../types";
+import type { Sale } from "../types";
 import { Avatar } from "./Avatar";
 import { AutocompleteCompanyInput } from "../companies/AutocompleteCompanyInput.tsx";
 import { CompanyContactsCount } from "./CompanyContactsCount";
@@ -255,49 +247,3 @@ const ContactMiscInputs = () => {
 
 const saleOptionRenderer = (choice: Sale) =>
   `${choice.first_name} ${choice.last_name}`;
-
-export const ContactStatusSelector = () => {
-  const record = useRecordContext<Contact>();
-  const [update] = useUpdate<Contact>();
-  const notify = useNotify();
-  if (!record) return null;
-
-  const handleStatusChange = (nextStatus: string) => {
-    if (nextStatus === record?.status) return;
-
-    update(
-      "contacts",
-      {
-        id: record.id,
-        data: { status: nextStatus },
-        previousData: record,
-      },
-      {
-        mutationMode: "optimistic",
-        onError: (error) => {
-          notify(
-            typeof error === "string"
-              ? error
-              : error?.message || "ra.notification.http_error",
-            {
-              type: "error",
-              messageArgs: {
-                _: typeof error === "string" ? error : error?.message,
-              },
-            },
-          );
-        },
-      },
-    );
-  };
-
-  return (
-    <div className="[&_button]:w-auto">
-      <StatusSelector
-        status={record?.status}
-        setStatus={handleStatusChange}
-        triggerClassName="w-full"
-      />
-    </div>
-  );
-};

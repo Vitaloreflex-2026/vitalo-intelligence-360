@@ -107,7 +107,6 @@ select
     co.avatar,
     co.first_seen,
     co.last_seen,
-    co.status,
     co.tags,
     co.company_id,
     co.sales_id,

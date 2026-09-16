@@ -8,27 +8,7 @@ import lightModeLogo from "./logos/logo_atomic_crm_light.svg";
 export const defaultDarkModeLogo = darkModeLogo;
 export const defaultLightModeLogo = lightModeLogo;
 
-export const defaultCurrency = "USD";
-
 export const defaultTitle = "Vital Ô Réflex 360°";
-
-export const defaultDealStages = [
-  { value: "opportunity", label: "Opportunity" },
-  { value: "proposal-sent", label: "Proposal Sent" },
-  { value: "in-negociation", label: "In Negotiation" },
-  { value: "won", label: "Won" },
-  { value: "lost", label: "Lost" },
-  { value: "delayed", label: "Delayed" },
-];
-
-export const defaultDealPipelineStatuses = ["won"];
-
-export const defaultNoteStatuses = [
-  { value: "cold", label: "Cold", color: "#7dbde8" },
-  { value: "warm", label: "Warm", color: "#e8cb7d" },
-  { value: "hot", label: "Hot", color: "#e88b7d" },
-  { value: "in-contract", label: "In Contract", color: "#a4e87d" },
-];
 
 export const defaultTaskTypes = [
   { value: "none", label: "None" },
@@ -43,10 +23,6 @@ export const defaultTaskTypes = [
 ];
 
 export const defaultConfiguration: ConfigurationContextValue = {
-  currency: defaultCurrency,
-  dealPipelineStatuses: defaultDealPipelineStatuses,
-  dealStages: defaultDealStages,
-  noteStatuses: defaultNoteStatuses,
   taskTypes: defaultTaskTypes,
   title: defaultTitle,
   darkModeLogo: defaultDarkModeLogo,

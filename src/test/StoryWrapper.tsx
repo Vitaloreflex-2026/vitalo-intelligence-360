@@ -99,24 +99,20 @@ export const buildContact = (overrides: Partial<Contact> = {}): Contact => ({
   nb_tasks: 0,
   phone_jsonb: [],
   sales_id: 0,
-  status: "warm",
   tags: [],
   title: "CTO",
   ...overrides,
 });
 
 export const buildDeal = (overrides: Partial<Deal> = {}): Deal => ({
-  amount: 1000,
   archived_at: undefined,
   company_id: 1,
   contact_ids: [],
   created_at: "2025-01-01T09:00:00.000Z",
   expected_closing_date: "2025-02-01T09:00:00.000Z",
   id: 1,
-  index: 0,
-  name: "Acme deal",
+  reference: "DOS-0001",
   sales_id: 0,
-  stage: "opportunity",
   updated_at: "2025-01-01T09:00:00.000Z",
   ...overrides,
 });

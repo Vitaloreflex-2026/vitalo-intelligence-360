@@ -1,4 +1,3 @@
-import type { LabeledValue } from "../types";
 import type { ImportCell } from "./types";
 
 /** Trimmed cell content, or undefined when the cell is empty. */
@@ -14,16 +13,6 @@ export const toNumber = (cell: ImportCell): number | undefined => {
   if (text === undefined) return undefined;
   const value = Number(text);
   return Number.isFinite(value) ? value : undefined;
-};
-
-/**
- * Cell content as a whole number, for the integer columns of the database: an
- * amount of `4500.50` would make PostgREST reject the whole row with
- * `invalid input syntax for type bigint`.
- */
-export const toInteger = (cell: ImportCell): number | undefined => {
-  const value = toNumber(cell);
-  return value === undefined ? undefined : Math.round(value);
 };
 
 const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
@@ -48,22 +37,4 @@ export const toIsoDate = (cell: ImportCell): string | undefined => {
   // March 3 — so the parsed date has to name the day back
   const iso = date.toISOString();
   return iso.startsWith(text) ? iso : undefined;
-};
-
-/**
- * Cell content matched against configured options, so a CSV may carry either the
- * stored value ("proposal-sent") or the label users see ("Proposal Sent").
- * Returns undefined when the cell is empty or matches no option.
- */
-export const toConfiguredValue = (
-  cell: ImportCell,
-  options: LabeledValue[],
-): string | undefined => {
-  const text = toText(cell)?.toLowerCase();
-  if (text === undefined) return undefined;
-  return options.find(
-    (option) =>
-      option.value.toLowerCase() === text ||
-      option.label.toLowerCase() === text,
-  )?.value;
 };

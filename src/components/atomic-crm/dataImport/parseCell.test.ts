@@ -1,17 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  toConfiguredValue,
-  toInteger,
-  toIsoDate,
-  toNumber,
-  toText,
-} from "./parseCell";
-
-const stages = [
-  { value: "opportunity", label: "Opportunity" },
-  { value: "proposal-sent", label: "Proposal Sent" },
-];
+import { toIsoDate, toNumber, toText } from "./parseCell";
 
 describe("toText", () => {
   it("trims the cell content", () => {
@@ -41,18 +30,6 @@ describe("toNumber", () => {
   });
 });
 
-describe("toInteger", () => {
-  it("rounds a fractional cell, which an integer column would reject", () => {
-    expect(toInteger("4500.50")).toBe(4501);
-    expect(toInteger(12000)).toBe(12000);
-  });
-
-  it("returns undefined for an empty or non-numeric cell", () => {
-    expect(toInteger(null)).toBeUndefined();
-    expect(toInteger("a lot")).toBeUndefined();
-  });
-});
-
 describe("toIsoDate", () => {
   it("converts a date cell to an ISO string", () => {
     expect(toIsoDate("2026-09-30")).toBe("2026-09-30T00:00:00.000Z");
@@ -74,21 +51,5 @@ describe("toIsoDate", () => {
     // An impossible day rolls over to the next month rather than failing
     expect(toIsoDate("2026-02-31")).toBeUndefined();
     expect(toIsoDate("2026-13-01")).toBeUndefined();
-  });
-});
-
-describe("toConfiguredValue", () => {
-  it("matches a configured value", () => {
-    expect(toConfiguredValue("proposal-sent", stages)).toBe("proposal-sent");
-  });
-
-  it("matches a configured label, whatever its case", () => {
-    expect(toConfiguredValue("Proposal Sent", stages)).toBe("proposal-sent");
-    expect(toConfiguredValue("proposal sent", stages)).toBe("proposal-sent");
-  });
-
-  it("returns undefined when no option matches", () => {
-    expect(toConfiguredValue("Archived", stages)).toBeUndefined();
-    expect(toConfiguredValue(null, stages)).toBeUndefined();
   });
 });

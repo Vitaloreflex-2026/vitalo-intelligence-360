@@ -5,7 +5,6 @@ import { useState } from "react";
 import { createDataProvider } from "@/components/atomic-crm/providers/fakerest";
 import { DEFAULT_USER } from "@/components/atomic-crm/providers/fakerest/authProvider";
 import type { Db } from "@/components/atomic-crm/providers/fakerest/dataGenerator/types";
-import type { Deal } from "@/components/atomic-crm/types";
 import { createCrmDb, StoryWrapper } from "@/test/StoryWrapper";
 import type { DataProvider } from "ra-core";
 import { DataImportButton } from "./DataImportButton";
@@ -194,17 +193,16 @@ describe("DataImportButton", () => {
       .not.toBeInTheDocument();
   });
 
-  it("imports deals, reusing one company and defaulting a missing stage", async () => {
+  it("imports deals, reusing one company across rows", async () => {
     const { dataProvider, screen } = await renderImport(useDealImport, [
       {
-        name: "New website",
+        reference: "DOS-0001",
         company: "Acme",
         origin: "Site internet",
-        stage: "Proposal Sent",
-        amount: "12000",
+        objectives: "Sensibiliser, Former",
         expected_closing_date: "2026-09-30",
       },
-      { name: "Print campaign", company: "Acme", stage: null },
+      { reference: "DOS-0002", company: "Acme" },
     ]);
 
     await screen.getByRole("button", { name: "run import" }).click();
@@ -217,49 +215,14 @@ describe("DataImportButton", () => {
     const { data: deals } = await listAll(dataProvider, "deals");
     expect(deals).toHaveLength(2);
     expect(deals[0]).toMatchObject({
-      amount: 12000,
+      reference: "DOS-0001",
       origin: "Site internet",
+      objectives: ["Sensibiliser", "Former"],
       company_id: companies[0].id,
-      name: "New website",
-      stage: "proposal-sent",
     });
     expect(deals[0].expected_closing_date).toBe("2026-09-30T00:00:00.000Z");
     // Both rows name the same company, which is created once and shared
     expect(deals[1].company_id).toBe(companies[0].id);
-    // stage is required, so an empty cell falls back to the first stage
-    expect(deals[1].stage).toBe("opportunity");
-  });
-
-  it("appends imported deals below the deals already in their stage", async () => {
-    const { dataProvider, screen } = await renderImport(
-      useDealImport,
-      [
-        { name: "First", stage: "Opportunity" },
-        { name: "Second", stage: "Opportunity" },
-        { name: "Other column", stage: "Proposal Sent" },
-      ],
-      {
-        deals: [
-          { id: 1, name: "Already there", stage: "opportunity", index: 0 },
-        ] as Deal[],
-      },
-    );
-
-    await screen.getByRole("button", { name: "run import" }).click();
-    await expect.element(screen.getByText("imported")).toBeVisible();
-
-    const { data: deals } = await listAll(dataProvider, "deals");
-    // The Kanban board sorts a column on `index` and reorders it by shifting
-    // the indexes around the drop target, so two deals of one stage sharing an
-    // index cannot be dragged at all
-    expect(
-      deals.map(({ name, stage, index }) => ({ name, stage, index })),
-    ).toEqual([
-      { name: "Already there", stage: "opportunity", index: 0 },
-      { name: "First", stage: "opportunity", index: 1 },
-      { name: "Second", stage: "opportunity", index: 2 },
-      { name: "Other column", stage: "proposal-sent", index: 0 },
-    ]);
   });
 
   it("imports a deal the dialog parsed, down to its owner", async () => {
@@ -282,8 +245,8 @@ describe("DataImportButton", () => {
       .getByLabelText("CSV File")
       .upload(
         csvFile("deals.csv", [
-          "name,company,stage,amount,expected_closing_date",
-          "New website,Acme,Proposal Sent,4500.50,2026-09-30",
+          "reference,company,origin,expected_closing_date",
+          "DOS-0001,Acme,Site internet,2026-09-30",
         ]),
       );
     await screen.getByRole("button", { name: "Start import" }).click();
@@ -296,10 +259,9 @@ describe("DataImportButton", () => {
     // wiring this feature adds is covered too — the owner in particular, which
     // the dialog is the only thing to bring in
     expect(deals[0]).toMatchObject({
-      // A fractional amount would make the bigint column reject the row
-      amount: 4501,
+      reference: "DOS-0001",
+      origin: "Site internet",
       sales_id: DEFAULT_USER.id,
-      stage: "proposal-sent",
     });
     expect(deals[0].expected_closing_date).toBe("2026-09-30T00:00:00.000Z");
   });

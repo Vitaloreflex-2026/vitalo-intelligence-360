@@ -184,29 +184,11 @@ export const createDataProvider = ({
       return baseDataProvider.getList(resource, params);
     },
     unarchiveDeal: async (deal: Deal) => {
-      // get all deals where stage is the same as the deal to unarchive
-      const { data: deals } = await baseDataProvider.getList<Deal>("deals", {
-        filter: { stage: deal.stage },
-        pagination: { page: 1, perPage: 1000 },
-        sort: { field: "index", order: "ASC" },
+      return await dataProvider.update("deals", {
+        id: deal.id,
+        data: { archived_at: null },
+        previousData: deal,
       });
-
-      // set index for each deal starting from 1, if the deal to unarchive is found, set its index to the last one
-      const updatedDeals = deals.map((d, index) => ({
-        ...d,
-        index: d.id === deal.id ? 0 : index + 1,
-        archived_at: d.id === deal.id ? null : d.archived_at,
-      }));
-
-      return await Promise.all(
-        updatedDeals.map((updatedDeal) =>
-          dataProvider.update("deals", {
-            id: updatedDeal.id,
-            data: updatedDeal,
-            previousData: deals.find((d) => d.id === updatedDeal.id),
-          }),
-        ),
-      );
     },
     signUp: async ({
       email,

@@ -24,7 +24,6 @@ import { NoteCreate, NotesIterator, NotesIteratorMobile } from "../notes";
 import { NoteCreateSheet } from "../notes/NoteCreateSheet";
 import { TagsListEdit } from "./TagsListEdit";
 import { ContactEditSheet } from "./ContactEditSheet";
-import { ContactStatusSelector } from "./ContactInputs";
 import { ContactPersonalInfo } from "./ContactPersonalInfo";
 import { ContactBackgroundInfo } from "./ContactBackgroundInfo";
 import { ContactPositionInfo } from "./ContactPositionInfo";
@@ -178,7 +177,7 @@ const ContactShowContentMobile = () => {
                 },
               }}
             >
-              <NotesIteratorMobile contactId={record.id} showStatus />
+              <NotesIteratorMobile contactId={record.id} />
             </InfiniteListBase>
           </TabsContent>
 
@@ -188,15 +187,6 @@ const ContactShowContentMobile = () => {
 
           <TabsContent value="details" className="mt-4">
             <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold">
-                  {translate("resources.notes.fields.status")}
-                </h3>
-                <Separator />
-                <div className="mt-3">
-                  <ContactStatusSelector />
-                </div>
-              </div>
               <div>
                 <h3 className="text-lg font-semibold">
                   {translate(
@@ -297,11 +287,9 @@ const ContactShowContent = () => {
               perPage={25}
               disableSyncWithLocation
               storeKey={false}
-              empty={
-                <NoteCreate reference="contacts" showStatus className="mt-4" />
-              }
+              empty={<NoteCreate reference="contacts" className="mt-4" />}
             >
-              <NotesIterator reference="contacts" showStatus />
+              <NotesIterator reference="contacts" />
             </InfiniteListBase>
           </CardContent>
         </Card>

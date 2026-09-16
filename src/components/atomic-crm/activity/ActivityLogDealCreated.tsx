@@ -19,6 +19,7 @@ export function ActivityLogDealCreated({
   const isMobile = useIsMobile();
   const translate = useTranslate();
   const { deal } = activity;
+  const dealLabel = deal.reference || `#${deal.id}`;
   const { identity, isPending } = useGetIdentity();
   const isCurrentUser = !isPending && identity?.id === activity.sales_id;
   const salesName = useGetSalesName(activity.sales_id, {
@@ -36,9 +37,9 @@ export function ActivityLogDealCreated({
             { name: salesName },
           )}{" "}
           {isMobile ? (
-            deal.name
+            dealLabel
           ) : (
-            <Link to={`/deals/${deal.id}/show`}>{deal.name}</Link>
+            <Link to={`/deals/${deal.id}/show`}>{dealLabel}</Link>
           )}{" "}
           {context !== "company" && (
             <>

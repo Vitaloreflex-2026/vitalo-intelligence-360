@@ -40,12 +40,8 @@ import {
 } from "./ConfigurationContext";
 import type { CrmDataProvider } from "../providers/types";
 import {
-  defaultCurrency,
   defaultDarkModeLogo,
-  defaultDealPipelineStatuses,
-  defaultDealStages,
   defaultLightModeLogo,
-  defaultNoteStatuses,
   defaultTaskTypes,
   defaultTitle,
 } from "./defaultConfiguration";
@@ -77,14 +73,10 @@ export type CRMProps = {
  * default configurations and themes but allows for customization through props. The component
  * seeds the store with any custom prop values for backwards compatibility.
  *
- * @param {string} currency - The ISO 4217 currency code used to format monetary values (e.g. "USD", "EUR", "GBP").
  * @param {RaThemeOptions} darkTheme - The theme to use when the application is in dark mode.
- * @param {string[]} dealPipelineStatuses - The statuses of deals in the pipeline used in the application.
- * @param {DealStage[]} dealStages - The stages of deals used in the application.
  * @param {RaThemeOptions} lightTheme - The theme to use when the application is in light mode.
  * @param {string} darkModeLogo - Logo shown in dark mode and on the auth pages. Must be an imported asset, an absolute URL, or a data URI — never a route-relative path like "./logos/x.svg", which breaks on nested routes such as /oauth/consent (issue #291).
  * @param {string} lightModeLogo - Logo shown in light mode. Same rule as darkModeLogo: imported asset, absolute URL, or data URI only.
- * @param {NoteStatus[]} noteStatuses - The statuses of notes used in the application.
  * @param {LabeledValue[]} taskTypes - The types of tasks used in the application.
  * @param {string} title - The title of the CRM application.
  *
@@ -111,12 +103,8 @@ export type CRMProps = {
  * export default App;
  */
 export const CRM = ({
-  currency = defaultCurrency,
-  dealPipelineStatuses = defaultDealPipelineStatuses,
-  dealStages = defaultDealStages,
   darkModeLogo = defaultDarkModeLogo,
   lightModeLogo = defaultLightModeLogo,
-  noteStatuses = defaultNoteStatuses,
   taskTypes = defaultTaskTypes,
   title = defaultTitle,
   dataProvider = defaultDataProviderBuilder(),
@@ -145,10 +133,6 @@ export const CRM = ({
   useEffect(() => {
     if (!store.getItem(CONFIGURATION_STORE_KEY)) {
       store.setItem(CONFIGURATION_STORE_KEY, {
-        currency,
-        dealPipelineStatuses,
-        dealStages,
-        noteStatuses,
         taskTypes,
         title,
         darkModeLogo,
