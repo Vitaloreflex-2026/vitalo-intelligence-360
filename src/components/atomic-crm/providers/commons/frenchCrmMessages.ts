@@ -210,6 +210,7 @@ export const frenchCrmMessages = {
         stage: "Étape",
       },
       action: {
+        add: "Ajouter un dossier",
         back_to_deal: "Retour au dossier",
         create: "Créer un dossier",
         new: "Nouveau dossier",
