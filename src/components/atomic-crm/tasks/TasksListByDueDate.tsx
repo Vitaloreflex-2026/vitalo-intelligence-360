@@ -1,11 +1,5 @@
 import { useMemo } from "react";
-import {
-  type Identifier,
-  useGetIdentity,
-  useGetList,
-  useTimeout,
-  useTranslate,
-} from "ra-core";
+import { type Identifier, useGetList, useTimeout, useTranslate } from "ra-core";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 import { TaskListFilter } from "./TasksListFilter";
@@ -30,23 +24,18 @@ export const TasksListByDueDate = ({
   pendingPlaceholder?: React.ReactNode;
   hideDueLater?: boolean;
 }) => {
-  const { identity } = useGetIdentity();
   const isMobile = useIsMobile();
   const translate = useTranslate();
 
-  const { data: tasks, isPending } = useGetList(
-    "tasks",
-    {
-      pagination: { page: 1, perPage: 1000 },
-      sort: { field: "due_date", order: "ASC" },
-      filter: {
-        ...(filterByContact != null
-          ? { contact_id: filterByContact }
-          : { sales_id: identity?.id }),
-      },
+  // Not scoped to the current sales_id: the list shows every upcoming meeting,
+  // whoever the consultant is. The meeting notifications stay personal.
+  const { data: tasks, isPending } = useGetList("tasks", {
+    pagination: { page: 1, perPage: 1000 },
+    sort: { field: "due_date", order: "ASC" },
+    filter: {
+      ...(filterByContact != null ? { contact_id: filterByContact } : {}),
     },
-    { enabled: filterByContact != null ? true : !!identity },
-  );
+  });
 
   const showContact = filterByContact == null;
 
