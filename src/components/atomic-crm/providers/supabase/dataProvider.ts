@@ -1,5 +1,6 @@
 import { supabaseDataProvider } from "ra-supabase-core";
 import {
+  HttpError,
   withLifecycleCallbacks,
   type DataProvider,
   type GetListParams,
@@ -19,6 +20,26 @@ import type { ConfigurationContextValue } from "../../root/ConfigurationContext"
 import { ATTACHMENTS_BUCKET } from "../commons/attachments";
 import { getIsInitialized } from "./authProvider";
 import { getSupabaseClient } from "./supabase";
+
+/**
+ * Edge functions answer errors as `{ status, message }`; `functions.invoke` only
+ * exposes the raw Response on `error.context`. Read it so callers can show the
+ * actual reason instead of a generic failure.
+ */
+const parseFunctionError = async (
+  error: unknown,
+  fallbackMessage: string,
+): Promise<{ status: number; message: string }> => {
+  const context = (error as { context?: Response })?.context;
+  const status = context?.status ?? 500;
+
+  try {
+    const body = await context?.clone().json();
+    return { status, message: body?.message || fallbackMessage };
+  } catch {
+    return { status, message: fallbackMessage };
+  }
+};
 
 const getBaseDataProvider = () =>
   supabaseDataProvider({
@@ -166,20 +187,26 @@ const getDataProviderWithCustomMethods = () => {
       return updatedData.data;
     },
     async updatePassword(id: Identifier) {
-      const { data: passwordUpdated, error } =
-        await getSupabaseClient().functions.invoke<boolean>("update_password", {
+      const { error } = await getSupabaseClient().functions.invoke(
+        "update_password",
+        {
           method: "PATCH",
           body: {
             sales_id: id,
           },
-        });
+        },
+      );
 
-      if (!passwordUpdated || error) {
+      if (error) {
         console.error("update_password.error", error);
-        throw new Error("Failed to update password");
+        const { status, message } = await parseFunctionError(
+          error,
+          "Failed to update password",
+        );
+        throw new HttpError(message, status);
       }
 
-      return passwordUpdated;
+      return true as const;
     },
     async unarchiveDeal(deal: Deal) {
       // get all deals where stage is the same as the deal to unarchive

@@ -600,6 +600,10 @@ export const englishCrmMessages = {
       },
       password: {
         change: "Change password",
+        change_error:
+          "The password reset email could not be sent. Please try again.",
+        too_many_requests:
+          "A password reset email was just sent. Please wait a minute before asking for another one.",
       },
       password_reset_sent:
         "A reset password email has been sent to your email address",

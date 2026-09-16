@@ -608,6 +608,10 @@ export const frenchCrmMessages = {
       },
       password: {
         change: "Changer le mot de passe",
+        change_error:
+          "L'e-mail de réinitialisation du mot de passe n'a pas pu être envoyé. Veuillez réessayer.",
+        too_many_requests:
+          "Un e-mail de réinitialisation vient d'être envoyé. Patientez une minute avant d'en demander un autre.",
       },
       password_reset_sent:
         "Un e-mail de réinitialisation du mot de passe a été envoyé à votre adresse e-mail",

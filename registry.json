@@ -158,6 +158,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/settings/useChangePassword.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/settings/SettingsPageMobile.tsx",
           "type": "registry:component"
         },
