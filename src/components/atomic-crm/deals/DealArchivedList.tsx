@@ -1,4 +1,5 @@
 import {
+  RecordContextProvider,
   useGetIdentity,
   useGetList,
   useLocaleState,
@@ -8,8 +9,10 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
+import { Link } from "react-router";
+
 import type { Deal } from "../types";
-import { DealCardContent } from "./DealCard";
+import { DealTitle } from "./DealTitle";
 import { getRelativeTimeString } from "./dealUtils";
 
 export const DealArchivedList = () => {
@@ -72,11 +75,17 @@ export const DealArchivedList = () => {
                 <h4 className="font-bold">
                   {getRelativeTimeString(date, locale)}
                 </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                <div className="flex flex-col gap-2">
                   {deals.map((deal: Deal) => (
-                    <div key={deal.id}>
-                      <DealCardContent deal={deal} />
-                    </div>
+                    <Link
+                      key={deal.id}
+                      to={`/deals/${deal.id}/show`}
+                      className="text-sm underline hover:no-underline"
+                    >
+                      <RecordContextProvider value={deal}>
+                        <DealTitle />
+                      </RecordContextProvider>
+                    </Link>
                   ))}
                 </div>
               </div>

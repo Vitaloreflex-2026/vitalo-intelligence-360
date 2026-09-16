@@ -23,17 +23,14 @@ import {
 import { CompanyAvatar } from "../companies/CompanyAvatar";
 import { Markdown } from "../misc/Markdown";
 import { RelativeDate } from "../misc/RelativeDate";
-import { Status } from "../misc/Status";
 import type { ContactNote, DealNote } from "../types";
 import { NoteAttachments } from "./NoteAttachments";
 import { NoteInputs } from "./NoteInputs";
 import { useGetSalesName } from "../sales/useGetSalesName";
 
 export const Note = ({
-  showStatus,
   note,
 }: {
-  showStatus?: boolean;
   note: DealNote | ContactNote;
   isLast: boolean;
 }) => {
@@ -117,9 +114,6 @@ export const Note = ({
               : "resources.notes.author_added",
             { name: salesName },
           )}{" "}
-          {showStatus && note.status && (
-            <Status className="ml-2" status={note.status} />
-          )}
         </div>
         <span className={`${isHover ? "visible" : "invisible"}`}>
           <TooltipProvider>
@@ -164,7 +158,7 @@ export const Note = ({
       </div>
       {isEditing ? (
         <Form onSubmit={handleNoteUpdate} record={note} className="mt-1">
-          <NoteInputs showStatus={showStatus} />
+          <NoteInputs />
           <div className="flex justify-end mt-2 space-x-4">
             <Button
               variant="ghost"

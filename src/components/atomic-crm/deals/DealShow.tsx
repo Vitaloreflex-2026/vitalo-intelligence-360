@@ -24,10 +24,10 @@ import { Separator } from "@/components/ui/separator";
 import { CompanyAvatar } from "../companies/CompanyAvatar";
 import { NoteCreate } from "../notes/NoteCreate";
 import { NotesIterator } from "../notes/NotesIterator";
-import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Deal } from "../types";
 import { ContactList } from "./ContactList";
-import { findDealLabel, formatISODateString } from "./dealUtils";
+import { formatISODateString } from "./dealUtils";
+import { DealTitle } from "./DealTitle";
 
 export const DealShow = ({ open, id }: { open: boolean; id?: string }) => {
   const redirect = useRedirect();
@@ -50,7 +50,6 @@ export const DealShow = ({ open, id }: { open: boolean; id?: string }) => {
 
 const DealShowContent = () => {
   const translate = useTranslate();
-  const { dealStages, currency } = useConfigurationContext();
   const record = useRecordContext<Deal>();
   if (!record) return null;
 
@@ -68,7 +67,7 @@ const DealShowContent = () => {
               >
                 <CompanyAvatar />
               </ReferenceField>
-              <h2 className="text-2xl font-semibold">{record.name}</h2>
+              <DealTitle className="text-2xl font-semibold" />
             </div>
             <div className={`flex gap-2 ${record.archived_at ? "" : "pr-12"}`}>
               {record.archived_at ? (
@@ -104,21 +103,6 @@ const DealShowContent = () => {
               </div>
             </div>
 
-            <div className="flex flex-col mr-10">
-              <span className="text-xs text-muted-foreground tracking-wide">
-                {translate("resources.deals.fields.amount")}
-              </span>
-              <span className="text-sm">
-                {record.amount.toLocaleString("en-US", {
-                  notation: "compact",
-                  style: "currency",
-                  currency,
-                  currencyDisplay: "narrowSymbol",
-                  minimumSignificantDigits: 3,
-                })}
-              </span>
-            </div>
-
             {record.reference && (
               <div className="flex flex-col mr-10">
                 <span className="text-xs text-muted-foreground tracking-wide">
@@ -149,15 +133,6 @@ const DealShowContent = () => {
                 <span className="text-sm">{record.origin}</span>
               </div>
             )}
-
-            <div className="flex flex-col mr-10">
-              <span className="text-xs text-muted-foreground tracking-wide">
-                {translate("resources.deals.fields.stage")}
-              </span>
-              <span className="text-sm">
-                {findDealLabel(dealStages, record.stage)}
-              </span>
-            </div>
           </div>
 
           {!!record.contact_ids?.length && (

@@ -7,8 +7,11 @@ import {
 import { matchPath, useLocation } from "react-router";
 import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { CreateButton } from "@/components/admin/create-button";
+import { DataTable } from "@/components/admin/data-table";
+import { DateField } from "@/components/admin/date-field";
 import { ExportButton } from "@/components/admin/export-button";
 import { List } from "@/components/admin/list";
+import { ReferenceField } from "@/components/admin/reference-field";
 import { ReferenceInput } from "@/components/admin/reference-input";
 import { FilterButton } from "@/components/admin/filter-form";
 import { SearchInput } from "@/components/admin/search-input";
@@ -16,12 +19,13 @@ import { SearchInput } from "@/components/admin/search-input";
 import { DataImportButton } from "../dataImport/DataImportButton";
 import { TopToolbar } from "../layout/TopToolbar";
 import { AccountManagerInput } from "../sales/AccountManagerInput";
+import { RelationshipStatusField } from "../misc/RelationshipStatusField";
 import { DealArchivedList } from "./DealArchivedList";
 import { DealCreate } from "./DealCreate";
 import { DealEdit } from "./DealEdit";
 import { DealEmpty } from "./DealEmpty";
-import { DealListContent } from "./DealListContent";
 import { DealShow } from "./DealShow";
+import { DealTitle } from "./DealTitle";
 import { OnlyMineInput } from "./OnlyMineInput";
 
 const DealList = () => {
@@ -55,13 +59,12 @@ const DealList = () => {
 
   return (
     <List
-      perPage={100}
+      perPage={25}
       filter={{ "archived_at@is": null }}
       title={false}
-      sort={{ field: "index", order: "DESC" }}
+      sort={{ field: "created_at", order: "DESC" }}
       filters={dealFilters}
       actions={<DealActions />}
-      pagination={null}
     >
       <DealLayout />
     </List>
@@ -80,17 +83,15 @@ const DealLayout = () => {
   if (isPending) return null;
   if (!data?.length && !hasFilters)
     return (
-      <>
-        <DealEmpty>
-          <DealShow open={!!matchShow} id={matchShow?.params.id} />
-          <DealArchivedList />
-        </DealEmpty>
-      </>
+      <DealEmpty>
+        <DealShow open={!!matchShow} id={matchShow?.params.id} />
+        <DealArchivedList />
+      </DealEmpty>
     );
 
   return (
     <div className="w-full">
-      <DealListContent />
+      <DealTable />
       <DealArchivedList />
       <DealCreate open={!!matchCreate} />
       <DealEdit open={!!matchEdit && !matchCreate} id={matchEdit?.params.id} />
@@ -98,6 +99,27 @@ const DealLayout = () => {
     </div>
   );
 };
+
+const DealTable = () => (
+  <DataTable rowClick="show">
+    <DataTable.Col label="resources.deals.fields.title">
+      <DealTitle />
+    </DataTable.Col>
+    <DataTable.Col source="company_id">
+      <ReferenceField source="company_id" reference="companies" link={false} />
+    </DataTable.Col>
+    <DataTable.Col source="confidentiality">
+      <RelationshipStatusField source="confidentiality" />
+    </DataTable.Col>
+    <DataTable.Col source="origin" />
+    <DataTable.Col source="expected_closing_date">
+      <DateField source="expected_closing_date" />
+    </DataTable.Col>
+    <DataTable.Col source="sales_id">
+      <ReferenceField source="sales_id" reference="sales" link={false} />
+    </DataTable.Col>
+  </DataTable>
+);
 
 const DealActions = () => (
   <TopToolbar>

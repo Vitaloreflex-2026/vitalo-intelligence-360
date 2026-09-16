@@ -3,14 +3,12 @@ import { AutocompleteArrayInput } from "@/components/admin/autocomplete-array-in
 import { ReferenceArrayInput } from "@/components/admin/reference-array-input";
 import { ReferenceInput } from "@/components/admin/reference-input";
 import { TextInput } from "@/components/admin/text-input";
-import { NumberInput } from "@/components/admin/number-input";
 import { DateInput } from "@/components/admin/date-input";
 import { SelectInput } from "@/components/admin/select-input";
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 import { contactOptionText } from "../misc/ContactOption";
-import { useConfigurationContext } from "../root/ConfigurationContext";
 import { AutocompleteCompanyInput } from "../companies/AutocompleteCompanyInput.tsx";
 import { ChoiceInput } from "../misc/ChoiceInput";
 import { relationshipStatuses } from "../misc/relationshipStatuses";
@@ -33,7 +31,6 @@ export const DealInputs = () => {
 const DealInfoInputs = () => {
   return (
     <div className="flex flex-col gap-4 flex-1">
-      <TextInput source="name" validate={required()} helperText={false} />
       <TextInput source="reference" helperText={false} />
       <TextInput source="motivation" multiline rows={4} helperText={false} />
       <TextInput
@@ -73,7 +70,6 @@ const DealLinkedToInputs = () => {
 };
 
 const DealMiscInputs = () => {
-  const { dealStages } = useConfigurationContext();
   const translate = useTranslate();
   return (
     <div className="flex flex-col gap-4 flex-1">
@@ -88,26 +84,11 @@ const DealMiscInputs = () => {
       />
       <ChoiceInput source="origin" category="deal_origin" />
       <ChoiceInput source="objectives" category="deal_objective" multiple />
-      <NumberInput
-        source="amount"
-        defaultValue={0}
-        helperText={false}
-        validate={required()}
-      />
       <DateInput
         validate={required()}
         source="expected_closing_date"
         helperText={false}
         defaultValue={new Date().toISOString().split("T")[0]}
-      />
-      <SelectInput
-        source="stage"
-        choices={dealStages}
-        optionText="label"
-        optionValue="value"
-        defaultValue="opportunity"
-        helperText={false}
-        validate={required()}
       />
     </div>
   );

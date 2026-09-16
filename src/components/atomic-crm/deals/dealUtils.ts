@@ -1,12 +1,5 @@
 import { format } from "date-fns";
 
-import type { DealStage } from "../types";
-
-export const findDealLabel = (dealStages: DealStage[], dealValue: string) => {
-  const dealStage = dealStages.find((stage) => stage.value === dealValue);
-  return dealStage?.label;
-};
-
 export function getRelativeTimeString(
   dateString: string,
   locale = "en",

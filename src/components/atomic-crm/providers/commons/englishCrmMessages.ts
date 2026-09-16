@@ -100,7 +100,6 @@ export const englishCrmMessages = {
         added_on: "Added on %{date}",
         followed_by: "Followed by %{name}",
         followed_by_you: "Followed by you",
-        status_none: "None",
       },
       company_contacts_count:
         "Already %{smart_count} contact linked to this company |||| Already %{smart_count} contacts linked to this company",
@@ -170,17 +169,11 @@ export const englishCrmMessages = {
         tags: "Tags",
         tasks: "Meetings",
       },
-      hot: {
-        empty_change_status:
-          'Change the status of a contact by adding a note to that contact and clicking on "show options".',
-        empty_hint: 'Contacts with a "hot" status will appear here.',
-        title: "Hot Contacts",
-      },
     },
     deals: {
       name: "Deal |||| Deals",
       fields: {
-        name: "Name",
+        title: "Deal",
         reference: "Reference",
         company_id: "Company",
         contact_ids: "Linked contacts",
@@ -189,9 +182,8 @@ export const englishCrmMessages = {
         objectives: "Stated objectives",
         motivation: "Reason for the request",
         other_expectations: "Other stated expectations",
-        amount: "Budget",
         expected_closing_date: "Expected closing date",
-        stage: "Stage",
+        sales_id: "Consultant / Trainer",
       },
       action: {
         back_to_deal: "Back to deal",
@@ -235,7 +227,6 @@ export const englishCrmMessages = {
       name: "Note |||| Notes",
       forcedCaseName: "Note",
       fields: {
-        status: "Status",
         date: "Date",
         attachments: "Attachments",
         contact_id: "Contact",
@@ -436,8 +427,6 @@ export const englishCrmMessages = {
       load_more: "Load more activity",
     },
     dashboard: {
-      deals_chart: "Upcoming Deal Revenue",
-      deals_pipeline: "Deals Pipeline",
       latest_activity: "Latest Activity",
       latest_activity_error: "Error loading latest activity",
       latest_notes: "My Latest Notes",
@@ -511,17 +500,7 @@ export const englishCrmMessages = {
           "Sectors are managed from the company form: type a new sector to add it to the shared list.",
       },
       dark_mode_logo: "Dark Mode Logo",
-      deals: {
-        currency: "Currency",
-        pipeline_help:
-          "Select which deal stages should count as pipeline deals.",
-        pipeline_statuses: "Pipeline Statuses",
-        stages: "Stages",
-      },
       light_mode_logo: "Light Mode Logo",
-      notes: {
-        statuses: "Statuses",
-      },
       reset_defaults: "Reset to Defaults",
       save_error: "Failed to save configuration",
       saved: "Configuration saved successfully",
@@ -534,15 +513,6 @@ export const englishCrmMessages = {
       app_title: "App Title",
       sections: {
         branding: "Branding",
-      },
-      validation: {
-        duplicate: "Duplicate %{display_name}: %{items}",
-        in_use:
-          "Cannot remove %{display_name} that are still used by deals: %{items}",
-        validating: "Validating\u2026",
-        entities: {
-          stages: "stages",
-        },
       },
     },
     theme: {

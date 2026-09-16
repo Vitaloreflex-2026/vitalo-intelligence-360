@@ -37,31 +37,6 @@ describe("NoteInputs", () => {
     await expect.element(screen.getByText("Attachments")).toBeVisible();
   });
 
-  it("renders the status selector when showStatus is true", async () => {
-    const screen = await render(<NoteInputsStory showStatus />);
-
-    // Click 'Show options' to reveal the hidden section
-    await screen.getByRole("button", { name: "Show options" }).click();
-
-    await expect.element(screen.getByText("Status")).toBeVisible();
-  });
-
-  it("defaults the status selector to the current contact status", async () => {
-    const screen = await render(
-      <NoteInputsStory defaultStatus="hot" showStatus />,
-    );
-
-    await screen.getByRole("button", { name: "Show options" }).click();
-
-    await expect.element(screen.getByRole("combobox")).toHaveTextContent("Hot");
-  });
-
-  it("does not render the status selector when showStatus is false", async () => {
-    const screen = await render(<Default />);
-
-    await expect.element(screen.getByText("Status")).not.toBeInTheDocument();
-  });
-
   it("renders the contact reference selector when selectReference is contacts", async () => {
     const screen = await render(
       <NoteInputsStory reference="contacts" selectReference />,

@@ -12,17 +12,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { RotateCcw } from "lucide-react";
 
 import { RelativeDate } from "../misc/RelativeDate";
-import { Status } from "../misc/Status";
 import { useGetSalesName } from "../sales/useGetSalesName";
 import type { ContactNote } from "../types";
 import { InfinitePagination } from "../misc/InfinitePagination";
 
 export const NotesIteratorMobile = ({
   contactId,
-  showStatus,
 }: {
   contactId: Identifier;
-  showStatus?: boolean;
 }) => {
   const {
     data = [],
@@ -76,12 +73,7 @@ export const NotesIteratorMobile = ({
     <>
       <div className="divide-y">
         {data.map((note) => (
-          <NoteMobile
-            key={note.id}
-            note={note}
-            contactId={contactId}
-            showStatus={showStatus}
-          />
+          <NoteMobile key={note.id} note={note} contactId={contactId} />
         ))}
       </div>
       <InfinitePagination />
@@ -92,11 +84,9 @@ export const NotesIteratorMobile = ({
 export const NoteMobile = ({
   note,
   contactId,
-  showStatus,
 }: {
   note: ContactNote;
   contactId: Identifier;
-  showStatus?: boolean;
 }) => {
   const translate = useTranslate();
   const { identity } = useGetIdentity();
@@ -113,9 +103,6 @@ export const NoteMobile = ({
       <div className="flex items-center space-x-2 w-full">
         <div className="inline-flex h-full items-center text-sm text-muted-foreground">
           {isCurrentUser ? translate("resources.notes.me") : salesName}{" "}
-          {showStatus && note.status && (
-            <Status className="ml-2" status={note.status} />
-          )}
         </div>
         <div className="flex-1" />
         <span className="text-sm text-muted-foreground">

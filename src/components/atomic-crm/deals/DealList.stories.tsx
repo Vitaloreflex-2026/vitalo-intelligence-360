@@ -22,8 +22,8 @@ export default meta;
 const dataForAccountManagerFilter = {
   companies: [buildCompany()],
   deals: [
-    buildDeal({ id: 1, name: "Jane deal", sales_id: 0 }),
-    buildDeal({ id: 2, index: 1, name: "Marie deal", sales_id: 1 }),
+    buildDeal({ id: 1, reference: "Jane deal", sales_id: 0 }),
+    buildDeal({ id: 2, reference: "Marie deal", sales_id: 1 }),
   ],
   sales: [
     buildSale({ administrator: true, first_name: "Jane", id: 0 }),

@@ -10,7 +10,6 @@ const singleNote = {
   date: "2026-03-17T13:50:00.000Z",
   id: 9,
   sales_id: 0,
-  status: "warm",
   text: "Only note in the list",
 };
 
@@ -68,7 +67,7 @@ export const SingleNote = ({
   return (
     <StoryWrapper data={{ contact_notes: [singleNote] }}>
       <ListContextProvider value={listContext}>
-        <NotesIteratorMobile contactId={3} showStatus />
+        <NotesIteratorMobile contactId={3} />
       </ListContextProvider>
       {children}
     </StoryWrapper>

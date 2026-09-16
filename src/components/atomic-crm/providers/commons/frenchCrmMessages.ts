@@ -103,7 +103,6 @@ export const frenchCrmMessages = {
         added_on: "Ajouté le %{date}",
         followed_by: "Suivi par %{name}",
         followed_by_you: "Suivi par vous",
-        status_none: "Aucun",
       },
       company_contacts_count:
         "Déjà %{smart_count} contact lié à cette entreprise |||| Déjà %{smart_count} contacts liés à cette entreprise",
@@ -174,17 +173,11 @@ export const frenchCrmMessages = {
         tags: "Étiquettes",
         tasks: "Rendez-vous",
       },
-      hot: {
-        empty_change_status:
-          'Changez le statut d\'un contact en ajoutant une note à ce contact et en cliquant sur "afficher les options".',
-        empty_hint: 'Les contacts avec un statut "chaud" apparaîtront ici.',
-        title: "Contacts chauds",
-      },
     },
     deals: {
       name: "Dossier |||| Dossiers",
       fields: {
-        name: "Nom",
+        title: "Dossier",
         reference: "Référence dossier",
         company_id: "Entreprise",
         contact_ids: "Contacts liés",
@@ -193,9 +186,8 @@ export const frenchCrmMessages = {
         objectives: "Objectifs exprimés",
         motivation: "Motif de la démarche",
         other_expectations: "Autres attentes exprimées",
-        amount: "Budget",
         expected_closing_date: "Date de clôture prévue",
-        stage: "Étape",
+        sales_id: "Consultant / Formateur",
       },
       action: {
         back_to_deal: "Retour au dossier",
@@ -239,7 +231,6 @@ export const frenchCrmMessages = {
       name: "Note |||| Notes",
       forcedCaseName: "Note",
       fields: {
-        status: "Statut",
         date: "Date",
         attachments: "Pièces jointes",
         contact_id: "Contact",
@@ -442,8 +433,6 @@ export const frenchCrmMessages = {
       load_more: "Charger plus d'activité",
     },
     dashboard: {
-      deals_chart: "Revenus des dossiers à venir",
-      deals_pipeline: "Pipeline des dossiers",
       latest_activity: "Dernière activité",
       latest_activity_error:
         "Erreur lors du chargement de la dernière activité",
@@ -519,17 +508,7 @@ export const frenchCrmMessages = {
           "Les secteurs d'activité se gèrent directement depuis le formulaire d'une entreprise : saisissez un nouveau secteur pour l'ajouter à la liste partagée.",
       },
       dark_mode_logo: "Logo du mode sombre",
-      deals: {
-        currency: "Devise",
-        pipeline_help:
-          "Sélectionnez les étapes de dossier à considérer comme des dossiers dans le pipeline.",
-        pipeline_statuses: "Statuts des pipelines",
-        stages: "Étapes",
-      },
       light_mode_logo: "Logo du mode clair",
-      notes: {
-        statuses: "Statuts",
-      },
       reset_defaults: "Réinitialiser aux valeurs par défaut",
       save_error: "Échec de l'enregistrement de la configuration",
       saved: "Configuration enregistrée avec succès",
@@ -542,15 +521,6 @@ export const frenchCrmMessages = {
       app_title: "Titre de l'application",
       sections: {
         branding: "Image de marque",
-      },
-      validation: {
-        duplicate: "%{display_name} en double : %{items}",
-        in_use:
-          "Impossible de supprimer %{display_name} encore utilisés par des dossiers : %{items}",
-        validating: "Validation\u2026",
-        entities: {
-          stages: "étapes",
-        },
       },
     },
     theme: {
