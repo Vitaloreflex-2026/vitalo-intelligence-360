@@ -33,6 +33,20 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-heading: var(--brand-heading);
+  --color-profile-1: var(--profile-1);
+  --color-profile-2: var(--profile-2);
+  --color-profile-3: var(--profile-3);
+  --color-profile-4: var(--profile-4);
+  --color-journey-1: var(--journey-1);
+  --color-journey-2: var(--journey-2);
+  --color-journey-3: var(--journey-3);
+  --color-journey-4: var(--journey-4);
+  --color-journey-5: var(--journey-5);
+  --color-journey-6: var(--journey-6);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -76,6 +90,25 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* VitalO Reflex brand palette, taken from the printed discovery form: a leaf
+     green for accents and icons, a navy for section titles, and the four levels
+     of the IMPACT 360 profile (green, amber, orange, blue). */
+  --brand: oklch(0.63 0.15 141);
+  --brand-foreground: oklch(1 0 0);
+  --brand-muted: oklch(0.96 0.03 141);
+  --brand-heading: oklch(0.37 0.06 250);
+  --profile-1: oklch(0.63 0.15 141);
+  --profile-2: oklch(0.76 0.15 75);
+  --profile-3: oklch(0.65 0.18 45);
+  --profile-4: oklch(0.57 0.13 240);
+  /* The six steps of the IMPACT 360 journey, in the order and colours of the
+     printed form: violet, violet, teal, green, amber, magenta. */
+  --journey-1: oklch(0.52 0.16 300);
+  --journey-2: oklch(0.47 0.16 290);
+  --journey-3: oklch(0.58 0.11 205);
+  --journey-4: oklch(0.63 0.15 141);
+  --journey-5: oklch(0.76 0.15 75);
+  --journey-6: oklch(0.52 0.19 348);
   --avatar-0: oklch(0.85 0.08 240);
   --avatar-1: oklch(0.88 0.1 340);
   --avatar-2: oklch(0.85 0.07 180);
@@ -103,6 +136,20 @@
   --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
+  --brand: oklch(0.72 0.15 141);
+  --brand-foreground: oklch(0.205 0 0);
+  --brand-muted: oklch(0.3 0.04 141);
+  --brand-heading: oklch(0.85 0.05 250);
+  --profile-1: oklch(0.72 0.15 141);
+  --profile-2: oklch(0.82 0.14 75);
+  --profile-3: oklch(0.72 0.16 45);
+  --profile-4: oklch(0.68 0.12 240);
+  --journey-1: oklch(0.68 0.15 300);
+  --journey-2: oklch(0.64 0.15 290);
+  --journey-3: oklch(0.7 0.1 205);
+  --journey-4: oklch(0.72 0.15 141);
+  --journey-5: oklch(0.82 0.14 75);
+  --journey-6: oklch(0.68 0.17 348);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 15%);
   --input: oklch(1 0 0 / 15%);

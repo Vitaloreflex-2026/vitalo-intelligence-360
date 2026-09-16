@@ -128,6 +128,104 @@ export type ContactNote = {
   attachments?: AttachmentNote[];
 } & Pick<RaRecord, "id">;
 
+/**
+ * Assessment ("etat des lieux") — a review attached to a company.
+ * Business columns are not defined yet; only the company link exists so far.
+ */
+export type Assessment = {
+  company_id: Identifier;
+  created_at: string;
+  // Diagnose page of the discovery form; every answer is optional.
+  governance_maturity?: string | null;
+  governance_owners?: string[] | null;
+  governance_owners_other?: string | null;
+  governance_forums?: string[] | null;
+  governance_forums_other?: string | null;
+  existing_programs?: string[] | null;
+  existing_programs_comments?: string | null;
+  manager_training?: string[] | null;
+  manager_confidence?: string | null;
+  priority_issues?: string[] | null;
+  priority_issues_other?: string | null;
+  priority_issues_comments?: string | null;
+  company_strengths?: string[] | null;
+  company_strengths_other?: string | null;
+  company_strengths_comments?: string | null;
+  identified_barriers?: string[] | null;
+  identified_barriers_other?: string | null;
+  identified_barriers_comments?: string | null;
+  urgency_level?: string | null;
+  urgency_comments?: string | null;
+  client_priority_1?: string | null;
+  client_priority_2?: string | null;
+  client_priority_3?: string | null;
+  impact_awareness?: number | null;
+  impact_management?: number | null;
+  impact_prevention?: number | null;
+  impact_steering?: number | null;
+  impact_culture?: number | null;
+  impact_measurement?: number | null;
+  overall_profile_level?: number | null;
+  overall_profile_comments?: string | null;
+  // Recommend page of the discovery form; every answer is optional.
+  diagnostic_summary?: string | null;
+  support_objectives?: string[] | null;
+  support_objectives_other?: string | null;
+  journey_steps?: string[] | null;
+  recommended_path?: string[] | null;
+  consultant_recommendations?: string[] | null;
+  consultant_recommendations_other?: string | null;
+  target_audiences?: string[] | null;
+  target_audience_other?: string | null;
+  deployment_short_term?: string[] | null;
+  deployment_medium_term?: string[] | null;
+  deployment_long_term?: string[] | null;
+  expected_benefits?: string | null;
+  success_factors?: string[] | null;
+  success_factors_other?: string | null;
+  watch_points?: string | null;
+  // Concretize page of the discovery form; every answer is optional.
+  interview_summary?: string | null;
+  decider_management_name?: string | null;
+  decider_management_influence?: string | null;
+  decider_hr_name?: string | null;
+  decider_hr_influence?: string | null;
+  decider_manager_name?: string | null;
+  decider_manager_influence?: string | null;
+  decider_cse_name?: string | null;
+  decider_cse_influence?: string | null;
+  decider_other_name?: string | null;
+  decider_other_influence?: string | null;
+  decision_process?: string[] | null;
+  decision_process_other?: string | null;
+  expected_decision_date?: string | null;
+  budget_status?: string | null;
+  estimated_budget?: number | null;
+  next_steps?: AssessmentNextStep[] | null;
+  documents_to_send?: string[] | null;
+  documents_to_send_other?: string | null;
+  next_follow_up_date?: string | null;
+  next_follow_up_mode?: string | null;
+  opportunity_rating?: number | null;
+  opportunity_rating_comments?: string | null;
+  follow_up_status?: string[] | null;
+  follow_up_comments?: string | null;
+  development_opportunities?: string[] | null;
+  development_opportunities_other?: string | null;
+  development_comments?: string | null;
+  closing_checklist?: string[] | null;
+  closed_by?: string | null;
+  closed_at?: string | null;
+  next_action?: string | null;
+} & Pick<RaRecord, "id">;
+
+/** One row of the "Next steps" table of an assessment. */
+export type AssessmentNextStep = {
+  action?: string | null;
+  owner?: string | null;
+  due_date?: string | null;
+};
+
 export type Deal = {
   name: string;
   company_id: Identifier;

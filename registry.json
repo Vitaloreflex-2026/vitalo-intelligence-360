@@ -42,6 +42,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/tasks/useTaskExit.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/tasks/tasksPredicate.ts",
           "type": "registry:component"
         },
@@ -67,6 +71,10 @@
         },
         {
           "path": "src/components/atomic-crm/tasks/TaskFormContent.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/tasks/TaskExit.tsx",
           "type": "registry:component"
         },
         {
@@ -883,6 +891,74 @@
         },
         {
           "path": "src/components/atomic-crm/companies/AutocompleteCompanyInput.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/recommendChoices.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/diagnosticChoices.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/concretizeChoices.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/AssessmentSteps.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/AssessmentSection.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/AssessmentRecommendStep.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/AssessmentOtherInput.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/AssessmentOpportunityRating.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/AssessmentList.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/AssessmentJourney.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/AssessmentImpactProfile.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/AssessmentEdit.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/AssessmentDiagnosticStep.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/AssessmentDeciders.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/AssessmentCreate.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/AssessmentConcretizeStep.tsx",
           "type": "registry:component"
         },
         {

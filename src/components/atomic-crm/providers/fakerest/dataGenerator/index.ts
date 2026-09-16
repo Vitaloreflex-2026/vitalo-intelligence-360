@@ -12,6 +12,8 @@ import type { Db } from "./types";
 
 export default (): Db => {
   const db = {} as Db;
+  // Business columns are not defined yet, so there is nothing to fake here.
+  db.assessments = [];
   db.sales = generateSales(db);
   db.tags = generateTags(db);
   db.choices = generateChoices(db);
