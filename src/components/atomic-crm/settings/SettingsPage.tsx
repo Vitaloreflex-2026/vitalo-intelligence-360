@@ -1,6 +1,5 @@
- 
 import { RotateCcw, Save } from "lucide-react";
-import { EditBase, Form, useNotify, useTranslate } from "ra-core";
+import { EditBase, Form, useInput, useNotify, useTranslate } from "ra-core";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -29,6 +28,7 @@ const SECTIONS = [
     label: "resources.companies.name",
     fallback: "Companies",
   },
+  { id: "notes", label: "resources.notes.name", fallback: "Notes" },
   { id: "tasks", label: "resources.tasks.name", fallback: "Tasks" },
 ];
 
@@ -41,6 +41,7 @@ const transformFormValues = (data: Record<string, any>) => ({
     title: data.title,
     lightModeLogo: data.lightModeLogo,
     darkModeLogo: data.darkModeLogo,
+    noteStatuses: ensureValues(data.noteStatuses),
     taskTypes: ensureValues(data.taskTypes),
   } as ConfigurationContextValue,
 });
@@ -83,6 +84,7 @@ const SettingsForm = () => {
       title: config.title,
       lightModeLogo: { src: config.lightModeLogo },
       darkModeLogo: { src: config.darkModeLogo },
+      noteStatuses: config.noteStatuses,
       taskTypes: config.taskTypes,
     }),
     [config],
@@ -179,6 +181,26 @@ const SettingsFormFields = () => {
           </CardContent>
         </Card>
 
+        {/* Notes */}
+        <Card id="notes">
+          <CardContent className="space-y-4">
+            <h2 className="text-xl font-semibold text-muted-foreground">
+              {translate("resources.notes.name", {
+                smart_count: 2,
+              })}
+            </h2>
+            <h3 className="text-lg font-medium text-muted-foreground">
+              {translate("crm.settings.notes.statuses")}
+            </h3>
+            <ArrayInput source="noteStatuses" label={false} helperText={false}>
+              <SimpleFormIterator inline disableReordering disableClear>
+                <TextInput source="label" label={false} className="flex-1" />
+                <ColorInput source="color" />
+              </SimpleFormIterator>
+            </ArrayInput>
+          </CardContent>
+        </Card>
+
         {/* Tasks */}
         <Card id="tasks">
           <CardContent className="space-y-4">
@@ -239,5 +261,18 @@ const SettingsFormFields = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+/** A minimal color picker input compatible with ra-core's useInput. */
+const ColorInput = ({ source }: { source: string }) => {
+  const { field } = useInput({ source });
+  return (
+    <input
+      type="color"
+      {...field}
+      value={field.value || "#000000"}
+      className="w-9 h-9 shrink-0 cursor-pointer appearance-none rounded border bg-transparent p-0.5 [&::-webkit-color-swatch-wrapper]:cursor-pointer [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:cursor-pointer [&::-webkit-color-swatch]:rounded-sm [&::-webkit-color-swatch]:border-none [&::-moz-color-swatch]:cursor-pointer [&::-moz-color-swatch]:rounded-sm [&::-moz-color-swatch]:border-none"
+    />
   );
 };

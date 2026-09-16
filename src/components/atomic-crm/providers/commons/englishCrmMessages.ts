@@ -100,9 +100,16 @@ export const englishCrmMessages = {
         added_on: "Added on %{date}",
         followed_by: "Followed by %{name}",
         followed_by_you: "Followed by you",
+        status_none: "None",
       },
       company_contacts_count:
         "Already %{smart_count} contact linked to this company |||| Already %{smart_count} contacts linked to this company",
+      hot: {
+        empty_change_status:
+          'Change the status of a contact by adding a note to that contact and clicking on "show options".',
+        empty_hint: 'Contacts with a "hot" status will appear here.',
+        title: "Hot Contacts",
+      },
       position_at: "%{title} at",
       position_at_company: "%{title} at %{company}",
       empty: {
@@ -229,6 +236,7 @@ export const englishCrmMessages = {
       fields: {
         date: "Date",
         attachments: "Attachments",
+        status: "Status",
         contact_id: "Contact",
         deal_id: "Deal",
       },
@@ -501,6 +509,9 @@ export const englishCrmMessages = {
       },
       dark_mode_logo: "Dark Mode Logo",
       light_mode_logo: "Light Mode Logo",
+      notes: {
+        statuses: "Statuses",
+      },
       reset_defaults: "Reset to Defaults",
       save_error: "Failed to save configuration",
       saved: "Configuration saved successfully",

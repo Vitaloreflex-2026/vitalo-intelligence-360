@@ -1,12 +1,13 @@
 import { useMemo } from "react";
 import { useStore } from "ra-core";
 
-import type { LabeledValue } from "../types";
+import type { LabeledValue, NoteStatus } from "../types";
 import { defaultConfiguration } from "./defaultConfiguration";
 
 export const CONFIGURATION_STORE_KEY = "app.configuration";
 
 export interface ConfigurationContextValue {
+  noteStatuses: NoteStatus[];
   taskTypes: LabeledValue[];
   title: string;
   darkModeLogo: string;

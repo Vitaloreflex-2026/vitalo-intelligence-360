@@ -39,6 +39,7 @@ create table public.contacts (
     avatar jsonb,
     first_seen timestamp with time zone,
     last_seen timestamp with time zone,
+    status text,
     tags bigint[],
     company_id bigint,
     sales_id bigint,
@@ -57,6 +58,7 @@ create table public.contact_notes (
     text text,
     date timestamp with time zone default now(),
     sales_id bigint,
+    status text,
     attachments jsonb[]
 );
 
@@ -84,6 +86,7 @@ create table public.deal_notes (
     text text,
     date timestamp with time zone default now(),
     sales_id bigint,
+    status text,
     attachments jsonb[]
 );
 

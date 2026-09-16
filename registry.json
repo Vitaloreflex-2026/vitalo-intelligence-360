@@ -362,6 +362,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/notes/StatusSelector.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/notes/NotesIteratorMobile.tsx",
           "type": "registry:component"
         },
@@ -431,6 +435,10 @@
         },
         {
           "path": "src/components/atomic-crm/misc/fetchWithTimeout.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/misc/Status.tsx",
           "type": "registry:component"
         },
         {
@@ -671,6 +679,10 @@
         },
         {
           "path": "src/components/atomic-crm/dashboard/LatestNotes.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/dashboard/HotContacts.tsx",
           "type": "registry:component"
         },
         {

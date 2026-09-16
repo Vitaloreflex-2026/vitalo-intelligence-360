@@ -103,9 +103,16 @@ export const frenchCrmMessages = {
         added_on: "Ajouté le %{date}",
         followed_by: "Suivi par %{name}",
         followed_by_you: "Suivi par vous",
+        status_none: "Aucun",
       },
       company_contacts_count:
         "Déjà %{smart_count} contact lié à cette entreprise |||| Déjà %{smart_count} contacts liés à cette entreprise",
+      hot: {
+        empty_change_status:
+          'Changez le statut d\'un contact en ajoutant une note à ce contact et en cliquant sur "afficher les options".',
+        empty_hint: 'Les contacts avec un statut "chaud" apparaîtront ici.',
+        title: "Contacts chauds",
+      },
       position_at: "%{title} chez",
       position_at_company: "%{title} chez %{company}",
       empty: {
@@ -233,6 +240,7 @@ export const frenchCrmMessages = {
       fields: {
         date: "Date",
         attachments: "Pièces jointes",
+        status: "Statut",
         contact_id: "Contact",
         deal_id: "Dossier",
       },
@@ -509,6 +517,9 @@ export const frenchCrmMessages = {
       },
       dark_mode_logo: "Logo du mode sombre",
       light_mode_logo: "Logo du mode clair",
+      notes: {
+        statuses: "Statuts",
+      },
       reset_defaults: "Réinitialiser aux valeurs par défaut",
       save_error: "Échec de l'enregistrement de la configuration",
       saved: "Configuration enregistrée avec succès",

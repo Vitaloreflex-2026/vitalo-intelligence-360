@@ -103,6 +103,7 @@ export type Contact = {
   tags: number[];
   gender: string;
   sales_id?: Identifier;
+  status: string;
   background: string;
   phone_jsonb: PhoneNumberAndType[];
   nb_tasks?: number;
@@ -118,6 +119,7 @@ export type ContactNote = {
   text: string;
   date: string;
   sales_id: Identifier;
+  status: string;
   attachments?: AttachmentNote[];
 } & Pick<RaRecord, "id">;
 
@@ -143,6 +145,9 @@ export type DealNote = {
   date: string;
   sales_id: Identifier;
   attachments?: AttachmentNote[];
+
+  // This is defined for compatibility with `ContactNote`
+  status?: undefined;
 } & Pick<RaRecord, "id">;
 
 export type Tag = {
@@ -222,6 +227,10 @@ export type AttachmentNote = RAFile;
 export interface LabeledValue {
   value: string;
   label: string;
+}
+
+export interface NoteStatus extends LabeledValue {
+  color: string;
 }
 
 export interface ContactGender {
