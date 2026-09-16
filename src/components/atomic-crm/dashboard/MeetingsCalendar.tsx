@@ -5,6 +5,7 @@ import type {
   DatesSetArg,
 } from "@fullcalendar/core";
 import enLocale from "@fullcalendar/core/locales/en-gb";
+import dayGridPlugin from "@fullcalendar/daygrid";
 import frLocale from "@fullcalendar/core/locales/fr";
 import interactionPlugin, {
   type EventResizeDoneArg,
@@ -20,6 +21,7 @@ import { Card } from "@/components/ui/card";
 import { TaskEdit } from "../tasks/TaskEdit";
 import { calendarScrollTime } from "./calendarScrollTime";
 import { MeetingCreateDialog } from "./MeetingCreateDialog";
+import { meetingSlotFromSelection } from "./meetingSlot";
 import "./MeetingsCalendar.css";
 import {
   DEFAULT_MEETING_MINUTES,
@@ -32,6 +34,9 @@ const FIRST_SLOT = "07:00:00";
 const LAST_SLOT = "21:00:00";
 
 const GRID_HEIGHT = 520;
+
+/** Meetings shown in a month cell before collapsing into a "+N more" link. */
+const MAX_EVENTS_PER_DAY = 3;
 const MINUTE_MS = 60 * 1000;
 
 const minutesBetween = (start: Date, end: Date): number =>
@@ -133,7 +138,7 @@ export const MeetingsCalendar = () => {
   }, []);
 
   const handleSelect = useCallback((arg: DateSelectArg) => {
-    setCreatedSlot({ start: arg.start, end: arg.end });
+    setCreatedSlot(meetingSlotFromSelection(arg.start, arg.end, arg.allDay));
   }, []);
 
   return (
@@ -149,13 +154,13 @@ export const MeetingsCalendar = () => {
 
       <Card className="p-3 meetings-calendar">
         <FullCalendar
-          plugins={[timeGridPlugin, interactionPlugin]}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridWeek"
           locale={locale === "fr" ? frLocale : enLocale}
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: "timeGridWeek,timeGridDay",
+            right: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
           height={GRID_HEIGHT}
           allDaySlot={false}
@@ -165,6 +170,14 @@ export const MeetingsCalendar = () => {
           scrollTime={scrollTime}
           slotDuration="00:30:00"
           slotLabelInterval="01:00"
+          views={{
+            // A month cell renders timed events as a bare dot by default, which
+            // would drop the type colour the rest of the widget relies on.
+            dayGridMonth: {
+              eventDisplay: "block",
+              dayMaxEvents: MAX_EVENTS_PER_DAY,
+            },
+          }}
           expandRows
           stickyHeaderDates
           events={events}

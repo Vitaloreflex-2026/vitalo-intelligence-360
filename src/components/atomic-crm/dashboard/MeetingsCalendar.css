@@ -111,6 +111,32 @@
   white-space: nowrap;
 }
 
+/* Month view: same block treatment as the time grid, on a single line. */
+.meetings-calendar .fc .fc-daygrid-event {
+  border-radius: 0.25rem;
+  border-width: 0 0 0 3px;
+  box-shadow: none;
+  margin: 1px 2px;
+  padding: 0 2px;
+}
+
+.meetings-calendar .fc .fc-daygrid-day-number {
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  padding: 0.25rem;
+  text-decoration: none;
+}
+
+.meetings-calendar .fc .fc-daygrid-day.fc-day-today {
+  background-color: var(--accent);
+}
+
+.meetings-calendar .fc .fc-daygrid-more-link {
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
 /* A checked-off meeting stays on the grid as a record, but recedes. */
 .meetings-calendar .fc .meeting-event--done {
   opacity: 0.45;
