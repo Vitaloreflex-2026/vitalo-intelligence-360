@@ -222,6 +222,7 @@ const ContactPersonalInformationInputs = () => {
 
 const ContactMiscInputs = () => {
   const translate = useTranslate();
+  const record = useRecordContext<Contact>();
   const { noteStatuses } = useConfigurationContext();
   return (
     <div className="flex flex-col gap-4">
@@ -242,6 +243,8 @@ const ContactMiscInputs = () => {
       <ReferenceArrayInput
         source="linked_contact_ids"
         reference="contacts_summary"
+        // a contact cannot be linked to itself
+        filter={record?.id != null ? { "id@neq": record.id } : undefined}
       >
         <AutocompleteArrayInput
           label="resources.contacts.fields.linked_contact_ids"
