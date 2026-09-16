@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { required, useTranslate } from "ra-core";
+import { required, useGetOne, useTranslate } from "ra-core";
 import { TextInput } from "@/components/admin/text-input";
 import { FileInput } from "@/components/admin/file-input";
+import { SelectInput } from "@/components/admin/select-input";
 import { DateTimeInput } from "@/components/admin/date-time-input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useFormContext, useWatch } from "react-hook-form";
 
 import type { ContactNote, DealNote } from "../types";
+import { Status } from "../misc/Status";
+import { useConfigurationContext } from "../root/ConfigurationContext";
 import { getCurrentDate } from "./utils";
 import { AttachmentField } from "./AttachmentField";
 import { foreignKeyMapping } from "./foreignKeyMapping";
@@ -16,17 +19,26 @@ import { contactOptionText } from "../misc/ContactOption";
 import { validateNoteOrAttachmentRequired } from "./noteModel";
 
 export const NoteInputs = ({
+  defaultStatus,
+  showStatus,
   selectReference,
   reference,
 }: {
+  defaultStatus?: string;
+  showStatus?: boolean;
   selectReference?: boolean;
   reference?: "contacts" | "deals";
 }) => {
+  const { noteStatuses } = useConfigurationContext();
   const translate = useTranslate();
   const [displayMore, setDisplayMore] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { control } = useFormContext<ContactNote | DealNote>();
+  const { control, formState, setValue } = useFormContext<
+    ContactNote | DealNote
+  >();
+  const selectedContactId = useWatch({ control, name: "contact_id" });
+  const selectedStatus = useWatch({ control, name: "status" });
   const textValue = useWatch({ control, name: "text" as any });
   const isExpanded = isFocused || !!textValue;
   useEffect(() => {
@@ -38,6 +50,44 @@ export const NoteInputs = ({
       }
     }
   }, [textValue]);
+  const shouldHydrateStatus =
+    showStatus &&
+    (defaultStatus !== undefined ||
+      (reference === "contacts" && Boolean(selectReference)));
+  const { data: selectedContact } = useGetOne(
+    "contacts",
+    { id: selectedContactId! },
+    {
+      enabled:
+        shouldHydrateStatus &&
+        reference === "contacts" &&
+        Boolean(selectReference) &&
+        selectedContactId != null,
+    },
+  );
+  const resolvedDefaultStatus = shouldHydrateStatus
+    ? reference === "contacts" && selectReference
+      ? selectedContact?.status
+      : defaultStatus
+    : undefined;
+
+  useEffect(() => {
+    if (!shouldHydrateStatus || !resolvedDefaultStatus) return;
+    if (
+      formState.dirtyFields.status ||
+      selectedStatus === resolvedDefaultStatus
+    ) {
+      return;
+    }
+
+    setValue("status", resolvedDefaultStatus, { shouldDirty: false });
+  }, [
+    formState.dirtyFields.status,
+    resolvedDefaultStatus,
+    selectedStatus,
+    setValue,
+    shouldHydrateStatus,
+  ]);
 
   // We manually define the input labels because the default ones
   // would use the resource from the context, which is either "contact_notes" or "deal_notes",
@@ -107,6 +157,20 @@ export const NoteInputs = ({
         )}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {showStatus && (
+            <SelectInput
+              source="status"
+              label="resources.notes.fields.status"
+              choices={noteStatuses.map((status) => ({
+                id: status.value,
+                name: status.label,
+                value: status.value,
+              }))}
+              optionText={optionRenderer}
+              defaultValue={resolvedDefaultStatus}
+              helperText={false}
+            />
+          )}
           <DateTimeInput
             source="date"
             label="resources.notes.fields.date"
@@ -123,6 +187,14 @@ export const NoteInputs = ({
           <AttachmentField source="src" title="title" target="_blank" />
         </FileInput>
       </div>
+    </div>
+  );
+};
+
+const optionRenderer = (choice: any) => {
+  return (
+    <div>
+      <Status status={choice.value} /> {choice.name}
     </div>
   );
 };

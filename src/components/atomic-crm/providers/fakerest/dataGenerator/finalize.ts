@@ -1,4 +1,10 @@
 import type { Db } from "./types";
 
-// Nothing to backfill for now: every generator produces self-contained records.
-export const finalize = (_db: Db) => {};
+export const finalize = (db: Db) => {
+  // set contact status according to the latest note
+  db.contact_notes
+    .sort((a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf())
+    .forEach((note) => {
+      db.contacts[note.contact_id as number].status = note.status;
+    });
+};

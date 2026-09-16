@@ -8,8 +8,10 @@ import { InfinitePagination } from "../misc/InfinitePagination";
 
 export const NotesIterator = ({
   reference,
+  showStatus,
 }: {
   reference: "contacts" | "deals";
+  showStatus?: boolean;
 }) => {
   const { isPending, error, data = [] } = useListContext();
 
@@ -17,12 +19,16 @@ export const NotesIterator = ({
 
   return (
     <div className="mt-4">
-      <NoteCreate reference={reference} />
+      <NoteCreate reference={reference} showStatus={showStatus} />
       {data.length > 0 && (
         <div className="mt-4 space-y-4">
           {data.map((note, index) => (
             <Fragment key={note.id}>
-              <Note note={note} isLast={index === data.length - 1} />
+              <Note
+                note={note}
+                isLast={index === data.length - 1}
+                showStatus={showStatus}
+              />
               {index < data.length - 1 && <Separator />}
             </Fragment>
           ))}

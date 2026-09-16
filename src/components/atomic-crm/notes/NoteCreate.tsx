@@ -21,9 +21,11 @@ import { foreignKeyMapping } from "./foreignKeyMapping";
 
 export const NoteCreate = ({
   reference,
+  showStatus,
   className,
 }: {
   reference: "contacts" | "deals";
+  showStatus?: boolean;
   className?: string;
 }) => {
   const resource = useResourceContext();
@@ -32,12 +34,18 @@ export const NoteCreate = ({
 
   if (!record || !identity) return null;
 
+  const defaultStatus = reference === "contacts" ? record.status : undefined;
+
   return (
     <CreateBase resource={resource} redirect={false}>
       <Form>
         <div className={cn("space-y-3", className)}>
-          <NoteInputs />
-          <NoteCreateButton record={record} reference={reference} />
+          <NoteInputs defaultStatus={defaultStatus} showStatus={showStatus} />
+          <NoteCreateButton
+            defaultStatus={defaultStatus}
+            record={record}
+            reference={reference}
+          />
         </div>
       </Form>
     </CreateBase>
@@ -45,9 +53,11 @@ export const NoteCreate = ({
 };
 
 const NoteCreateButton = ({
+  defaultStatus,
   reference,
   record,
 }: {
+  defaultStatus?: string;
   reference: "contacts" | "deals";
   record: RaRecord<Identifier>;
 }) => {
@@ -60,13 +70,22 @@ const NoteCreateButton = ({
 
   if (!record || !identity) return null;
 
-  const resetValues = {
+  const resetValues: {
+    date: string;
+    text: null;
+    attachments: null;
+    status?: string;
+  } = {
     date: getCurrentDate(),
     text: null,
     attachments: null,
   };
 
-  const handleSuccess = () => {
+  const handleSuccess = (data: any) => {
+    if (reference === "contacts") {
+      resetValues.status = data.status ?? defaultStatus;
+    }
+
     reset(resetValues, { keepValues: false });
     refetch();
     update(reference, {
@@ -74,6 +93,7 @@ const NoteCreateButton = ({
       data: {
         last_seen:
           reference === "contacts" ? new Date().toISOString() : undefined,
+        status: data.status,
       },
       previousData: record,
     });

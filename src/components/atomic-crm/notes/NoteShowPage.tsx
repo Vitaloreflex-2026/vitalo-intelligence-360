@@ -16,6 +16,7 @@ import MobileHeader from "../layout/MobileHeader";
 import { Markdown } from "../misc/Markdown";
 import { MobileBackButton } from "../misc/MobileBackButton";
 import { RelativeDate } from "../misc/RelativeDate";
+import { Status } from "../misc/Status";
 import type { ContactNote } from "../types";
 import { NoteAttachments } from "./NoteAttachments";
 import { NoteEditSheet } from "./NoteEditSheet";
@@ -91,6 +92,7 @@ export const NoteShowPage = () => {
             <span>
               {isCurrentUser ? translate("resources.notes.me") : salesName}{" "}
             </span>
+            {note.status && <Status status={note.status} />}
             <div className="flex-1" />
             <RelativeDate date={note.date} />
           </div>
