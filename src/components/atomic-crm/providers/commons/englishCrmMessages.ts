@@ -467,6 +467,7 @@ export const englishCrmMessages = {
       no_contacts: "No contact",
       nb_contacts: "%{smart_count} contact |||| %{smart_count} contacts",
       nb_deals: "%{smart_count} deal |||| %{smart_count} deals",
+      no_deals: "No deal",
       sizes: {
         fewer_than_fifty_employees: "Fewer than 50 employees",
         fifty_to_one_hundred_employees: "50-100 employees",
@@ -623,6 +624,7 @@ export const englishCrmMessages = {
         stage: "Stage",
       },
       action: {
+        add: "Add deal",
         back_to_deal: "Back to deal",
         create: "Create deal",
         new: "New Deal",
@@ -740,6 +742,7 @@ export const englishCrmMessages = {
       fields: {
         text: "Description",
         due_date: "Date and time",
+        duration_minutes: "Duration (min)",
         type: "Meeting type",
         mode: "Meeting mode",
         location: "Location",
@@ -877,7 +880,10 @@ export const englishCrmMessages = {
       load_more: "Load more activity",
     },
     dashboard: {
-      deals_chart: "Upcoming Deal Revenue",
+      calendar: {
+        title: "My meetings",
+        reschedule_error: "This meeting could not be moved",
+      },
       deals_pipeline: "Deals Pipeline",
       latest_activity: "Latest Activity",
       latest_activity_error: "Error loading latest activity",
@@ -971,6 +977,12 @@ export const englishCrmMessages = {
       tasks: {
         types: "Types",
       },
+      rdv_types: {
+        title: "Meeting types",
+        hint: "Colour of each type in the dashboard calendar. Saved as soon as you close the picker.",
+        empty: "No meeting type yet.",
+        save_error: "This colour could not be saved",
+      },
       preferences: "Preferences",
       title: "Settings",
       app_title: "App Title",
@@ -1011,6 +1023,10 @@ export const englishCrmMessages = {
       },
       password: {
         change: "Change password",
+        change_error:
+          "The password reset email could not be sent. Please try again.",
+        too_many_requests:
+          "A password reset email was just sent. Please wait a minute before asking for another one.",
       },
       password_reset_sent:
         "A reset password email has been sent to your email address",

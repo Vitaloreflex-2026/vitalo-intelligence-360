@@ -34,6 +34,7 @@ import {
 import ImageEditorField from "../misc/ImageEditorField";
 import type { CrmDataProvider } from "../providers/types";
 import type { Sale, SalesFormData } from "../types";
+import { useChangePassword } from "./useChangePassword";
 
 export const ProfilePage = () => {
   const [isEditMode, setEditMode] = useState(false);
@@ -106,31 +107,7 @@ const ProfileForm = ({
   const { isDirty } = useFormState();
   const dataProvider = useDataProvider<CrmDataProvider>();
 
-  const { mutate: updatePassword } = useMutation({
-    mutationKey: ["updatePassword"],
-    mutationFn: async () => {
-      if (!identity) {
-        throw new Error(
-          translate("crm.profile.record_not_found", {
-            _: "Record not found",
-          }),
-        );
-      }
-      return dataProvider.updatePassword(identity.id);
-    },
-    onSuccess: () => {
-      notify("crm.profile.password_reset_sent", {
-        messageArgs: {
-          _: "A reset password email has been sent to your email address",
-        },
-      });
-    },
-    onError: (e) => {
-      notify(`${e}`, {
-        type: "error",
-      });
-    },
-  });
+  const { changePassword, isPending: isChangingPassword } = useChangePassword();
 
   const { mutate: mutateSale } = useMutation({
     mutationKey: ["signup"],
@@ -162,10 +139,6 @@ const ProfileForm = ({
     },
   });
   if (!identity) return null;
-
-  const handleClickOpenPasswordChange = () => {
-    updatePassword();
-  };
 
   const handleAvatarUpdate = async (values: any) => {
     mutateSale(values);
@@ -202,7 +175,8 @@ const ProfileForm = ({
                 <Button
                   variant="outline"
                   type="button"
-                  onClick={handleClickOpenPasswordChange}
+                  disabled={isChangingPassword}
+                  onClick={() => changePassword()}
                 >
                   {translate("crm.profile.password.change")}
                 </Button>

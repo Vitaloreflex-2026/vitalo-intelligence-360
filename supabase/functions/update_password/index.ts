@@ -9,8 +9,14 @@ async function updatePassword(user: any) {
     user.email,
   );
 
-  if (!data || error) {
-    return createErrorResponse(500, "Internal Server Error");
+  // Forward the auth error as-is: the caller needs the status (429 when the
+  // recovery email was requested too recently) to explain the failure.
+  if (error) {
+    return createErrorResponse(
+      error.status ?? 500,
+      error.message || "Internal Server Error",
+      { code: error.code },
+    );
   }
 
   return new Response(

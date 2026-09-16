@@ -1,5 +1,6 @@
 import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { ReferenceInput } from "@/components/admin/reference-input";
+import { NumberInput } from "@/components/admin/number-input";
 import { SelectInput } from "@/components/admin/select-input";
 import { TextInput } from "@/components/admin/text-input";
 import { required } from "ra-core";
@@ -16,6 +17,10 @@ import type { Sale } from "../types";
  * disabled for them. Matched against the labels seeded in `choices`.
  */
 const REMOTE_MEETING_MODES = ["visioconférence", "téléphone"];
+
+/** A meeting cannot be shorter than a quarter of an hour, and moves by quarters. */
+const MIN_DURATION_MINUTES = 15;
+const DURATION_STEP_MINUTES = 15;
 
 const saleOptionRenderer = (choice: Sale) =>
   `${choice.first_name} ${choice.last_name}`;
@@ -70,6 +75,12 @@ export const TaskFormContent = ({
           source="due_date"
           helperText={false}
           validate={required()}
+        />
+        <NumberInput
+          source="duration_minutes"
+          helperText={false}
+          min={MIN_DURATION_MINUTES}
+          step={DURATION_STEP_MINUTES}
         />
         <ChoiceInput source="type" category="rdv_type" validate={required()} />
         <ChoiceInput source="mode" category="rdv_mode" />

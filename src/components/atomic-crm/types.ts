@@ -58,6 +58,8 @@ export type RelationshipStatus = "prospect" | "client" | "partner";
 export type Choice = {
   category: string;
   label: string;
+  /** Hex fill, only meaningful for the `rdv_type` category so far. */
+  color?: string | null;
 } & Pick<RaRecord, "id">;
 
 export type Company = {
@@ -274,6 +276,8 @@ export type Task = {
   sales_id?: Identifier;
   location?: string | null;
   mode?: string | null;
+  /** Length of the meeting in minutes, used to size its calendar block. */
+  duration_minutes?: number;
 } & Pick<RaRecord, "id">;
 
 export type ActivityCompanyCreated = {

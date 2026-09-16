@@ -1,7 +1,9 @@
 import { useLocaleState, useRecordContext, useTranslate } from "ra-core";
+import { Link as RouterLink } from "react-router";
 import { ReferenceArrayField } from "@/components/admin/reference-array-field";
 import { SingleFieldList } from "@/components/admin/single-field-list";
 import { TextField } from "@/components/admin/text-field";
+import { Badge } from "@/components/ui/badge";
 
 import { formatLocalizedDate } from "../misc/RelativeDate";
 import { relationshipStatuses } from "../misc/relationshipStatuses";
@@ -59,7 +61,16 @@ export const ContactPositionInfo = () => {
             source="linked_contact_ids"
             reference="contacts_summary"
           >
-            <SingleFieldList />
+            <SingleFieldList
+              className="flex-wrap"
+              render={(contact: Contact) => (
+                <Badge variant="outline" asChild>
+                  <RouterLink to={`/contacts/${contact.id}/show`}>
+                    {contact.first_name} {contact.last_name}
+                  </RouterLink>
+                </Badge>
+              )}
+            />
           </ReferenceArrayField>
         </div>
       )}

@@ -49,6 +49,7 @@ export const generateTasks = (db: Db) => {
         new Date(Date.now() + 100 * 24 * 60 * 60 * 1000),
       ).toISOString(),
       done_date: undefined,
+      duration_minutes: random.arrayElement([30, 45, 60, 90, 120]),
       sales_id: 0,
     };
   });

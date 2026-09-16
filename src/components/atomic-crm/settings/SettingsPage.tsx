@@ -20,7 +20,9 @@ import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { SimpleFormIterator } from "@/components/admin/simple-form-iterator";
 import { TextInput } from "@/components/admin/text-input";
 
+import { ColorSwatchInput } from "../misc/ColorSwatchInput";
 import ImageEditorField from "../misc/ImageEditorField";
+import { RdvTypeColorsCard } from "./RdvTypeColorsCard";
 import {
   useConfigurationContext,
   useConfigurationUpdater,
@@ -42,6 +44,11 @@ const SECTIONS = [
   { id: "deals", label: "resources.deals.name", fallback: "Deals" },
   { id: "notes", label: "resources.notes.name", fallback: "Notes" },
   { id: "tasks", label: "resources.tasks.name", fallback: "Tasks" },
+  {
+    id: "rdv-types",
+    label: "crm.settings.rdv_types.title",
+    fallback: "Meeting types",
+  },
 ];
 
 /** Ensure every item in a { value, label } array has a value (slug from label). */
@@ -451,6 +458,10 @@ const SettingsFormFields = () => {
             </ArrayInput>
           </CardContent>
         </Card>
+
+        {/* Meeting types live in the `choices` referential, not in the
+            configuration record, so this card saves on its own. */}
+        <RdvTypeColorsCard />
       </div>
 
       {/* Sticky save button */}
@@ -500,11 +511,11 @@ const SettingsFormFields = () => {
 const ColorInput = ({ source }: { source: string }) => {
   const { field } = useInput({ source });
   return (
-    <input
-      type="color"
-      {...field}
-      value={field.value || "#000000"}
-      className="w-9 h-9 shrink-0 cursor-pointer appearance-none rounded border bg-transparent p-0.5 [&::-webkit-color-swatch-wrapper]:cursor-pointer [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:cursor-pointer [&::-webkit-color-swatch]:rounded-sm [&::-webkit-color-swatch]:border-none [&::-moz-color-swatch]:cursor-pointer [&::-moz-color-swatch]:rounded-sm [&::-moz-color-swatch]:border-none"
+    <ColorSwatchInput
+      name={field.name}
+      value={field.value}
+      onChange={field.onChange}
+      onBlur={field.onBlur}
     />
   );
 };

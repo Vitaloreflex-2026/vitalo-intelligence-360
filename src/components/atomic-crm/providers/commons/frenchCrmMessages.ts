@@ -474,6 +474,7 @@ export const frenchCrmMessages = {
       no_contacts: "Aucun contact",
       nb_contacts: "%{smart_count} contact |||| %{smart_count} contacts",
       nb_deals: "%{smart_count} dossier |||| %{smart_count} dossiers",
+      no_deals: "Aucun dossier",
       sizes: {
         fewer_than_fifty_employees: "Moins de 50 salariés",
         fifty_to_one_hundred_employees: "50 à 100 salariés",
@@ -632,6 +633,7 @@ export const frenchCrmMessages = {
         stage: "Étape",
       },
       action: {
+        add: "Ajouter un dossier",
         back_to_deal: "Retour au dossier",
         create: "Créer un dossier",
         new: "Nouveau dossier",
@@ -750,6 +752,7 @@ export const frenchCrmMessages = {
       fields: {
         text: "Description",
         due_date: "Date et heure",
+        duration_minutes: "Durée (min)",
         type: "Type de rendez-vous",
         mode: "Mode de rendez-vous",
         location: "Lieu",
@@ -888,7 +891,10 @@ export const frenchCrmMessages = {
       load_more: "Charger plus d'activité",
     },
     dashboard: {
-      deals_chart: "Revenus des dossiers à venir",
+      calendar: {
+        title: "Mes rendez-vous",
+        reschedule_error: "Impossible de déplacer ce rendez-vous",
+      },
       deals_pipeline: "Pipeline des dossiers",
       latest_activity: "Dernière activité",
       latest_activity_error:
@@ -984,6 +990,12 @@ export const frenchCrmMessages = {
       tasks: {
         types: "Types",
       },
+      rdv_types: {
+        title: "Types de rendez-vous",
+        hint: "Couleur de chaque type dans le calendrier du tableau de bord. Enregistrée dès que vous fermez le sélecteur.",
+        empty: "Aucun type de rendez-vous pour le moment.",
+        save_error: "Impossible d'enregistrer cette couleur",
+      },
       preferences: "Préférences",
       title: "Paramètres",
       app_title: "Titre de l'application",
@@ -1024,6 +1036,10 @@ export const frenchCrmMessages = {
       },
       password: {
         change: "Changer le mot de passe",
+        change_error:
+          "L'e-mail de réinitialisation du mot de passe n'a pas pu être envoyé. Veuillez réessayer.",
+        too_many_requests:
+          "Un e-mail de réinitialisation vient d'être envoyé. Patientez une minute avant d'en demander un autre.",
       },
       password_reset_sent:
         "Un e-mail de réinitialisation du mot de passe a été envoyé à votre adresse e-mail",
