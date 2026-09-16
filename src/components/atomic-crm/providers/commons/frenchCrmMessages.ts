@@ -112,7 +112,10 @@ export const frenchCrmMessages = {
         status_none: "Aucun",
       },
       company_contacts_count:
-        "Déjà %{smart_count} contact lié à cette entreprise |||| Déjà %{smart_count} contacts liés à cette entreprise",
+        "Déjà %{link} lié à cette entreprise |||| Déjà %{link} liés à cette entreprise",
+      company_contacts_count_link:
+        "%{smart_count} contact |||| %{smart_count} contacts",
+      company_contacts_dialog_title: "Contacts de %{company}",
       position_at: "%{title} chez",
       position_at_company: "%{title} chez %{company}",
       empty: {
