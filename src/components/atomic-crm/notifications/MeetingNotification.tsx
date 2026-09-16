@@ -15,6 +15,8 @@ import { cn } from "@/lib/utils";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import { TaskEdit } from "../tasks/TaskEdit";
+import { TaskExit } from "../tasks/TaskExit";
+import { useTaskExit } from "../tasks/useTaskExit";
 import {
   DAYS_UNTIL_NEXT_WEEK,
   DAYS_UNTIL_TOMORROW,
@@ -26,7 +28,14 @@ import type { Contact, Task } from "../types";
  * One of today's meetings in the notification panel: the meeting itself plus
  * its two actions — mark as done, and postpone (tomorrow / next week / edit).
  */
-export const MeetingNotification = ({ meeting }: { meeting: Task }) => {
+export const MeetingNotification = ({
+  meeting,
+  showDate,
+}: {
+  meeting: Task;
+  /** Overdue meetings are not from today, so their day must be spelled out. */
+  showDate?: boolean;
+}) => {
   const translate = useTranslate();
   const queryClient = useQueryClient();
   const { taskTypes } = useConfigurationContext();
@@ -34,31 +43,37 @@ export const MeetingNotification = ({ meeting }: { meeting: Task }) => {
 
   const [openEdit, setOpenEdit] = useState(false);
   const [update, { isPending }] = useUpdate();
+  const { isLeaving, leave } = useTaskExit();
 
   const isDone = !!meeting.done_date;
 
+  // A checked meeting leaves the panel, so it folds away first.
   const handleCheck = () => {
-    update("tasks", {
-      id: meeting.id,
-      data: { done_date: isDone ? null : new Date().toISOString() },
-      previousData: meeting,
-    });
+    leave(() =>
+      update("tasks", {
+        id: meeting.id,
+        data: { done_date: isDone ? null : new Date().toISOString() },
+        previousData: meeting,
+      }),
+    );
   };
 
   const handlePostpone = (days: number) => () => {
-    update(
-      "tasks",
-      {
-        id: meeting.id,
-        data: { due_date: postponeDueDate(meeting.due_date, days) },
-        previousData: meeting,
-      },
-      {
-        // A postponed meeting leaves today's list, so the panel must refetch.
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["tasks", "getList"] });
+    leave(() =>
+      update(
+        "tasks",
+        {
+          id: meeting.id,
+          data: { due_date: postponeDueDate(meeting.due_date, days) },
+          previousData: meeting,
         },
-      },
+        {
+          // A postponed meeting leaves today's list, so the panel must refetch.
+          onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["tasks", "getList"] });
+          },
+        },
+      ),
     );
   };
 
@@ -68,92 +83,98 @@ export const MeetingNotification = ({ meeting }: { meeting: Task }) => {
 
   return (
     <>
-      <div className="flex items-start justify-between gap-3 py-2">
-        <div className={cn("flex-grow text-sm", isDone && "line-through")}>
-          <div className="flex items-baseline gap-2">
-            <DateField
-              source="due_date"
-              record={meeting}
-              showTime
-              showDate={false}
-              options={{ hour: "2-digit", minute: "2-digit" }}
-              className="font-semibold tabular-nums"
-            />
-            <span>{meeting.text}</span>
+      <TaskExit isLeaving={isLeaving}>
+        <div className="flex items-start justify-between gap-3 py-2">
+          <div className={cn("flex-grow text-sm", isDone && "line-through")}>
+            <div className="flex items-baseline gap-2">
+              <DateField
+                source="due_date"
+                record={meeting}
+                showTime
+                showDate={!!showDate}
+                options={{
+                  ...(showDate && { day: "2-digit", month: "2-digit" }),
+                  hour: "2-digit",
+                  minute: "2-digit",
+                }}
+                className="font-semibold tabular-nums whitespace-nowrap"
+              />
+              <span>{meeting.text}</span>
+            </div>
+            <div className="flex items-baseline gap-2 text-xs text-muted-foreground">
+              <ReferenceField<Task, Contact>
+                source="contact_id"
+                reference="contacts"
+                record={meeting}
+                link="show"
+                render={({ referenceRecord }) =>
+                  referenceRecord ? (
+                    <>{getContactRepresentation(referenceRecord)}</>
+                  ) : null
+                }
+              />
+              <span className="truncate">
+                {[
+                  meetingType && meeting.type !== "none"
+                    ? meetingType.label
+                    : meeting.type,
+                  meeting.mode,
+                  meeting.location,
+                ]
+                  .filter(Boolean)
+                  .join(" — ")}
+              </span>
+            </div>
           </div>
-          <div className="flex items-baseline gap-2 text-xs text-muted-foreground">
-            <ReferenceField<Task, Contact>
-              source="contact_id"
-              reference="contacts"
-              record={meeting}
-              link="show"
-              render={({ referenceRecord }) =>
-                referenceRecord ? (
-                  <>{getContactRepresentation(referenceRecord)}</>
-                ) : null
-              }
-            />
-            <span className="truncate">
-              {[
-                meetingType && meeting.type !== "none"
-                  ? meetingType.label
-                  : meeting.type,
-                meeting.mode,
-                meeting.location,
-              ]
-                .filter(Boolean)
-                .join(" — ")}
-            </span>
+
+          <div className="flex items-center gap-1 shrink-0">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-8 cursor-pointer"
+              disabled={isPending || isLeaving}
+              onClick={handleCheck}
+              aria-label={translate("crm.notifications.actions.done")}
+            >
+              <Check className={cn("size-4", isDone && "text-primary")} />
+            </Button>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-8 cursor-pointer"
+                  disabled={isPending || isLeaving}
+                  aria-label={translate("crm.notifications.actions.postpone")}
+                >
+                  <Clock className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={handlePostpone(DAYS_UNTIL_TOMORROW)}
+                >
+                  {translate("resources.tasks.actions.postpone_tomorrow")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={handlePostpone(DAYS_UNTIL_NEXT_WEEK)}
+                >
+                  {translate("resources.tasks.actions.postpone_next_week")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => setOpenEdit(true)}
+                >
+                  {translate("ra.action.edit")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
-
-        <div className="flex items-center gap-1 shrink-0">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-8 cursor-pointer"
-            disabled={isPending}
-            onClick={handleCheck}
-            aria-label={translate("crm.notifications.actions.done")}
-          >
-            <Check className={cn("size-4", isDone && "text-primary")} />
-          </Button>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="size-8 cursor-pointer"
-                disabled={isPending}
-                aria-label={translate("crm.notifications.actions.postpone")}
-              >
-                <Clock className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={handlePostpone(DAYS_UNTIL_TOMORROW)}
-              >
-                {translate("resources.tasks.actions.postpone_tomorrow")}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={handlePostpone(DAYS_UNTIL_NEXT_WEEK)}
-              >
-                {translate("resources.tasks.actions.postpone_next_week")}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => setOpenEdit(true)}
-              >
-                {translate("ra.action.edit")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
+      </TaskExit>
 
       <TaskEdit
         taskId={meeting.id}

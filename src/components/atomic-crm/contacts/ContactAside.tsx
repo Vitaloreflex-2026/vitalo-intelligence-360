@@ -69,7 +69,7 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
           sort={{ field: "due_date", order: "ASC" }}
           perPage={1000}
         >
-          <TasksIterator />
+          <TasksIterator showDone />
         </ReferenceManyField>
         <AddTask />
       </AsideSection>

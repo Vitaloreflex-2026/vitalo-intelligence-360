@@ -4,12 +4,12 @@ import { Default } from "./MeetingNotifications.stories";
 
 const openPanel = async () => {
   const screen = await render(<Default />);
-  await screen.getByRole("button", { name: /today's meetings/i }).click();
+  await screen.getByRole("button", { name: /meetings to handle/i }).click();
   return screen;
 };
 
 describe("MeetingNotifications", () => {
-  it("lists only the meetings due today", async () => {
+  it("lists the meetings due today and the overdue ones", async () => {
     // Arrange / Act
     const screen = await openPanel();
 
@@ -20,9 +20,47 @@ describe("MeetingNotifications", () => {
     await expect
       .element(screen.getByText("Point hebdomadaire"))
       .toBeInTheDocument();
-    expect(screen.getByText("Rendez-vous de demain").elements()).toHaveLength(
-      0,
-    );
+    await expect
+      .element(screen.getByText("Rendez-vous oublie"))
+      .toBeInTheDocument();
+  });
+
+  it("lists overdue meetings above today's ones", async () => {
+    // Arrange
+    const screen = await openPanel();
+    await expect
+      .element(screen.getByText("Rendez-vous oublie"))
+      .toBeInTheDocument();
+
+    // Act
+    const headings = await screen.getByRole("heading").elements();
+
+    // Assert
+    expect(headings.map((heading) => heading.textContent)).toEqual([
+      "Meetings to handle",
+      "Overdue",
+      "Today",
+    ]);
+  });
+
+  it("leaves out meetings that are not due yet", async () => {
+    // Arrange / Act
+    const screen = await openPanel();
+
+    // Assert
+    await expect
+      .element(screen.getByText("Rendez-vous de demain"))
+      .not.toBeInTheDocument();
+  });
+
+  it("leaves out meetings that are already done", async () => {
+    // Arrange / Act
+    const screen = await openPanel();
+
+    // Assert
+    await expect
+      .element(screen.getByText("Rendez-vous deja traite"))
+      .not.toBeInTheDocument();
   });
 
   it("shows the number of meetings still to handle", async () => {
@@ -30,14 +68,14 @@ describe("MeetingNotifications", () => {
     const screen = await render(<Default />);
 
     // Act / Assert
-    await expect.element(screen.getByText("2")).toBeInTheDocument();
+    await expect.element(screen.getByText("3")).toBeInTheDocument();
   });
 
-  it("drops a meeting from the pending count once it is marked as done", async () => {
+  it("drops a meeting from the list and the count once it is marked as done", async () => {
     // Arrange
     const screen = await openPanel();
     await expect
-      .element(screen.getByText("Bilan de formation"))
+      .element(screen.getByText("Rendez-vous oublie"))
       .toBeInTheDocument();
 
     // Act
@@ -47,14 +85,17 @@ describe("MeetingNotifications", () => {
       .click();
 
     // Assert
-    await expect.element(screen.getByText("1")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("Rendez-vous oublie"))
+      .not.toBeInTheDocument();
+    await expect.element(screen.getByText("2")).toBeInTheDocument();
   });
 
-  it("removes a meeting from today's list when postponed to tomorrow", async () => {
+  it("removes an overdue meeting from the list when postponed to tomorrow", async () => {
     // Arrange
     const screen = await openPanel();
     await expect
-      .element(screen.getByText("Bilan de formation"))
+      .element(screen.getByText("Rendez-vous oublie"))
       .toBeInTheDocument();
 
     // Act
@@ -68,10 +109,10 @@ describe("MeetingNotifications", () => {
 
     // Assert
     await expect
-      .element(screen.getByText("Point hebdomadaire"))
+      .element(screen.getByText("Bilan de formation"))
       .toBeInTheDocument();
     await expect
-      .element(screen.getByText("Bilan de formation"))
+      .element(screen.getByText("Rendez-vous oublie"))
       .not.toBeInTheDocument();
   });
 

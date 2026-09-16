@@ -1,5 +1,4 @@
 import { endOfToday } from "date-fns/endOfToday";
-import { startOfToday } from "date-fns/startOfToday";
 import { Bell } from "lucide-react";
 import { useGetIdentity, useGetList, useTranslate } from "ra-core";
 import { useMemo } from "react";
@@ -10,14 +9,50 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
-import { isRecentlyDone } from "../tasks/tasksPredicate";
+import { isOverdue } from "../tasks/tasksPredicate";
 import type { Task } from "../types";
 import { MeetingNotification } from "./MeetingNotification";
 
+const MeetingSection = ({
+  meetings,
+  showDate,
+  title,
+  titleClassName,
+}: {
+  meetings: Task[];
+  showDate?: boolean;
+  title: string;
+  titleClassName?: string;
+}) => {
+  if (!meetings.length) return null;
+
+  return (
+    <section className="px-4 pb-2">
+      <h3
+        className={cn(
+          "text-xs font-semibold uppercase tracking-wide pt-2 pb-1",
+          titleClassName,
+        )}
+      >
+        {title}
+      </h3>
+      <ul className="divide-y">
+        {meetings.map((meeting) => (
+          <li key={meeting.id}>
+            <MeetingNotification meeting={meeting} showDate={showDate} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+};
+
 /**
- * Floating bottom-right panel listing the current user's meetings for today,
- * each with a "done" and a "postpone" action.
+ * Floating bottom-right panel listing the current user's meetings that still
+ * need handling — overdue ones first, then today's — each with a "done" and a
+ * "postpone" action.
  */
 export const MeetingNotifications = () => {
   const translate = useTranslate();
@@ -26,35 +61,31 @@ export const MeetingNotifications = () => {
   const { data: meetings } = useGetList<Task>(
     "tasks",
     {
+      // Newest first, so this bounded window holds today's meetings plus the
+      // most recent overdue ones instead of the oldest of a long backlog.
       pagination: { page: 1, perPage: 100 },
-      sort: { field: "due_date", order: "ASC" },
+      sort: { field: "due_date", order: "DESC" },
       filter: {
         sales_id: identity?.id,
-        "due_date@gte": startOfToday().toISOString(),
         "due_date@lte": endOfToday().toISOString(),
       },
     },
     { enabled: !!identity },
   );
 
-  // Meetings checked a moment ago stay listed so the user sees the change
-  // before they disappear, as in the dashboard task list.
-  const todayMeetings = useMemo(
-    () =>
-      meetings?.filter(
-        (meeting) =>
-          !meeting.done_date ||
-          isRecentlyDone({
-            due_date: meeting.due_date,
-            done_date: meeting.done_date,
-          }),
-      ) ?? [],
+  const pendingMeetings = useMemo(
+    () => (meetings ?? []).filter((meeting) => !meeting.done_date).reverse(),
     [meetings],
   );
 
-  const pendingCount = todayMeetings.filter(
-    (meeting) => !meeting.done_date,
-  ).length;
+  const overdueMeetings = pendingMeetings.filter((meeting) =>
+    isOverdue(meeting.due_date),
+  );
+  const todayMeetings = pendingMeetings.filter(
+    (meeting) => !isOverdue(meeting.due_date),
+  );
+
+  const pendingCount = pendingMeetings.length;
 
   return (
     <div className="fixed bottom-4 right-4 z-40">
@@ -85,18 +116,23 @@ export const MeetingNotifications = () => {
           <h2 className="text-sm font-semibold px-4 pt-4 pb-2">
             {translate("crm.notifications.title")}
           </h2>
-          {todayMeetings.length === 0 ? (
+          {pendingMeetings.length === 0 ? (
             <p className="text-sm text-muted-foreground px-4 pb-4">
               {translate("crm.notifications.empty")}
             </p>
           ) : (
-            <ul className="px-4 pb-2 divide-y">
-              {todayMeetings.map((meeting) => (
-                <li key={meeting.id}>
-                  <MeetingNotification meeting={meeting} />
-                </li>
-              ))}
-            </ul>
+            <>
+              <MeetingSection
+                meetings={overdueMeetings}
+                showDate
+                title={translate("resources.tasks.filters.overdue")}
+                titleClassName="text-destructive"
+              />
+              <MeetingSection
+                meetings={todayMeetings}
+                title={translate("resources.tasks.filters.today")}
+              />
+            </>
           )}
         </PopoverContent>
       </Popover>

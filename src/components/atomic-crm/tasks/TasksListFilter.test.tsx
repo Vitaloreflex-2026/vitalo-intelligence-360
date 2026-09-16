@@ -60,6 +60,19 @@ describe("TaskListFilter", () => {
     await expect.element(screen.getByText("Today")).toBeInTheDocument();
   });
 
+  it("leaves out tasks that are already done", async () => {
+    const tasks = [createTask(1, today), createTask(2, today, today)];
+    const screen = await render(
+      <TaskListFilter tasks={tasks} title="Today" isMobile={false} />,
+      {
+        wrapper: Wrapper,
+      },
+    );
+
+    await expect.element(screen.getByText("Task 1")).toBeInTheDocument();
+    await expect.element(screen.getByText("Task 2")).not.toBeInTheDocument();
+  });
+
   it("does not show Load more when tasks fit in one page", async () => {
     const tasks = Array.from({ length: 3 }, (_, i) => createTask(i + 1, today));
     const screen = await render(

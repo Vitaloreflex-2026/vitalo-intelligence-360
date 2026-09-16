@@ -1,25 +1,37 @@
 import { useListContext } from "ra-core";
 
 import { Task } from "./Task";
-import { isDone, isRecentlyDone } from "./tasksPredicate";
+import { isDone } from "./tasksPredicate";
 
 export const TasksIterator = ({
   showContact,
   className,
+  showDone,
 }: {
   showContact?: boolean;
   className?: string;
+  /** Keep the done tasks, listed after the pending ones. */
+  showDone?: boolean;
 }) => {
   const { data, error, isPending } = useListContext();
   if (isPending || error || data.length === 0) return null;
 
-  // Keep only tasks that are not done or done less than 5 minutes ago
-  const tasks = data.filter((task) => !isDone(task) || isRecentlyDone(task));
+  // A checked task leaves the list straight away, unless the caller wants the
+  // whole history — it then sinks to the bottom.
+  const pendingTasks = data.filter((task) => !isDone(task));
+  const tasks = showDone
+    ? [...pendingTasks, ...data.filter(isDone)]
+    : pendingTasks;
 
   return (
     <div className={`space-y-4 md:space-y-2 ${className || ""}`}>
       {tasks.map((task) => (
-        <Task task={task} showContact={showContact} key={task.id} />
+        <Task
+          task={task}
+          showContact={showContact}
+          animateExit={!showDone}
+          key={task.id}
+        />
       ))}
     </div>
   );

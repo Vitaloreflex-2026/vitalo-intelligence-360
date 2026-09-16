@@ -385,8 +385,8 @@ export const frenchCrmMessages = {
   },
   crm: {
     notifications: {
-      title: "Rendez-vous du jour",
-      empty: "Aucun rendez-vous aujourd'hui",
+      title: "Rendez-vous à traiter",
+      empty: "Aucun rendez-vous à traiter",
       actions: {
         done: "Marquer comme fait",
         postpone: "Reporter",

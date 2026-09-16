@@ -16,7 +16,7 @@ const signIn = async (page: Page) => {
   await expect(page.getByText("Latest Activity")).toBeVisible();
 };
 
-test.describe("today's meetings notifications", () => {
+test.describe("meetings to handle notifications", () => {
   // The notification panel lives in the desktop layout only; mobile has its own
   // bottom navigation in that corner.
   test.skip(({ isMobile }) => !!isMobile, "desktop-only panel");
@@ -45,17 +45,27 @@ test.describe("today's meetings notifications", () => {
     await createTask({
       contact_id: contact.id,
       sales_id: sales.id,
+      text: "Rendez-vous oublie",
+      due_date: atNoon(-3),
+    });
+
+    await createTask({
+      contact_id: contact.id,
+      sales_id: sales.id,
       text: "Rendez-vous de demain",
       due_date: atNoon(1),
     });
   });
 
-  test("lists only the meetings due today", async ({ page }) => {
+  test("lists today's and overdue meetings, but not the upcoming ones", async ({
+    page,
+  }) => {
     await signIn(page);
 
-    await page.getByRole("button", { name: "Today's meetings" }).click();
+    await page.getByRole("button", { name: "Meetings to handle" }).click();
 
     await expect(page.getByText("Bilan de formation")).toBeVisible();
+    await expect(page.getByText("Rendez-vous oublie")).toBeVisible();
     await expect(page.getByText("Rendez-vous de demain")).toBeHidden();
   });
 
@@ -64,34 +74,36 @@ test.describe("today's meetings notifications", () => {
   }) => {
     await signIn(page);
 
-    const panelTrigger = page.getByRole("button", { name: "Today's meetings" });
-    await expect(panelTrigger).toContainText("1");
+    const panelTrigger = page.getByRole("button", {
+      name: "Meetings to handle",
+    });
+    await expect(panelTrigger).toContainText("2");
     await panelTrigger.click();
     await expect(page.getByText("Bilan de formation")).toBeVisible();
 
-    await page.getByRole("button", { name: "Mark as done" }).click();
+    await page.getByRole("button", { name: "Mark as done" }).last().click();
 
-    await expect(panelTrigger).not.toContainText("1");
+    await expect(panelTrigger).toContainText("1");
   });
 
-  test("postpones a meeting to tomorrow", async ({ page }) => {
+  test("postpones an overdue meeting to tomorrow", async ({ page }) => {
     await signIn(page);
 
-    await page.getByRole("button", { name: "Today's meetings" }).click();
-    await expect(page.getByText("Bilan de formation")).toBeVisible();
+    await page.getByRole("button", { name: "Meetings to handle" }).click();
+    await expect(page.getByText("Rendez-vous oublie")).toBeVisible();
 
-    await page.getByRole("button", { name: "Postpone" }).click();
+    await page.getByRole("button", { name: "Postpone" }).first().click();
     await page.getByRole("menuitem", { name: "Postpone to tomorrow" }).click();
 
-    await expect(page.getByText("Bilan de formation")).toBeHidden();
-    await expect(page.getByText("No meeting today")).toBeVisible();
+    await expect(page.getByText("Rendez-vous oublie")).toBeHidden();
+    await expect(page.getByText("Bilan de formation")).toBeVisible();
   });
 
   test("opens the edit dialog from the postpone menu", async ({ page }) => {
     await signIn(page);
 
-    await page.getByRole("button", { name: "Today's meetings" }).click();
-    await page.getByRole("button", { name: "Postpone" }).click();
+    await page.getByRole("button", { name: "Meetings to handle" }).click();
+    await page.getByRole("button", { name: "Postpone" }).first().click();
     await page.getByRole("menuitem", { name: "Edit" }).click();
 
     await expect(

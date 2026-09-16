@@ -46,6 +46,23 @@ const defaultData: Partial<Db> = {
       text: "Rendez-vous de demain",
       type: "meeting",
     },
+    {
+      contact_id: 1,
+      due_date: at(-2, 10),
+      id: 4,
+      sales_id: 0,
+      text: "Rendez-vous oublie",
+      type: "meeting",
+    },
+    {
+      contact_id: 1,
+      done_date: at(-3, 11),
+      due_date: at(-3, 10),
+      id: 5,
+      sales_id: 0,
+      text: "Rendez-vous deja traite",
+      type: "meeting",
+    },
   ] as Db["tasks"],
 };
 

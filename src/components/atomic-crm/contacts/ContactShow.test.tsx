@@ -35,6 +35,54 @@ describe("ContactShow", () => {
       .toBe(false);
   });
 
+  it("lists the contact's done meetings after the pending ones in the aside", async () => {
+    mockIsMobile.mockReturnValue(false);
+
+    const contact = buildContact();
+    const screen = await render(
+      <StoryWrapper
+        data={{
+          contacts: [contact],
+          tasks: [
+            {
+              contact_id: contact.id,
+              done_date: "2025-01-02T10:00:00.000Z",
+              due_date: "2025-01-01T10:00:00.000Z",
+              id: 1,
+              sales_id: 0,
+              text: "Rendez-vous traite",
+              type: "meeting",
+            },
+            {
+              contact_id: contact.id,
+              due_date: "2099-01-01T10:00:00.000Z",
+              id: 2,
+              sales_id: 0,
+              text: "Rendez-vous a venir",
+              type: "meeting",
+            },
+          ],
+        }}
+      >
+        <ResourceContextProvider value="contacts">
+          <ShowBase id={contact.id}>
+            <ContactAside />
+          </ShowBase>
+        </ResourceContextProvider>
+      </StoryWrapper>,
+    );
+
+    await expect
+      .element(screen.getByText("Rendez-vous traite"))
+      .toBeInTheDocument();
+
+    // Sorted by due date the done meeting would come first; it must not.
+    const asideText = screen.container.textContent ?? "";
+    expect(asideText.indexOf("Rendez-vous a venir")).toBeLessThan(
+      asideText.indexOf("Rendez-vous traite"),
+    );
+  });
+
   it("updates the contact status from the aside", async () => {
     mockIsMobile.mockReturnValue(false);
 

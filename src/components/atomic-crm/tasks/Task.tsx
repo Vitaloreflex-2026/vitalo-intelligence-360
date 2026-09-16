@@ -22,15 +22,25 @@ import {
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Contact, Task as TData } from "../types";
 import { TaskEdit } from "./TaskEdit";
+import { TaskExit } from "./TaskExit";
+import { useTaskExit } from "./useTaskExit";
 import { TaskEditSheet } from "./TaskEditSheet";
+import {
+  DAYS_UNTIL_NEXT_WEEK,
+  DAYS_UNTIL_TOMORROW,
+  postponeDueDate,
+} from "./postponeDueDate";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export const Task = ({
   task,
   showContact,
+  animateExit,
 }: {
   task: TData;
   showContact?: boolean;
+  /** Set when checking or postponing the task drops it from the list. */
+  animateExit?: boolean;
 }) => {
   const isMobile = useIsMobile();
   const { taskTypes } = useConfigurationContext();
@@ -40,6 +50,7 @@ export const Task = ({
   const getContactRepresentation = useGetRecordRepresentation("contacts");
 
   const [openEdit, setOpenEdit] = useState(false);
+  const { isLeaving, leave } = useTaskExit();
 
   const handleCloseEdit = () => {
     setOpenEdit(false);
@@ -63,14 +74,37 @@ export const Task = ({
     setOpenEdit(true);
   };
 
+  const handlePostpone = (days: number) => () => {
+    const postpone = () =>
+      update("tasks", {
+        id: task.id,
+        data: { due_date: postponeDueDate(task.due_date, days) },
+        previousData: task,
+      });
+
+    if (animateExit) {
+      leave(postpone);
+      return;
+    }
+    postpone();
+  };
+
   const handleCheck = () => () => {
-    update("tasks", {
-      id: task.id,
-      data: {
-        done_date: task.done_date ? null : new Date().toISOString(),
-      },
-      previousData: task,
-    });
+    const toggleDone = () =>
+      update("tasks", {
+        id: task.id,
+        data: {
+          done_date: task.done_date ? null : new Date().toISOString(),
+        },
+        previousData: task,
+      });
+
+    // Checking it off removes the task from this list, so fold it away first.
+    if (animateExit && !task.done_date) {
+      leave(toggleDone);
+      return;
+    }
+    toggleDone();
   };
 
   useEffect(() => {
@@ -90,129 +124,113 @@ export const Task = ({
 
   return (
     <>
-      <div className="flex items-start justify-between">
-        <div
-          className="flex items-start gap-2 flex-1"
-          onClick={isMobile ? handleCheck() : undefined}
-        >
-          <Checkbox
-            id={labelId}
-            checked={!!task.done_date}
-            onCheckedChange={handleCheck()}
-            disabled={isUpdatePending}
-            className="mt-1"
-          />
-          <div className={`flex-grow ${task.done_date ? "line-through" : ""}`}>
-            <div className="text-sm">
-              {task.type && task.type !== "none" && (
-                <>
-                  <span className="font-semibold text-sm">
-                    {(() => {
-                      const matchedTaskType = taskTypes.find(
-                        (taskType) => taskType.value === task.type,
-                      );
-                      return matchedTaskType
-                        ? matchedTaskType.label
-                        : task.type;
-                    })()}
-                  </span>
-                  &nbsp;
-                </>
-              )}
-              {task.text}
-            </div>
-            {(task.mode || task.location) && (
-              <div className="text-sm text-muted-foreground">
-                {[task.mode, task.location].filter(Boolean).join(" — ")}
+      <TaskExit isLeaving={isLeaving}>
+        <div className="flex items-start justify-between">
+          <div
+            className="flex items-start gap-2 flex-1"
+            onClick={isMobile ? handleCheck() : undefined}
+          >
+            <Checkbox
+              id={labelId}
+              checked={!!task.done_date}
+              onCheckedChange={handleCheck()}
+              disabled={isUpdatePending || isLeaving}
+              className="mt-1"
+            />
+            <div
+              className={`flex-grow ${task.done_date ? "line-through" : ""}`}
+            >
+              <div className="text-sm">
+                {task.type && task.type !== "none" && (
+                  <>
+                    <span className="font-semibold text-sm">
+                      {(() => {
+                        const matchedTaskType = taskTypes.find(
+                          (taskType) => taskType.value === task.type,
+                        );
+                        return matchedTaskType
+                          ? matchedTaskType.label
+                          : task.type;
+                      })()}
+                    </span>
+                    &nbsp;
+                  </>
+                )}
+                {task.text}
               </div>
-            )}
-            <div className="text-sm text-muted-foreground">
-              {translate("resources.tasks.fields.due_short")}
-              &nbsp;
-              <DateField source="due_date" record={task} showDate showTime />
-              {showContact && (
-                <ReferenceField<TData, Contact>
-                  source="contact_id"
-                  reference="contacts"
-                  record={task}
-                  link="show"
-                  className="inline text-sm text-muted-foreground"
-                  render={({ referenceRecord }) => {
-                    if (!referenceRecord) return null;
-                    return (
-                      <>
-                        {" "}
-                        {translate("resources.tasks.regarding_contact", {
-                          name: getContactRepresentation(referenceRecord),
-                        })}
-                      </>
-                    );
-                  }}
-                />
+              {(task.mode || task.location) && (
+                <div className="text-sm text-muted-foreground">
+                  {[task.mode, task.location].filter(Boolean).join(" — ")}
+                </div>
               )}
+              <div className="text-sm text-muted-foreground">
+                {translate("resources.tasks.fields.due_short")}
+                &nbsp;
+                <DateField source="due_date" record={task} showDate showTime />
+                {showContact && (
+                  <ReferenceField<TData, Contact>
+                    source="contact_id"
+                    reference="contacts"
+                    record={task}
+                    link="show"
+                    className="inline text-sm text-muted-foreground"
+                    render={({ referenceRecord }) => {
+                      if (!referenceRecord) return null;
+                      return (
+                        <>
+                          {" "}
+                          {translate("resources.tasks.regarding_contact", {
+                            name: getContactRepresentation(referenceRecord),
+                          })}
+                        </>
+                      );
+                    }}
+                  />
+                )}
+              </div>
             </div>
           </div>
-        </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-5 pr-0! size-8 cursor-pointer"
-              aria-label={translate("resources.tasks.actions.title")}
-            >
-              <MoreVertical className="size-5 md:size-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              className="cursor-pointer h-12 md:h-8 px-4 md:px-2 text-base md:text-sm"
-              onClick={() => {
-                update("tasks", {
-                  id: task.id,
-                  data: {
-                    due_date: new Date(Date.now() + 24 * 60 * 60 * 1000)
-                      .toISOString()
-                      .slice(0, 10),
-                  },
-                  previousData: task,
-                });
-              }}
-            >
-              {translate("resources.tasks.actions.postpone_tomorrow")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer h-12 md:h-8 px-4 md:px-2 text-base md:text-sm"
-              onClick={() => {
-                update("tasks", {
-                  id: task.id,
-                  data: {
-                    due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-                      .toISOString()
-                      .slice(0, 10),
-                  },
-                  previousData: task,
-                });
-              }}
-            >
-              {translate("resources.tasks.actions.postpone_next_week")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer h-12 md:h-8 px-4 md:px-2 text-base md:text-sm"
-              onClick={handleEdit}
-            >
-              {translate("ra.action.edit")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer h-12 md:h-8 px-4 md:px-2 text-base md:text-sm"
-              onClick={handleDelete}
-            >
-              {translate("ra.action.delete")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-5 pr-0! size-8 cursor-pointer"
+                aria-label={translate("resources.tasks.actions.title")}
+              >
+                <MoreVertical className="size-5 md:size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                className="cursor-pointer h-12 md:h-8 px-4 md:px-2 text-base md:text-sm"
+                onClick={handlePostpone(DAYS_UNTIL_TOMORROW)}
+              >
+                {translate("resources.tasks.actions.postpone_tomorrow")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer h-12 md:h-8 px-4 md:px-2 text-base md:text-sm"
+                onClick={handlePostpone(DAYS_UNTIL_NEXT_WEEK)}
+              >
+                {translate("resources.tasks.actions.postpone_next_week")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer h-12 md:h-8 px-4 md:px-2 text-base md:text-sm"
+                onClick={handleEdit}
+              >
+                {translate("ra.action.edit")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer h-12 md:h-8 px-4 md:px-2 text-base md:text-sm"
+                onClick={handleDelete}
+              >
+                {translate("ra.action.delete")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </TaskExit>
 
       {isMobile ? (
         <TaskEditSheet

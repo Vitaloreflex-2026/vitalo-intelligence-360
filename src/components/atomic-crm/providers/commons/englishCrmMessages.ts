@@ -379,8 +379,8 @@ export const englishCrmMessages = {
   },
   crm: {
     notifications: {
-      title: "Today's meetings",
-      empty: "No meeting today",
+      title: "Meetings to handle",
+      empty: "No meeting to handle",
       actions: {
         done: "Mark as done",
         postpone: "Postpone",
