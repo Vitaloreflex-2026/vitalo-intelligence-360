@@ -384,6 +384,14 @@ export const frenchCrmMessages = {
     },
   },
   crm: {
+    notifications: {
+      title: "Rendez-vous du jour",
+      empty: "Aucun rendez-vous aujourd'hui",
+      actions: {
+        done: "Marquer comme fait",
+        postpone: "Reporter",
+      },
+    },
     choices: {
       create_error: "Une erreur s'est produite lors de la création du choix",
       create_item: 'Ajouter "%{item}"',

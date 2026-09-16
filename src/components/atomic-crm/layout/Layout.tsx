@@ -4,6 +4,7 @@ import { Notification } from "@/components/admin/notification";
 import { Error } from "@/components/admin/error";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { MeetingNotifications } from "../notifications/MeetingNotifications";
 import { useConfigurationLoader } from "../root/useConfigurationLoader";
 import Header from "./Header";
 
@@ -19,6 +20,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
           </Suspense>
         </ErrorBoundary>
       </main>
+      <MeetingNotifications />
       <Notification />
     </>
   );

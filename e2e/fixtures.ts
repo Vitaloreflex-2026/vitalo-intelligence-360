@@ -219,6 +219,32 @@ async function createContact({
   return data;
 }
 
+async function createTask({
+  contact_id,
+  sales_id,
+  text,
+  due_date,
+  type = "Premier contact",
+}: {
+  contact_id: string | number;
+  sales_id: string | number;
+  text: string;
+  due_date: string;
+  type?: string;
+}) {
+  const { data, error } = await adminSupabase
+    .from("tasks")
+    .insert({ contact_id, sales_id, text, due_date, type })
+    .select("id")
+    .single();
+
+  if (error) {
+    throw new Error(`Failed to create task: ${error.message}`);
+  }
+
+  return data;
+}
+
 const getMenuMethod = ({ page }: { page: Page; isMobile: boolean }) => ({
   goToDashboard: async () => {
     await page.getByRole("link", { name: "Dashboard" }).click();
@@ -245,6 +271,7 @@ export const test = base.extend<{
   createCompany: typeof createCompany;
   createContact: typeof createContact;
   createNotes: typeof createNotes;
+  createTask: typeof createTask;
   menu: ReturnType<typeof getMenuMethod>;
   dismissToast: (content: string) => Promise<void>;
 }>({
@@ -281,6 +308,10 @@ export const test = base.extend<{
   // eslint-disable-next-line no-empty-pattern
   createNotes: async ({}, cb) => {
     await cb(createNotes);
+  },
+  // eslint-disable-next-line no-empty-pattern
+  createTask: async ({}, cb) => {
+    await cb(createTask);
   },
   menu: async ({ page, isMobile }, cb) => {
     await cb(getMenuMethod({ page, isMobile }));

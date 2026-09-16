@@ -378,6 +378,14 @@ export const englishCrmMessages = {
     },
   },
   crm: {
+    notifications: {
+      title: "Today's meetings",
+      empty: "No meeting today",
+      actions: {
+        done: "Mark as done",
+        postpone: "Postpone",
+      },
+    },
     choices: {
       create_error: "An error occurred while creating the option",
       create_item: 'Add "%{item}"',
