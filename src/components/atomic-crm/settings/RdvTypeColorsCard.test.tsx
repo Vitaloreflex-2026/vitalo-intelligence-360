@@ -6,6 +6,18 @@ import { StoryWrapper } from "@/test/StoryWrapper";
 import type { Choice } from "../types";
 import { RdvTypeColorsCard } from "./RdvTypeColorsCard";
 
+/**
+ * React installs its own `value` setter on the input to know when the value
+ * changed; going through it is what makes the synthetic onChange fire.
+ */
+const setNativeValue = (element: HTMLInputElement, value: string) => {
+  const setter = Object.getOwnPropertyDescriptor(
+    window.HTMLInputElement.prototype,
+    "value",
+  )?.set;
+  setter?.call(element, value);
+};
+
 const buildMeetingTypes = (): Choice[] => [
   { id: 1, category: "rdv_type", label: "Premier contact", color: "#cfe3f7" },
   { id: 2, category: "rdv_type", label: "Bilan annuel", color: "#e2d9f3" },
@@ -62,13 +74,13 @@ describe("RdvTypeColorsCard", () => {
     const picker = screen.getByLabelText("Premier contact");
     await expect.element(picker).toBeVisible();
 
-    // Act — a native color input commits its value on change, then blurs when
-    // the picker closes, which is when the row persists it.
+    // Act — drive the input the way a real color picker does: React tracks the
+    // value through its own setter, so assigning `.value` directly would be
+    // ignored, and it listens for `focusout` rather than `blur`.
     const element = picker.element() as HTMLInputElement;
-    element.value = "#ff8800";
+    setNativeValue(element, "#ff8800");
     element.dispatchEvent(new Event("input", { bubbles: true }));
-    element.dispatchEvent(new Event("change", { bubbles: true }));
-    element.dispatchEvent(new FocusEvent("blur", { bubbles: true }));
+    element.dispatchEvent(new FocusEvent("focusout", { bubbles: true }));
 
     // Assert
     await expect

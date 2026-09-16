@@ -14,10 +14,11 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { CalendarDays } from "lucide-react";
 import type { Identifier } from "ra-core";
 import { useLocaleState, useNotify, useTranslate, useUpdate } from "ra-core";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 
 import { TaskEdit } from "../tasks/TaskEdit";
+import { calendarScrollTime } from "./calendarScrollTime";
 import { MeetingCreateDialog } from "./MeetingCreateDialog";
 import "./MeetingsCalendar.css";
 import {
@@ -29,7 +30,6 @@ import {
 /** Business hours the grid opens on; earlier or later meetings stay reachable by scrolling. */
 const FIRST_SLOT = "07:00:00";
 const LAST_SLOT = "21:00:00";
-const INITIAL_SCROLL = "08:00:00";
 
 const GRID_HEIGHT = 520;
 const MINUTE_MS = 60 * 1000;
@@ -47,6 +47,13 @@ export const MeetingsCalendar = () => {
   const notify = useNotify();
   const [locale] = useLocaleState();
   const [update] = useUpdate();
+
+  // Computed once on mount: the scroll position is the user's from then on,
+  // and re-deriving it on every render would fight them for it.
+  const scrollTime = useMemo(
+    () => calendarScrollTime(new Date(), FIRST_SLOT, LAST_SLOT),
+    [],
+  );
 
   const [range, setRange] = useState<CalendarRange>();
   const [editedTaskId, setEditedTaskId] = useState<Identifier>();
@@ -155,7 +162,7 @@ export const MeetingsCalendar = () => {
           nowIndicator
           slotMinTime={FIRST_SLOT}
           slotMaxTime={LAST_SLOT}
-          scrollTime={INITIAL_SCROLL}
+          scrollTime={scrollTime}
           slotDuration="00:30:00"
           slotLabelInterval="01:00"
           expandRows
