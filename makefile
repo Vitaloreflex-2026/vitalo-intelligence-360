@@ -38,6 +38,11 @@ supabase-migrate-database: ## apply the migrations to the database
 supabase-reset-database: ## reset (and clear!) the database
 	npx supabase db reset
 
+seed: ## load the local demo data (destructive: replaces companies, contacts, deals, notes and tasks)
+	@docker exec -i $$(docker ps -qf name=supabase_db) \
+		psql -U postgres -d postgres -v ON_ERROR_STOP=1 -q -f - < supabase/seed-demo.sql
+	@echo "Demo data loaded."
+
 start-app: ## start the app locally
 	npm run dev
 

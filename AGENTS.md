@@ -39,6 +39,12 @@ npx supabase db push                    # Push migrations to remote
 npx supabase db reset --local           # Reset local database (destructive)
 ```
 
+Demo data for local development lives in `supabase/seed-demo.sql` (French CRM
+dataset: companies, contacts, deals, notes, meetings). Load it with `make seed`
+— destructive, it replaces the business tables but leaves `sales`, `choices` and
+`configuration` alone. It is deliberately separate from `supabase/seed.sql`
+(reference data, run by `supabase db reset` and copied into the e2e instance).
+
 ### Registry (Shadcn Components)
 
 ```bash

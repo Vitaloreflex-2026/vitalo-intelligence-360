@@ -28,7 +28,7 @@ export const DealCreate = ({ open }: { open: boolean }) => {
 
   const onSuccess = async (deal: Deal) => {
     if (!allDeals) {
-      redirect("/deals");
+      redirect("show", "deals", deal.id);
       return;
     }
     // increase the index of all deals in the same stage as the new deal
@@ -67,7 +67,7 @@ export const DealCreate = ({ open }: { open: boolean }) => {
       },
       { updatedAt: now },
     );
-    redirect("/deals");
+    redirect("show", "deals", deal.id);
   };
 
   const { identity } = useGetIdentity();
