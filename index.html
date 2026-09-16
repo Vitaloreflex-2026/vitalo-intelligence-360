@@ -30,6 +30,27 @@
     <link rel="apple-touch-icon" sizes="1024x1024" href="./appIcon/1024.png" />
     <title>Vital Ô Réflex 360°</title>
 
+    <script>
+      // Supabase invite and password-recovery emails redirect to the site root
+      // with the tokens in the URL fragment (#access_token=...&type=invite).
+      // Left as is, supabase-js consumes them at startup and logs the user
+      // straight into the app, so they never get to choose a password. Rewrite
+      // the fragment into the set-password route before the app boots. Links
+      // going through auth-callback.html already have that shape and are left
+      // untouched.
+      (function () {
+        var fragment = window.location.hash.slice(1);
+        if (
+          /(^|&)access_token=/.test(fragment) &&
+          /(^|&)type=(invite|recovery)(&|$)/.test(fragment)
+        ) {
+          window.location.replace(
+            window.location.pathname + "#/set-password?" + fragment,
+          );
+        }
+      })();
+    </script>
+
     <style>
       body {
         margin: 0;

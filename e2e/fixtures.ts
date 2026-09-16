@@ -54,6 +54,30 @@ async function createUser({
   return data.user;
 }
 
+async function inviteUser({
+  email,
+  first_name,
+  last_name,
+  redirectTo,
+}: {
+  email: string;
+  first_name: string;
+  last_name: string;
+  redirectTo: string;
+}) {
+  const { data, error } = await adminSupabase.auth.admin.generateLink({
+    type: "invite",
+    email,
+    options: { data: { first_name, last_name }, redirectTo },
+  });
+
+  if (error) {
+    throw new Error(`Failed to invite user: ${error.message}`);
+  }
+
+  return data.properties.action_link;
+}
+
 async function createSales({
   first_name,
   last_name,
@@ -217,6 +241,7 @@ export const test = base.extend<{
   resetDb: void;
   createUser: typeof createUser;
   createSales: typeof createSales;
+  inviteUser: typeof inviteUser;
   createCompany: typeof createCompany;
   createContact: typeof createContact;
   createNotes: typeof createNotes;
@@ -240,6 +265,10 @@ export const test = base.extend<{
   // eslint-disable-next-line no-empty-pattern
   createSales: async ({}, cb) => {
     await cb(createSales);
+  },
+  // eslint-disable-next-line no-empty-pattern
+  inviteUser: async ({}, cb) => {
+    await cb(inviteUser);
   },
   // eslint-disable-next-line no-empty-pattern
   createCompany: async ({}, cb) => {
