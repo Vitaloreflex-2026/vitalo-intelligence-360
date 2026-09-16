@@ -33,6 +33,10 @@ test.describe("meetings to handle notifications", () => {
       first_name: "Jane",
       last_name: "Smith",
       sales_id: sales.id,
+      // The dashboard only renders once the account has a contact AND a note;
+      // without one it shows the onboarding stepper, which has no activity log
+      // for signIn to wait on.
+      notes: [{ text: "Met at a conference." }],
     });
 
     await createTask({

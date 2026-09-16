@@ -166,6 +166,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/settings/RdvTypeColorsCard.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/settings/ProfilePage.tsx",
           "type": "registry:component"
         },
@@ -450,6 +454,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/misc/rdvColors.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/misc/isLinkedInUrl.ts",
           "type": "registry:component"
         },
@@ -499,6 +507,10 @@
         },
         {
           "path": "src/components/atomic-crm/misc/ContactOption.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/misc/ColorSwatchInput.tsx",
           "type": "registry:component"
         },
         {
@@ -694,6 +706,18 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/dashboard/useMeetingEvents.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/dashboard/meetingSlot.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/dashboard/calendarScrollTime.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/dashboard/Welcome.tsx",
           "type": "registry:component"
         },
@@ -706,6 +730,14 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/dashboard/MeetingsCalendar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/dashboard/MeetingCreateDialog.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/dashboard/LatestNotes.tsx",
           "type": "registry:component"
         },
@@ -715,10 +747,6 @@
         },
         {
           "path": "src/components/atomic-crm/dashboard/DealsPipeline.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "src/components/atomic-crm/dashboard/DealsChart.tsx",
           "type": "registry:component"
         },
         {
