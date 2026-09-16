@@ -190,7 +190,7 @@ const ContactShowContentMobile = () => {
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-semibold">
-                  {translate("resources.notes.fields.status")}
+                  {translate("resources.contacts.fields.status")}
                 </h3>
                 <Separator />
                 <div className="mt-3">

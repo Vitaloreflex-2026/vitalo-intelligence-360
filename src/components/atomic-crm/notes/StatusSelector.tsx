@@ -19,6 +19,8 @@ type StatusSelectorProps = {
   status?: string;
   setStatus: (status: string) => void;
   triggerClassName?: string;
+  /** i18n key used as the accessible name of the native mobile select */
+  labelKey?: string;
 };
 
 export const StatusSelector = ({
@@ -26,6 +28,7 @@ export const StatusSelector = ({
   status,
   setStatus,
   triggerClassName,
+  labelKey = "resources.notes.fields.status",
 }: StatusSelectorProps) => {
   const { noteStatuses } = useConfigurationContext();
   const translate = useTranslate();
@@ -65,7 +68,7 @@ export const StatusSelector = ({
           disabled={disabled}
           value={status || ""}
           onChange={(e) => setStatus(e.target.value)}
-          aria-label={translate("resources.notes.fields.status", {
+          aria-label={translate(labelKey, {
             _: "Status",
           })}
           className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"

@@ -84,6 +84,7 @@ export const frenchCrmMessages = {
         company_start_date: "Ancienneté dans l'entreprise",
         decision_role: "Rôle dans la décision",
         relationship_status: "Statut",
+        status: "Intérêt",
         linked_contact_ids: "Contacts liés",
         email_jsonb: "Adresses e-mail",
         email: "E-mail",

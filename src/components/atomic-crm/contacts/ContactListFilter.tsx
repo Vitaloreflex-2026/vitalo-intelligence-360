@@ -88,7 +88,7 @@ export const ContactListFilter = () => {
       </FilterCategory>
 
       <FilterCategory
-        label="resources.notes.fields.status"
+        label="resources.contacts.fields.status"
         icon={<TrendingUp />}
       >
         {noteStatuses.map((status) => (

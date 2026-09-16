@@ -22,7 +22,9 @@ import { AutocompleteArrayInput } from "@/components/admin/autocomplete-array-in
 import { ReferenceArrayInput } from "@/components/admin/reference-array-input";
 
 import { isLinkedinUrl } from "../misc/isLinkedInUrl";
+import { Status } from "../misc/Status";
 import { StatusSelector } from "../notes";
+import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Sale, Contact } from "../types";
 import { Avatar } from "./Avatar";
 import { AutocompleteCompanyInput } from "../companies/AutocompleteCompanyInput.tsx";
@@ -220,11 +222,22 @@ const ContactPersonalInformationInputs = () => {
 
 const ContactMiscInputs = () => {
   const translate = useTranslate();
+  const { noteStatuses } = useConfigurationContext();
   return (
     <div className="flex flex-col gap-4">
       <h6 className="text-lg font-semibold">
         {translate("resources.contacts.field_categories.misc")}
       </h6>
+      <SelectInput
+        source="status"
+        choices={noteStatuses.map((status) => ({
+          id: status.value,
+          name: status.label,
+          value: status.value,
+        }))}
+        optionText={statusOptionRenderer}
+        helperText={false}
+      />
       <TextInput source="background" multiline helperText={false} />
       <ReferenceArrayInput
         source="linked_contact_ids"
@@ -257,6 +270,12 @@ const ContactMiscInputs = () => {
 
 const saleOptionRenderer = (choice: Sale) =>
   `${choice.first_name} ${choice.last_name}`;
+
+const statusOptionRenderer = (choice: { value: string; name: string }) => (
+  <div className="flex items-center gap-2">
+    <Status status={choice.value} /> {choice.name}
+  </div>
+);
 
 export const ContactStatusSelector = () => {
   const record = useRecordContext<Contact>();
@@ -299,6 +318,7 @@ export const ContactStatusSelector = () => {
         status={record?.status}
         setStatus={handleStatusChange}
         triggerClassName="w-full"
+        labelKey="resources.contacts.fields.status"
       />
     </div>
   );

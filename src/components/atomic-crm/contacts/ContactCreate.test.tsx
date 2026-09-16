@@ -90,6 +90,33 @@ describe("ContactCreate", () => {
     );
   });
 
+  it("saves the interest status selected on the creation form", async () => {
+    const createMock = vi.fn().mockResolvedValue({ data: {} });
+
+    const screen = await render(
+      <ContactCreateBasic silent dataProvider={{ create: createMock }} />,
+    );
+
+    await expect.element(screen.getByPlaceholder("Email")).toBeInTheDocument();
+
+    await screen.getByLabelText(/first name/i).fill("Ada");
+    await screen.getByLabelText(/last name/i).fill("Lovelace");
+
+    await screen.getByRole("combobox", { name: /interest/i }).click();
+    await screen.getByRole("option", { name: /hot/i }).click();
+
+    await screen.getByRole("button", { name: /^save$/i }).click();
+
+    await expect.poll(() => createMock).toBeCalledTimes(1);
+
+    expect(createMock).toBeCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        data: expect.objectContaining({ status: "hot" }),
+      }),
+    );
+  });
+
   it("submits both email and phone when filled", async () => {
     const createMock = vi.fn().mockResolvedValue({ data: {} });
 

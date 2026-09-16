@@ -32,7 +32,7 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
         )}
       </div>
 
-      <AsideSection title={translate("resources.notes.fields.status")}>
+      <AsideSection title={translate("resources.contacts.fields.status")}>
         <ContactStatusSelector />
       </AsideSection>
 
