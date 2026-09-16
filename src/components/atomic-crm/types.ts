@@ -186,15 +186,15 @@ export type Assessment = {
   watch_points?: string | null;
   // Concretize page of the discovery form; every answer is optional.
   interview_summary?: string | null;
-  decider_management_name?: string | null;
+  decider_management_contact_id?: Identifier | null;
   decider_management_influence?: string | null;
-  decider_hr_name?: string | null;
+  decider_hr_contact_id?: Identifier | null;
   decider_hr_influence?: string | null;
-  decider_manager_name?: string | null;
+  decider_manager_contact_id?: Identifier | null;
   decider_manager_influence?: string | null;
-  decider_cse_name?: string | null;
+  decider_cse_contact_id?: Identifier | null;
   decider_cse_influence?: string | null;
-  decider_other_name?: string | null;
+  decider_other_contact_id?: Identifier | null;
   decider_other_influence?: string | null;
   decision_process?: string[] | null;
   decision_process_other?: string | null;

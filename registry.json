@@ -910,6 +910,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/assessments/CompanyAssessmentButton.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/assessments/AssessmentTeamMemberInput.tsx",
           "type": "registry:component"
         },

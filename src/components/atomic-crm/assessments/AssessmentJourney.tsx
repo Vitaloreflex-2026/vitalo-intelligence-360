@@ -44,14 +44,20 @@ export const AssessmentJourneyInput = () => {
             key={step.id}
             className="flex min-w-0 flex-1 flex-row items-center gap-1"
           >
-            <div
+            <Label
+              htmlFor={inputId}
               className={cn(
-                // The six steps share the row, as they do on one printed line.
-                "flex min-w-0 flex-1 flex-col items-center gap-2 rounded-lg border p-2",
+                // The whole card is the checkbox label, so a click anywhere on
+                // it ticks the box. The six steps share the row, as they do on
+                // one printed line.
+                "flex min-w-0 flex-1 cursor-pointer flex-col items-center gap-2 rounded-lg border p-2",
                 values.includes(step.id) ? color.border : "border-border",
               )}
             >
               <span
+                // Decorative: the rank is already carried by the reading order,
+                // and it would otherwise pollute the checkbox accessible name.
+                aria-hidden
                 className={cn(
                   "flex size-7 items-center justify-center rounded-full text-sm font-semibold text-white",
                   color.bg,
@@ -60,8 +66,7 @@ export const AssessmentJourneyInput = () => {
                 {index + 1}
               </span>
               <step.icon className={cn("size-6", color.text)} />
-              <Label
-                htmlFor={inputId}
+              <span
                 className={cn(
                   "text-center text-xs font-semibold uppercase",
                   color.text,
@@ -70,7 +75,7 @@ export const AssessmentJourneyInput = () => {
                 {translate(
                   `resources.assessments.recommend.journey_steps.${step.id}`,
                 )}
-              </Label>
+              </span>
               <Checkbox
                 id={inputId}
                 checked={values.includes(step.id)}
@@ -78,7 +83,7 @@ export const AssessmentJourneyInput = () => {
                   toggle(step.id, isChecked === true)
                 }
               />
-            </div>
+            </Label>
             {index < JOURNEY_STEPS.length - 1 && (
               <ArrowRight
                 aria-hidden
@@ -107,9 +112,10 @@ export const AssessmentRecommendedPath = () => {
         const inputId = `${id}-${step.id}`;
         return (
           <div key={step.id} className="flex flex-col items-center gap-1">
-            <div
+            <Label
+              htmlFor={inputId}
               className={cn(
-                "flex w-full flex-row items-center gap-3 rounded-lg border p-2",
+                "flex w-full cursor-pointer flex-row items-center gap-3 rounded-lg border p-2",
                 values.includes(step.id) ? color.border : "border-border",
               )}
             >
@@ -128,15 +134,12 @@ export const AssessmentRecommendedPath = () => {
               >
                 <step.icon className="size-4" />
               </span>
-              <Label
-                htmlFor={inputId}
-                className={cn("text-sm font-semibold", color.text)}
-              >
+              <span className={cn("text-sm font-semibold", color.text)}>
                 {translate(
                   `resources.assessments.recommend.recommended_path.${step.id}`,
                 )}
-              </Label>
-            </div>
+              </span>
+            </Label>
             {index < RECOMMENDED_PATH_STEPS.length - 1 && (
               <ArrowDown
                 aria-hidden

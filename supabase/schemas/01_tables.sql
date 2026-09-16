@@ -213,16 +213,16 @@ create table public.assessments (
     watch_points text,
     -- Concretize / interview summary
     interview_summary text,
-    -- Concretize / project deciders, one name and influence level per role
-    decider_management_name text,
+    -- Concretize / project deciders, one contact and influence level per role
+    decider_management_contact_id bigint,
     decider_management_influence text,
-    decider_hr_name text,
+    decider_hr_contact_id bigint,
     decider_hr_influence text,
-    decider_manager_name text,
+    decider_manager_contact_id bigint,
     decider_manager_influence text,
-    decider_cse_name text,
+    decider_cse_contact_id bigint,
     decider_cse_influence text,
-    decider_other_name text,
+    decider_other_contact_id bigint,
     decider_other_influence text,
     -- Concretize / decision process
     decision_process text[],
@@ -273,6 +273,21 @@ create table public.favicons_excluded_domains (
 
 alter table public.assessments
     add constraint assessments_company_id_fkey foreign key (company_id) references public.companies(id) on update cascade on delete cascade;
+
+alter table public.assessments
+    add constraint assessments_decider_management_contact_id_fkey foreign key (decider_management_contact_id) references public.contacts(id) on delete set null;
+
+alter table public.assessments
+    add constraint assessments_decider_hr_contact_id_fkey foreign key (decider_hr_contact_id) references public.contacts(id) on delete set null;
+
+alter table public.assessments
+    add constraint assessments_decider_manager_contact_id_fkey foreign key (decider_manager_contact_id) references public.contacts(id) on delete set null;
+
+alter table public.assessments
+    add constraint assessments_decider_cse_contact_id_fkey foreign key (decider_cse_contact_id) references public.contacts(id) on delete set null;
+
+alter table public.assessments
+    add constraint assessments_decider_other_contact_id_fkey foreign key (decider_other_contact_id) references public.contacts(id) on delete set null;
 
 alter table public.assessments
     add constraint assessments_closed_by_id_fkey foreign key (closed_by_id) references public.sales(id);

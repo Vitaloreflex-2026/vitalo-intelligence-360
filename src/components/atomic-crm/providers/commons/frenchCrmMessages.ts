@@ -416,6 +416,7 @@ export const frenchCrmMessages = {
         company: "Choix de l'entreprise",
       },
       action: {
+        open: "État des lieux",
         create: "Créer un état des lieux",
         new: "Nouvel état des lieux",
       },

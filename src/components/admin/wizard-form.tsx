@@ -39,6 +39,7 @@ import { cn } from "@/lib/utils";
 export const WizardForm = ({
   children,
   className,
+  initialStep = 0,
   ...rest
 }: WizardFormProps) => {
   const steps = flattenSteps(children);
@@ -47,7 +48,7 @@ export const WizardForm = ({
       className={cn("flex flex-col gap-6 w-full max-w-lg", className)}
       {...rest}
     >
-      <WizardFormContent steps={steps} />
+      <WizardFormContent steps={steps} initialStep={initialStep} />
     </Form>
   );
 };
@@ -64,6 +65,8 @@ export const WizardFormStep = ({ children }: WizardFormStepProps) => (
 export type WizardFormProps = {
   children: ReactNode;
   className?: string;
+  /** Step to open on, when earlier ones are already filled in. */
+  initialStep?: number;
 } & FormProps;
 
 export type WizardFormStepProps = {
@@ -87,8 +90,16 @@ const flattenSteps = (children: ReactNode): WizardFormStepElement[] =>
     return [];
   });
 
-const WizardFormContent = ({ steps }: { steps: WizardFormStepElement[] }) => {
-  const [stepIndex, setStepIndex] = useState(0);
+const WizardFormContent = ({
+  steps,
+  initialStep,
+}: {
+  steps: WizardFormStepElement[];
+  initialStep: number;
+}) => {
+  const [stepIndex, setStepIndex] = useState(
+    Math.min(Math.max(initialStep, 0), steps.length - 1),
+  );
   const { trigger } = useFormContext();
   const translate = useTranslate();
 

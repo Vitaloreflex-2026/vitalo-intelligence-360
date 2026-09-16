@@ -409,6 +409,7 @@ export const englishCrmMessages = {
         company: "Company selection",
       },
       action: {
+        open: "Assessment",
         create: "Create an assessment",
         new: "New assessment",
       },

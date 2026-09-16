@@ -50,16 +50,12 @@ describe("AssessmentDeciders", () => {
     }
   });
 
-  it("stores the name and the influence level of each row separately", async () => {
+  it("stores the influence level of each row separately", async () => {
     const onSave = vi.fn();
     const screen = await render(<DecidersForm onSave={onSave} />, {
       wrapper: Wrapper,
     });
 
-    await screen
-      .getByRole("row", { name: /management/ })
-      .getByRole("textbox")
-      .fill("Claire Dubois");
     await screen
       .getByRole("row", { name: /management/ })
       .getByRole("radio", { name: "high" })
@@ -72,7 +68,6 @@ describe("AssessmentDeciders", () => {
 
     await expect.poll(() => onSave.mock.calls.length).toBeGreaterThan(0);
     expect(onSave.mock.calls[0][0]).toMatchObject({
-      decider_management_name: "Claire Dubois",
       decider_management_influence: "high",
       decider_hr_influence: "low",
     });
