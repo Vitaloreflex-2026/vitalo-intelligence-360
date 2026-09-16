@@ -322,6 +322,7 @@ export const englishCrmMessages = {
       fields: {
         text: "Description",
         due_date: "Date and time",
+        duration_minutes: "Duration (min)",
         type: "Meeting type",
         mode: "Meeting mode",
         location: "Location",
@@ -455,7 +456,10 @@ export const englishCrmMessages = {
       load_more: "Load more activity",
     },
     dashboard: {
-      deals_chart: "Upcoming Deal Revenue",
+      calendar: {
+        title: "My meetings",
+        reschedule_error: "This meeting could not be moved",
+      },
       deals_pipeline: "Deals Pipeline",
       latest_activity: "Latest Activity",
       latest_activity_error: "Error loading latest activity",
@@ -548,6 +552,12 @@ export const englishCrmMessages = {
       saving: "Saving...",
       tasks: {
         types: "Types",
+      },
+      rdv_types: {
+        title: "Meeting types",
+        hint: "Colour of each type in the dashboard calendar. Saved as soon as you close the picker.",
+        empty: "No meeting type yet.",
+        save_error: "This colour could not be saved",
       },
       preferences: "Preferences",
       title: "Settings",

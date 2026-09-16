@@ -1,0 +1,127 @@
+/*
+ * FullCalendar ships its own look; these variables and overrides bind it to the
+ * app's Tailwind tokens so the widget follows the light/dark theme like every
+ * other panel. Scoped under .meetings-calendar to leave any other calendar
+ * instance untouched.
+ */
+.meetings-calendar {
+  --fc-border-color: var(--border);
+  --fc-page-bg-color: var(--card);
+  --fc-neutral-bg-color: var(--muted);
+  --fc-today-bg-color: var(--accent);
+  --fc-now-indicator-color: var(--destructive);
+  --fc-small-font-size: 0.75rem;
+  --fc-event-selected-overlay-color: transparent;
+}
+
+.meetings-calendar .fc {
+  font-size: 0.8125rem;
+}
+
+/* Header: the toolbar is chrome, not content, so it stays muted and compact. */
+.meetings-calendar .fc .fc-toolbar {
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.meetings-calendar .fc .fc-toolbar-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.meetings-calendar .fc .fc-button {
+  background-color: transparent;
+  border-color: var(--border);
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  text-transform: capitalize;
+  box-shadow: none;
+}
+
+.meetings-calendar .fc .fc-button:hover:not(:disabled) {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+.meetings-calendar .fc .fc-button:disabled {
+  opacity: 0.4;
+}
+
+.meetings-calendar .fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: var(--muted);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+
+.meetings-calendar .fc .fc-button:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+  box-shadow: none;
+}
+
+/* Grid: axis and day headers read as labels, not as data. */
+.meetings-calendar .fc .fc-col-header-cell-cushion,
+.meetings-calendar .fc .fc-timegrid-axis-cushion,
+.meetings-calendar .fc .fc-timegrid-slot-label-cushion {
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  padding: 0.25rem;
+  text-decoration: none;
+}
+
+.meetings-calendar .fc .fc-timegrid-slot {
+  height: 2rem;
+}
+
+.meetings-calendar .fc .fc-scrollgrid {
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+/*
+ * Events: the type color arrives inline as background/border, so only the
+ * shared geometry lives here. The left border is the one the type color paints,
+ * which is what stays legible once a column is too narrow for the label.
+ */
+.meetings-calendar .fc .fc-timegrid-event {
+  border-radius: 0.25rem;
+  border-width: 0 0 0 3px;
+  box-shadow: none;
+  padding: 1px 2px;
+}
+
+.meetings-calendar .fc .fc-event-main {
+  padding: 0;
+}
+
+.meetings-calendar .fc .fc-event-time {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.meetings-calendar .fc .fc-event-title {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* A checked-off meeting stays on the grid as a record, but recedes. */
+.meetings-calendar .fc .meeting-event--done {
+  opacity: 0.45;
+}
+
+.meetings-calendar .fc .meeting-event--done .fc-event-title {
+  text-decoration: line-through;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meetings-calendar .fc * {
+    transition: none !important;
+  }
+}

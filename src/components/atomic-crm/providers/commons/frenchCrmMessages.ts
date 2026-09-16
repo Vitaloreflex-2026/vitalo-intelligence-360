@@ -327,6 +327,7 @@ export const frenchCrmMessages = {
       fields: {
         text: "Description",
         due_date: "Date et heure",
+        duration_minutes: "Durée (min)",
         type: "Type de rendez-vous",
         mode: "Mode de rendez-vous",
         location: "Lieu",
@@ -461,7 +462,10 @@ export const frenchCrmMessages = {
       load_more: "Charger plus d'activité",
     },
     dashboard: {
-      deals_chart: "Revenus des dossiers à venir",
+      calendar: {
+        title: "Mes rendez-vous",
+        reschedule_error: "Impossible de déplacer ce rendez-vous",
+      },
       deals_pipeline: "Pipeline des dossiers",
       latest_activity: "Dernière activité",
       latest_activity_error:
@@ -556,6 +560,12 @@ export const frenchCrmMessages = {
       saving: "Enregistrement...",
       tasks: {
         types: "Types",
+      },
+      rdv_types: {
+        title: "Types de rendez-vous",
+        hint: "Couleur de chaque type dans le calendrier du tableau de bord. Enregistrée dès que vous fermez le sélecteur.",
+        empty: "Aucun type de rendez-vous pour le moment.",
+        save_error: "Impossible d'enregistrer cette couleur",
       },
       preferences: "Préférences",
       title: "Paramètres",
