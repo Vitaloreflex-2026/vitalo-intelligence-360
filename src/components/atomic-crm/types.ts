@@ -214,7 +214,7 @@ export type Assessment = {
   development_opportunities_other?: string | null;
   development_comments?: string | null;
   closing_checklist?: string[] | null;
-  closed_by?: string | null;
+  closed_by_id?: Identifier | null;
   closed_at?: string | null;
   next_action?: string | null;
 } & Pick<RaRecord, "id">;
@@ -222,7 +222,7 @@ export type Assessment = {
 /** One row of the "Next steps" table of an assessment. */
 export type AssessmentNextStep = {
   action?: string | null;
-  owner?: string | null;
+  owner_id?: Identifier | null;
   due_date?: string | null;
 };
 

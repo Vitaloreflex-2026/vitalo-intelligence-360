@@ -231,7 +231,7 @@ create table public.assessments (
     -- Concretize / budget
     budget_status text,
     estimated_budget numeric,
-    -- Concretize / next steps, as [{ action, owner, due_date }]
+    -- Concretize / next steps, as [{ action, owner_id, due_date }]
     next_steps jsonb,
     -- Concretize / documents to send
     documents_to_send text[],
@@ -251,7 +251,7 @@ create table public.assessments (
     development_comments text,
     -- Concretize / checklist and closing
     closing_checklist text[],
-    closed_by text,
+    closed_by_id bigint,
     closed_at date,
     next_action text
 );
@@ -273,6 +273,9 @@ create table public.favicons_excluded_domains (
 
 alter table public.assessments
     add constraint assessments_company_id_fkey foreign key (company_id) references public.companies(id) on update cascade on delete cascade;
+
+alter table public.assessments
+    add constraint assessments_closed_by_id_fkey foreign key (closed_by_id) references public.sales(id);
 
 alter table public.companies
     add constraint companies_sales_id_fkey foreign key (sales_id) references public.sales(id);

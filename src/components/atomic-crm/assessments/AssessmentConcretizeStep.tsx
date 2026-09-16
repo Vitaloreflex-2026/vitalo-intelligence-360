@@ -19,6 +19,8 @@ import { RadioButtonGroupInput } from "@/components/admin/radio-button-group-inp
 import { SimpleFormIterator } from "@/components/admin/simple-form-iterator";
 import { TextInput } from "@/components/admin/text-input";
 
+import { AssessmentTeamMemberInput } from "./AssessmentTeamMemberInput";
+
 import { AssessmentDeciders } from "./AssessmentDeciders";
 import { AssessmentOpportunityRating } from "./AssessmentOpportunityRating";
 import { AssessmentOtherInput } from "./AssessmentOtherInput";
@@ -105,7 +107,7 @@ export const AssessmentConcretizeStep = () => {
           <ArrayInput source="next_steps" label={false}>
             <SimpleFormIterator inline>
               <TextInput source="action" />
-              <TextInput source="owner" />
+              <AssessmentTeamMemberInput source="owner_id" />
               {/* The inline row would otherwise squeeze the date below the
                   width a full date needs. */}
               <DateInput source="due_date" inputClassName="min-w-36" />
@@ -212,7 +214,7 @@ export const AssessmentConcretizeStep = () => {
           icon={Lock}
         >
           <div className="grid gap-4 sm:grid-cols-2">
-            <TextInput source="closed_by" />
+            <AssessmentTeamMemberInput source="closed_by_id" />
             <DateInput source="closed_at" />
           </div>
           <TextInput source="next_action" />
