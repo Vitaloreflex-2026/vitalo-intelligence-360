@@ -12,18 +12,14 @@ export const frenchCrmMessages = {
         phone_number: "Numéro de téléphone",
         created_at: "Date de création",
         nb_contacts: "Nombre de contacts",
-        revenue: "Chiffre d'affaires",
         sector: "Secteur d'activité",
         size: "Effectif",
         nb_sites: "Nombre de sites",
-        tax_identifier: "Identifiant fiscal",
         address: "Adresse",
         city: "Ville",
         zipcode: "Code postal",
-        state_abbr: "État",
         country: "Pays",
         description: "Description",
-        context_links: "URLs de contexte",
         sales_id: "Responsable de compte",
       },
       empty: {
@@ -92,7 +88,6 @@ export const frenchCrmMessages = {
         phone_number: "Numéro de téléphone",
         linkedin_url: "URL LinkedIn",
         background: "Informations de contexte",
-        has_newsletter: "Abonné à la newsletter",
         sales_id: "Consultant / Formateur VitalÔréflex lié",
       },
       action: {
@@ -195,7 +190,6 @@ export const frenchCrmMessages = {
       fields: {
         name: "Nom",
         reference: "Référence dossier",
-        description: "Description",
         company_id: "Entreprise",
         contact_ids: "Contacts liés",
         confidentiality: "Confidentialité",
@@ -203,7 +197,6 @@ export const frenchCrmMessages = {
         objectives: "Objectifs exprimés",
         motivation: "Motif de la démarche",
         other_expectations: "Autres attentes exprimées",
-        category: "Catégorie",
         amount: "Budget",
         expected_closing_date: "Date de clôture prévue",
         stage: "Étape",
@@ -531,7 +524,6 @@ export const frenchCrmMessages = {
       },
       dark_mode_logo: "Logo du mode sombre",
       deals: {
-        categories: "Catégories",
         currency: "Devise",
         pipeline_help:
           "Sélectionnez les étapes de dossier à considérer comme des dossiers dans le pipeline.",
@@ -561,7 +553,6 @@ export const frenchCrmMessages = {
           "Impossible de supprimer %{display_name} encore utilisés par des dossiers : %{items}",
         validating: "Validation\u2026",
         entities: {
-          categories: "catégories",
           stages: "étapes",
         },
       },

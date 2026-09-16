@@ -50,7 +50,7 @@ export const DealShow = ({ open, id }: { open: boolean; id?: string }) => {
 
 const DealShowContent = () => {
   const translate = useTranslate();
-  const { dealStages, dealCategories, currency } = useConfigurationContext();
+  const { dealStages, currency } = useConfigurationContext();
   const record = useRecordContext<Deal>();
   if (!record) return null;
 
@@ -150,18 +150,6 @@ const DealShowContent = () => {
               </div>
             )}
 
-            {record.category && (
-              <div className="flex flex-col mr-10">
-                <span className="text-xs text-muted-foreground tracking-wide">
-                  {translate("resources.deals.fields.category")}
-                </span>
-                <span className="text-sm">
-                  {dealCategories.find((c) => c.value === record.category)
-                    ?.label ?? record.category}
-                </span>
-              </div>
-            )}
-
             <div className="flex flex-col mr-10">
               <span className="text-xs text-muted-foreground tracking-wide">
                 {translate("resources.deals.fields.stage")}
@@ -200,15 +188,6 @@ const DealShowContent = () => {
                   </Badge>
                 ))}
               </div>
-            </div>
-          )}
-
-          {record.description && (
-            <div className="m-4 whitespace-pre-line">
-              <span className="text-xs text-muted-foreground tracking-wide">
-                {translate("resources.deals.fields.description")}
-              </span>
-              <p className="text-sm leading-6">{record.description}</p>
             </div>
           )}
 

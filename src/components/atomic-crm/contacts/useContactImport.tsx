@@ -22,7 +22,6 @@ export type ContactImportSchema = {
   avatar: string;
   first_seen: string;
   last_seen: string;
-  has_newsletter: string;
   status: string;
   tags: string;
   linkedin_url: string;
@@ -84,7 +83,6 @@ export function useContactImport() {
             background,
             first_seen,
             last_seen,
-            has_newsletter,
             status,
             company: companyName,
             tags: tagNames,
@@ -125,7 +123,6 @@ export function useContactImport() {
                 last_seen: last_seen
                   ? new Date(last_seen).toISOString()
                   : today,
-                has_newsletter,
                 status,
                 company_id: company?.id,
                 tags: tagList.map((tag) => tag.id),

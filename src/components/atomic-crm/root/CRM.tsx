@@ -42,7 +42,6 @@ import type { CrmDataProvider } from "../providers/types";
 import {
   defaultCurrency,
   defaultDarkModeLogo,
-  defaultDealCategories,
   defaultDealPipelineStatuses,
   defaultDealStages,
   defaultLightModeLogo,
@@ -80,7 +79,6 @@ export type CRMProps = {
  *
  * @param {string} currency - The ISO 4217 currency code used to format monetary values (e.g. "USD", "EUR", "GBP").
  * @param {RaThemeOptions} darkTheme - The theme to use when the application is in dark mode.
- * @param {LabeledValue[]} dealCategories - The categories of deals used in the application.
  * @param {string[]} dealPipelineStatuses - The statuses of deals in the pipeline used in the application.
  * @param {DealStage[]} dealStages - The stages of deals used in the application.
  * @param {RaThemeOptions} lightTheme - The theme to use when the application is in light mode.
@@ -114,7 +112,6 @@ export type CRMProps = {
  */
 export const CRM = ({
   currency = defaultCurrency,
-  dealCategories = defaultDealCategories,
   dealPipelineStatuses = defaultDealPipelineStatuses,
   dealStages = defaultDealStages,
   darkModeLogo = defaultDarkModeLogo,
@@ -149,7 +146,6 @@ export const CRM = ({
     if (!store.getItem(CONFIGURATION_STORE_KEY)) {
       store.setItem(CONFIGURATION_STORE_KEY, {
         currency,
-        dealCategories,
         dealPipelineStatuses,
         dealStages,
         noteStatuses,

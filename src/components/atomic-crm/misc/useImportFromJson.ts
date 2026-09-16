@@ -232,7 +232,6 @@ export const useImportFromJson = (): [
             country: dataToImport.country?.trim(),
             address: dataToImport.address?.trim(),
             zipcode: dataToImport.zipcode?.trim(),
-            state_abbr: dataToImport.state_abbr?.trim(),
             sector: dataToImport.sector?.trim() || undefined,
             size: dataToImport.size
               ? mapSizeToCategory(dataToImport.size)
@@ -240,11 +239,6 @@ export const useImportFromJson = (): [
             linkedin_url: dataToImport.linkedin_url?.trim(),
             website: dataToImport.website?.trim(),
             phone_number: dataToImport.phone_number?.trim(),
-            revenue: dataToImport.revenue?.trim(),
-            tax_identifier: dataToImport.tax_identifier?.trim(),
-            context_links: Array.isArray(dataToImport.context_links)
-              ? dataToImport.context_links
-              : undefined,
             sales_id: dataToImport.sales_id
               ? idsMaps.sales[dataToImport.sales_id]
               : currentSale.id,
@@ -348,7 +342,6 @@ export const useImportFromJson = (): [
             background: dataToImport.background?.trim(),
             linkedin_url: dataToImport.linkedin_url?.trim(),
             gender: gender || undefined,
-            has_newsletter: !!dataToImport.has_newsletter,
             company_id: dataToImport.company_id
               ? idsMaps.companies[dataToImport.company_id]
               : undefined,
@@ -698,15 +691,11 @@ type CompanyImport = {
   country?: string;
   address?: string;
   zipcode?: string;
-  state_abbr?: string;
   sector?: string;
   size?: number;
   linkedin_url?: string;
   website?: string;
   phone_number?: string;
-  revenue?: string;
-  tax_identifier?: string;
-  context_links?: string[];
   created_at?: string;
   updated_at?: string;
 };
@@ -729,7 +718,6 @@ type ContactImport = {
   linkedin_url?: string;
   avatar?: string;
   gender?: string;
-  has_newsletter?: boolean;
   emails: Array<{ email: string; type: string }>;
   phones: Array<{ number: string; type: string }>;
   tags: Array<string>;

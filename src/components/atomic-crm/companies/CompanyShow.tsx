@@ -262,7 +262,7 @@ const DealsIterator = () => {
   const translate = useTranslate();
   const [locale = "en"] = useLocaleState();
   const { data: deals, error, isPending } = useListContext<Deal>();
-  const { dealStages, dealCategories, currency } = useConfigurationContext();
+  const { dealStages, currency } = useConfigurationContext();
   if (isPending || error) return null;
   return (
     <div>
@@ -284,9 +284,6 @@ const DealsIterator = () => {
                     currencyDisplay: "narrowSymbol",
                     minimumSignificantDigits: 3,
                   })}
-                  {deal.category
-                    ? `, ${dealCategories.find((c) => c.value === deal.category)?.label ?? deal.category}`
-                    : ""}
                 </div>
               </div>
               <div className="text-right">

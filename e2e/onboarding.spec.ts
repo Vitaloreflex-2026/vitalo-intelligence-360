@@ -58,8 +58,6 @@ test("user onboarding", async ({ page, isMobile, menu, dismissToast }) => {
     .getByLabel("Background info (bio, how you met, etc)")
     .fill("Met at a conference.");
 
-  await page.getByLabel("Has newsletter").check();
-
   await expect(
     page.getByLabel("Linked VitalÔréflex consultant / trainer *"),
   ).toHaveText("John Doe");

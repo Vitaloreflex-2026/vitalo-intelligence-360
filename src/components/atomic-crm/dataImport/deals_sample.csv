@@ -1,3 +1,3 @@
-name,reference,company,category,stage,confidentiality,origin,objectives,amount,expected_closing_date,description,motivation,other_expectations
-New website,DOS-0001,Acme,Website design,Opportunity,client,Site internet,"Sensibiliser, Former",12000,2026-09-30,Redesign of the public website,Demande suite à un audit interne,Souhaite un accompagnement des managers
-Print campaign,Globex,Print project,Proposal Sent,4500,2026-10-15,
+name,reference,company,stage,confidentiality,origin,objectives,amount,expected_closing_date,motivation,other_expectations
+New website,DOS-0001,Acme,Opportunity,client,Site internet,"Sensibiliser, Former",12000,2026-09-30,Demande suite à un audit interne,Souhaite un accompagnement des managers
+Print campaign,Globex,Print project,4500,2026-10-15,,,,,,

@@ -4,9 +4,9 @@ import { validateItemsInUse } from "./SettingsPage";
 
 describe("validateItemsInUse", () => {
   const deals: RaRecord[] = [
-    { id: 1, stage: "won", category: "ui-design" },
-    { id: 2, stage: "lost", category: "copywriting" },
-    { id: 3, stage: "opportunity", category: "ui-design" },
+    { id: 1, stage: "won", origin: "Linkedin" },
+    { id: 2, stage: "lost", origin: "Prospection" },
+    { id: 3, stage: "opportunity", origin: "Linkedin" },
   ];
 
   it("returns undefined when items is undefined", () => {
@@ -74,19 +74,19 @@ describe("validateItemsInUse", () => {
 
   it("ignores deals with a falsy value for the checked field", () => {
     const dealsWithEmpty: RaRecord[] = [
-      { id: 1, stage: "won", category: "" },
-      { id: 2, stage: "won", category: null },
+      { id: 1, stage: "won", origin: "" },
+      { id: 2, stage: "won", origin: null },
     ];
-    const items = [{ value: "other", label: "Other" }];
-    expect(
-      validateItemsInUse(items, dealsWithEmpty, "category", "categories"),
-    ).toBe(undefined);
+    const items = [{ value: "Linkedin", label: "Linkedin" }];
+    expect(validateItemsInUse(items, dealsWithEmpty, "origin", "origins")).toBe(
+      undefined,
+    );
   });
 
-  it("works with the category field", () => {
-    const items = [{ value: "ui-design", label: "UI Design" }];
-    expect(
-      validateItemsInUse(items, deals, "category", "categories"),
-    ).toContain("copywriting");
+  it("works with another field than stage", () => {
+    const items = [{ value: "Linkedin", label: "Linkedin" }];
+    expect(validateItemsInUse(items, deals, "origin", "origins")).toContain(
+      "Prospection",
+    );
   });
 });

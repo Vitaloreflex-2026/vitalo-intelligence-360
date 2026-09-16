@@ -199,7 +199,7 @@ describe("DataImportButton", () => {
       {
         name: "New website",
         company: "Acme",
-        category: "Website design",
+        origin: "Site internet",
         stage: "Proposal Sent",
         amount: "12000",
         expected_closing_date: "2026-09-30",
@@ -218,7 +218,7 @@ describe("DataImportButton", () => {
     expect(deals).toHaveLength(2);
     expect(deals[0]).toMatchObject({
       amount: 12000,
-      category: "website-design",
+      origin: "Site internet",
       company_id: companies[0].id,
       name: "New website",
       stage: "proposal-sent",
@@ -321,8 +321,8 @@ describe("DataImportButton", () => {
       .getByLabelText("CSV File")
       .upload(
         csvFile("companies.csv", [
-          "name,zipcode,phone_number,tax_identifier",
-          "Acme,02134,0155123456,0123456789",
+          "name,zipcode,phone_number",
+          "Acme,02134,0155123456",
         ]),
       );
     await screen.getByRole("button", { name: "Start import" }).click();
@@ -332,7 +332,6 @@ describe("DataImportButton", () => {
     const { data: companies } = await listAll(dataProvider, "companies");
     expect(companies[0]).toMatchObject({
       phone_number: "0155123456",
-      tax_identifier: "0123456789",
       zipcode: "02134",
     });
   });

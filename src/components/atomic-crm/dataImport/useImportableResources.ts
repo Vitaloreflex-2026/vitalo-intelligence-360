@@ -39,7 +39,7 @@ export function useImportableResources(): ImportableResource[] {
       sampleCsv: companiesSampleCsv,
       // These are text columns whose leading zero must survive the parsing:
       // a "02134" zipcode would otherwise be stored as 2134.
-      textColumns: ["zipcode", "phone_number", "tax_identifier"],
+      textColumns: ["zipcode", "phone_number"],
       processBatch: processCompanies,
     },
     { name: "deals", sampleCsv: dealsSampleCsv, processBatch: processDeals },
