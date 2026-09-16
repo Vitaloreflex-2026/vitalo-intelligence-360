@@ -49,6 +49,7 @@ export const englishCrmMessages = {
       no_contacts: "No contact",
       nb_contacts: "%{smart_count} contact |||| %{smart_count} contacts",
       nb_deals: "%{smart_count} deal |||| %{smart_count} deals",
+      no_deals: "No deal",
       sizes: {
         fewer_than_fifty_employees: "Fewer than 50 employees",
         fifty_to_one_hundred_employees: "50-100 employees",

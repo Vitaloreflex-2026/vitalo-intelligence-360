@@ -51,6 +51,7 @@ export const frenchCrmMessages = {
       no_contacts: "Aucun contact",
       nb_contacts: "%{smart_count} contact |||| %{smart_count} contacts",
       nb_deals: "%{smart_count} dossier |||| %{smart_count} dossiers",
+      no_deals: "Aucun dossier",
       sizes: {
         fewer_than_fifty_employees: "Moins de 50 salariés",
         fifty_to_one_hundred_employees: "50 à 100 salariés",

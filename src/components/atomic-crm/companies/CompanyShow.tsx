@@ -92,13 +92,13 @@ const CompanyShowContent = () => {
   const { record, isPending } = useShowContext<Company>();
   const navigate = useNavigate();
 
-  // Get tab from URL or default to "activity"
+  // Get tab from URL or default to "contacts"
   const tabMatch = useMatch("/companies/:id/show/:tab");
-  const currentTab = tabMatch?.params?.tab || "activity";
+  const currentTab = tabMatch?.params?.tab || "contacts";
 
   const handleTabChange = (value: string) => {
     if (value === currentTab) return;
-    if (value === "activity") {
+    if (value === "contacts") {
       navigate(`/companies/${record?.id}/show`);
       return;
     }
@@ -116,11 +116,8 @@ const CompanyShowContent = () => {
               <CompanyAvatar />
               <h5 className="text-xl ml-2 flex-1">{record.name}</h5>
             </div>
-            <Tabs defaultValue={currentTab} onValueChange={handleTabChange}>
+            <Tabs value={currentTab} onValueChange={handleTabChange}>
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="activity">
-                  {translate("crm.common.activity")}
-                </TabsTrigger>
                 <TabsTrigger value="contacts">
                   {record.nb_contacts === 0
                     ? translate("resources.companies.no_contacts")
@@ -128,17 +125,17 @@ const CompanyShowContent = () => {
                         smart_count: record.nb_contacts ?? 0,
                       })}
                 </TabsTrigger>
-                {record.nb_deals ? (
-                  <TabsTrigger value="deals">
-                    {translate("resources.companies.nb_deals", {
-                      smart_count: record.nb_deals ?? 0,
-                    })}
-                  </TabsTrigger>
-                ) : null}
+                <TabsTrigger value="deals">
+                  {record.nb_deals
+                    ? translate("resources.companies.nb_deals", {
+                        smart_count: record.nb_deals,
+                      })
+                    : translate("resources.companies.no_deals")}
+                </TabsTrigger>
+                <TabsTrigger value="activity">
+                  {translate("crm.common.activity")}
+                </TabsTrigger>
               </TabsList>
-              <TabsContent value="activity" className="pt-2">
-                <ActivityLog companyId={record.id} context="company" />
-              </TabsContent>
               <TabsContent value="contacts">
                 {record.nb_contacts ? (
                   <ReferenceManyField
@@ -175,7 +172,14 @@ const CompanyShowContent = () => {
                   >
                     <DealsIterator />
                   </ReferenceManyField>
-                ) : null}
+                ) : (
+                  <p className="py-4 text-sm text-muted-foreground">
+                    {translate("resources.companies.no_deals")}
+                  </p>
+                )}
+              </TabsContent>
+              <TabsContent value="activity" className="pt-2">
+                <ActivityLog companyId={record.id} context="company" />
               </TabsContent>
             </Tabs>
           </CardContent>
