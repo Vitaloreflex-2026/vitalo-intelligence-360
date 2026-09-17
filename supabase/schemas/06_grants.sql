@@ -66,6 +66,10 @@ grant all on function public.set_sales_id_default() to authenticated;
 grant all on function public.set_sales_id_default() to service_role;
 
 -- Table grants
+grant all on table public.assessments to anon;
+grant all on table public.assessments to authenticated;
+grant all on table public.assessments to service_role;
+
 grant all on table public.companies to anon;
 grant all on table public.companies to authenticated;
 grant all on table public.companies to service_role;
@@ -128,6 +132,10 @@ grant all on table public.init_state to authenticated;
 grant all on table public.init_state to service_role;
 
 -- Sequence grants
+grant all on sequence public.assessments_id_seq to anon;
+grant all on sequence public.assessments_id_seq to authenticated;
+grant all on sequence public.assessments_id_seq to service_role;
+
 grant all on sequence public.companies_id_seq to anon;
 grant all on sequence public.companies_id_seq to authenticated;
 grant all on sequence public.companies_id_seq to service_role;

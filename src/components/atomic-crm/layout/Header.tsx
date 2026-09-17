@@ -22,6 +22,8 @@ const Header = () => {
     currentPath = "/contacts";
   } else if (matchPath("/companies/*", location.pathname)) {
     currentPath = "/companies";
+  } else if (matchPath("/assessments/*", location.pathname)) {
+    currentPath = "/assessments";
   } else if (matchPath("/deals/*", location.pathname)) {
     currentPath = "/deals";
   } else {
@@ -70,6 +72,13 @@ const Header = () => {
                     })}
                     to="/contacts"
                     isActive={currentPath === "/contacts"}
+                  />
+                  <NavigationTab
+                    label={translate("resources.assessments.name", {
+                      smart_count: 2,
+                    })}
+                    to="/assessments"
+                    isActive={currentPath === "/assessments"}
                   />
                   <NavigationTab
                     label={translate("resources.deals.name", {

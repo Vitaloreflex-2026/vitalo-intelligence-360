@@ -4,6 +4,7 @@
 --
 
 -- Enable RLS on all tables
+alter table public.assessments enable row level security;
 alter table public.companies enable row level security;
 alter table public.contacts enable row level security;
 alter table public.contact_notes enable row level security;
@@ -15,6 +16,12 @@ alter table public.tasks enable row level security;
 alter table public.choices enable row level security;
 alter table public.configuration enable row level security;
 alter table public.favicons_excluded_domains enable row level security;
+
+-- Assessments
+create policy "Enable read access for authenticated users" on public.assessments for select to authenticated using (true);
+create policy "Enable insert for authenticated users only" on public.assessments for insert to authenticated with check (true);
+create policy "Enable update for authenticated users only" on public.assessments for update to authenticated using (true) with check (true);
+create policy "Assessments Delete Policy" on public.assessments for delete to authenticated using (true);
 
 -- Companies
 create policy "Enable read access for authenticated users" on public.companies for select to authenticated using (true);

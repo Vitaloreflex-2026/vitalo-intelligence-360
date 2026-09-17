@@ -23,6 +23,7 @@ import {
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ActivityLog } from "../activity/ActivityLog";
+import { CompanyAssessmentButton } from "../assessments/CompanyAssessmentButton";
 import { Avatar } from "../contacts/Avatar";
 import { TagsList } from "../contacts/TagsList";
 import { DealsIterator } from "../deals/DealsIterator";
@@ -112,9 +113,10 @@ const CompanyShowContent = () => {
       <div className="flex-1">
         <Card>
           <CardContent>
-            <div className="flex mb-3">
+            <div className="flex items-center mb-3">
               <CompanyAvatar />
               <h5 className="text-xl ml-2 flex-1">{record.name}</h5>
+              <CompanyAssessmentButton />
             </div>
             <Tabs value={currentTab} onValueChange={handleTabChange}>
               <TabsList className="grid w-full grid-cols-3">

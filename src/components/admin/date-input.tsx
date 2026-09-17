@@ -229,7 +229,9 @@ export const DateInput = (props: DateInputProps) => {
           className={cn(
             "ra-input",
             `ra-input-${source}`,
-            "scheme-light dark:scheme-dark relative [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-3 [&::-webkit-calendar-picker-indicator]:opacity-100 appearance-none",
+            // The picker icon is positioned absolutely, so it reserves no space:
+            // pad the input on the right to keep the date from running under it.
+            "scheme-light dark:scheme-dark relative pr-9 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-3 [&::-webkit-calendar-picker-indicator]:opacity-100 appearance-none",
             inputClassName,
           )}
           disabled={disabled || readOnly}
