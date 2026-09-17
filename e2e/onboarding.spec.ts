@@ -82,6 +82,8 @@ test("user onboarding", async ({ page, isMobile, menu, dismissToast }) => {
 
   await page.waitForLoadState("networkidle");
 
+  await page.getByRole("tab", { name: "Notes" }).click();
+
   await page.getByPlaceholder("Add a note").fill("This is a note about Jane.");
   await page
     .getByRole("button", { name: isMobile ? "Save" : "Add this note" })

@@ -68,9 +68,15 @@ test.describe("meetings to handle notifications", () => {
 
     await page.getByRole("button", { name: "Meetings to handle" }).click();
 
-    await expect(page.getByText("Bilan de formation")).toBeVisible();
-    await expect(page.getByText("Rendez-vous oublie")).toBeVisible();
-    await expect(page.getByText("Rendez-vous de demain")).toBeHidden();
+    await expect(
+      page.getByRole("dialog").getByText("Bilan de formation"),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("dialog").getByText("Rendez-vous oublie"),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("dialog").getByText("Rendez-vous de demain"),
+    ).toBeHidden();
   });
 
   test("stops counting a meeting once it is marked as done", async ({
@@ -83,7 +89,9 @@ test.describe("meetings to handle notifications", () => {
     });
     await expect(panelTrigger).toContainText("2");
     await panelTrigger.click();
-    await expect(page.getByText("Bilan de formation")).toBeVisible();
+    await expect(
+      page.getByRole("dialog").getByText("Bilan de formation"),
+    ).toBeVisible();
 
     await page.getByRole("button", { name: "Mark as done" }).last().click();
 
@@ -94,13 +102,19 @@ test.describe("meetings to handle notifications", () => {
     await signIn(page);
 
     await page.getByRole("button", { name: "Meetings to handle" }).click();
-    await expect(page.getByText("Rendez-vous oublie")).toBeVisible();
+    await expect(
+      page.getByRole("dialog").getByText("Rendez-vous oublie"),
+    ).toBeVisible();
 
     await page.getByRole("button", { name: "Postpone" }).first().click();
     await page.getByRole("menuitem", { name: "Postpone to tomorrow" }).click();
 
-    await expect(page.getByText("Rendez-vous oublie")).toBeHidden();
-    await expect(page.getByText("Bilan de formation")).toBeVisible();
+    await expect(
+      page.getByRole("dialog").getByText("Rendez-vous oublie"),
+    ).toBeHidden();
+    await expect(
+      page.getByRole("dialog").getByText("Bilan de formation"),
+    ).toBeVisible();
   });
 
   test("opens the edit dialog from the postpone menu", async ({ page }) => {
