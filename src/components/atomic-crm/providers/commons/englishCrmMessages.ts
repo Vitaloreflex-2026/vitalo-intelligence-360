@@ -916,42 +916,12 @@ export const englishCrmMessages = {
       stop: "Stop import",
       title: "Import data",
     },
-    header: {
-      import_data: "Import from JSON",
-    },
     image_editor: {
       change: "Change",
       drop_hint: "Drop a file to upload, or click to select it.",
       editable_content: "Editable content",
       title: "Upload and resize image",
       update_image: "Update Image",
-    },
-    import: {
-      action: {
-        download_error_report: "Download the error report",
-        import: "Import",
-        import_another: "Import another file",
-      },
-      error: {
-        unable: "Unable to import this file.",
-      },
-      idle: {
-        description_1:
-          "You can import sales, companies, contacts, companies, notes, and meetings.",
-        description_2:
-          "Data must be in a JSON file matching the following sample:",
-      },
-      status: {
-        all_success: "All records were imported successfully.",
-        complete: "Import complete.",
-        failed: "Failed",
-        imported: "Imported",
-        in_progress:
-          "Import in progress, please don't navigate away from this page.",
-        some_failed: "Some records were not imported.",
-        table_caption: "Import status",
-      },
-      title: "Import from JSON",
     },
     settings: {
       about: "About",

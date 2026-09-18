@@ -929,9 +929,6 @@ export const frenchCrmMessages = {
       stop: "Arrêter l'importation",
       title: "Importer des données",
     },
-    header: {
-      import_data: "Importer depuis JSON",
-    },
     image_editor: {
       change: "Changer",
       drop_hint:
@@ -939,32 +936,6 @@ export const frenchCrmMessages = {
       editable_content: "Contenu modifiable",
       title: "Télécharger et redimensionner l'image",
       update_image: "Mettre à jour l'image",
-    },
-    import: {
-      action: {
-        download_error_report: "Téléchargez le rapport d'erreur",
-        import: "Importer",
-        import_another: "Importer un autre fichier",
-      },
-      error: {
-        unable: "Impossible d'importer ce fichier.",
-      },
-      idle: {
-        description_1:
-          "Vous pouvez importer des ventes, des entreprises, des contacts, des entreprises, des notes et des rendez-vous.",
-        description_2:
-          "Les données doivent se trouver dans un fichier JSON correspondant à l'exemple suivant :",
-      },
-      status: {
-        all_success: "Tous les enregistrements ont été importés avec succès.",
-        complete: "Importation terminée.",
-        failed: "Échoué",
-        imported: "Importé",
-        in_progress: "Import en cours, veuillez ne pas quitter cette page.",
-        some_failed: "Certains enregistrements n'ont pas été importés.",
-        table_caption: "Statut d'importation",
-      },
-      title: "Importer depuis JSON",
     },
     settings: {
       about: "À propos",
