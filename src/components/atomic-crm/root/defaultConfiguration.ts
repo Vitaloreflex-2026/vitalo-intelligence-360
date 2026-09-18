@@ -12,23 +12,25 @@ export const defaultCurrency = "USD";
 
 export const defaultTitle = "Vital Ô Réflex 360°";
 
+// Labels are runtime data shown as-is on the Kanban columns (admins can edit
+// them in Settings), so they ship in the language of the app: French.
 export const defaultDealStages = [
-  { value: "opportunity", label: "Opportunity" },
-  { value: "proposal-sent", label: "Proposal Sent" },
-  { value: "in-negociation", label: "In Negotiation" },
-  { value: "won", label: "Won" },
-  { value: "lost", label: "Lost" },
-  { value: "delayed", label: "Delayed" },
+  { value: "opportunity", label: "Opportunité" },
+  { value: "proposal-sent", label: "Proposition envoyée" },
+  { value: "in-negociation", label: "En négociation" },
+  { value: "won", label: "Gagné" },
+  { value: "lost", label: "Perdu" },
+  { value: "delayed", label: "Reporté" },
 ];
 
 export const defaultDealPipelineStatuses = ["won"];
 
 export const defaultDealCategories = [
-  { value: "other", label: "Other" },
-  { value: "copywriting", label: "Copywriting" },
-  { value: "print-project", label: "Print project" },
-  { value: "ui-design", label: "UI Design" },
-  { value: "website-design", label: "Website design" },
+  { value: "other", label: "Autre" },
+  { value: "copywriting", label: "Rédaction" },
+  { value: "print-project", label: "Projet print" },
+  { value: "ui-design", label: "Design UI" },
+  { value: "website-design", label: "Conception de site web" },
 ];
 
 export const defaultNoteStatuses = [

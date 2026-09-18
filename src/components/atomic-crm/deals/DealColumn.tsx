@@ -1,4 +1,5 @@
 import { Droppable } from "@hello-pangea/dnd";
+import { useLocaleState } from "ra-core";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Deal } from "../types";
@@ -14,6 +15,7 @@ export const DealColumn = ({
 }) => {
   const totalAmount = deals.reduce((sum, deal) => sum + deal.amount, 0);
   const { dealStages, currency } = useConfigurationContext();
+  const [locale = "en"] = useLocaleState();
   return (
     <div className="flex-1 pb-8">
       <div className="flex flex-col items-center">
@@ -21,7 +23,7 @@ export const DealColumn = ({
           {findDealLabel(dealStages, stage)}
         </h3>
         <p className="text-sm text-muted-foreground">
-          {totalAmount.toLocaleString("en-US", {
+          {totalAmount.toLocaleString(locale, {
             notation: "compact",
             style: "currency",
             currency,

@@ -59,7 +59,11 @@ import { ContactShow } from "../contacts/ContactShow.tsx";
 import { CompanyShow } from "../companies/CompanyShow.tsx";
 import { NoteShowPage } from "../notes/NoteShowPage.tsx";
 
-const defaultStore = localStorageStore(undefined, "CRM");
+// Store version. Bumping it makes ra-core wipe every "RaStoreCRM" key on the
+// next load, once per browser — the way to push a new default configuration
+// (deal stage labels, for instance) to clients that cached the previous one.
+// It also drops saved list filters and UI preferences, so bump deliberately.
+const defaultStore = localStorageStore("2", "CRM");
 
 export type CRMProps = {
   dataProvider?: CrmDataProvider;

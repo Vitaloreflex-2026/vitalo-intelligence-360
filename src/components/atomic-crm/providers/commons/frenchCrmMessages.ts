@@ -447,7 +447,7 @@ export const frenchCrmMessages = {
         country: "Pays",
         description: "Description",
         context_links: "URLs de contexte",
-        sales_id: "Responsable de compte",
+        sales_id: "Consultant / Formateur",
       },
       empty: {
         description: "Il semble que la liste de vos entreprises soit vide.",
@@ -857,7 +857,7 @@ export const frenchCrmMessages = {
       welcome_title: "Bienvenue sur Atomic CRM",
     },
     common: {
-      account_manager: "Responsable de compte",
+      account_manager: "Consultant / Formateur",
       activity: "Activité",
       added: "ajoutée",
       details: "Détails",
