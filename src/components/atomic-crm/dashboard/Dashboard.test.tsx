@@ -26,7 +26,7 @@ describe("Dashboard", () => {
     );
 
     // Assert
-    await expect.element(screen.getByText("My meetings")).toBeVisible();
+    await expect.element(screen.getByText("Team meetings")).toBeVisible();
     await expect.element(screen.getByText("Latest Activity")).toBeVisible();
   });
 

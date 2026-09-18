@@ -55,6 +55,10 @@ create policy "Deal Notes Delete Policy" on public.deal_notes for delete to auth
 
 -- Sales
 create policy "Enable read access for authenticated users" on public.sales for select to authenticated using (true);
+-- Everything else about a sale is written by the `users` edge function with the
+-- service role; this policy exists so administrators can set the calendar color
+-- straight from the settings page.
+create policy "Enable update for admins" on public.sales for update to authenticated using (public.is_admin()) with check (public.is_admin());
 
 -- Tags
 create policy "Enable read access for authenticated users" on public.tags for select to authenticated using (true);

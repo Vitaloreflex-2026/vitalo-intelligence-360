@@ -18,6 +18,7 @@ import { useLocaleState, useNotify, useTranslate, useUpdate } from "ra-core";
 import { useCallback, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 
+import { rdvInkColor } from "../misc/rdvColors";
 import { TaskEdit } from "../tasks/TaskEdit";
 import { calendarScrollTime } from "./calendarScrollTime";
 import { MeetingCreateDialog } from "./MeetingCreateDialog";
@@ -27,6 +28,7 @@ import {
   DEFAULT_MEETING_MINUTES,
   useMeetingEvents,
   type CalendarRange,
+  type MeetingConsultant,
 } from "./useMeetingEvents";
 
 /** Business hours the grid opens on; earlier or later meetings stay reachable by scrolling. */
@@ -43,9 +45,42 @@ const minutesBetween = (start: Date, end: Date): number =>
   Math.max(1, Math.round((end.getTime() - start.getTime()) / MINUTE_MS));
 
 /**
- * The current user's meetings for the visible week, shown in the dashboard's
- * centre column. Dragging a block reschedules the meeting, resizing it changes
- * its duration, dragging across empty slots opens the creation dialog.
+ * A block is too narrow to hold a name, so the fill alone says whose meeting it
+ * is — this spells the code out for the consultants currently on screen.
+ */
+const ConsultantLegend = ({
+  consultants,
+}: {
+  consultants: MeetingConsultant[];
+}) => {
+  if (!consultants.length) return null;
+  return (
+    <ul className="flex flex-wrap gap-x-4 gap-y-1 px-1">
+      {consultants.map((consultant) => (
+        <li
+          key={consultant.id}
+          className="flex items-center gap-1.5 text-xs text-muted-foreground"
+        >
+          <span
+            aria-hidden
+            className="inline-block w-3 h-3 rounded-sm border"
+            style={{
+              backgroundColor: consultant.color,
+              borderColor: rdvInkColor(consultant.color),
+            }}
+          />
+          {consultant.name}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+/**
+ * Every consultant's meetings for the visible week, shown in the dashboard's
+ * centre column, each colored by the consultant holding it. Dragging a block
+ * reschedules the meeting, resizing it changes its duration, dragging across
+ * empty slots opens the creation dialog.
  */
 export const MeetingsCalendar = () => {
   const translate = useTranslate();
@@ -64,7 +99,7 @@ export const MeetingsCalendar = () => {
   const [editedTaskId, setEditedTaskId] = useState<Identifier>();
   const [createdSlot, setCreatedSlot] = useState<CalendarRange>();
 
-  const { events } = useMeetingEvents(range);
+  const { events, legend } = useMeetingEvents(range);
 
   const handleDatesSet = useCallback((arg: DatesSetArg) => {
     setRange({ start: arg.start, end: arg.end });
@@ -148,11 +183,11 @@ export const MeetingsCalendar = () => {
           <CalendarDays className="text-muted-foreground w-6 h-6" />
         </div>
         <h2 className="text-xl font-semibold text-muted-foreground flex-1">
-          {translate("crm.dashboard.calendar.title", { _: "My meetings" })}
+          {translate("crm.dashboard.calendar.title", { _: "Team meetings" })}
         </h2>
       </div>
 
-      <Card className="p-3 meetings-calendar">
+      <Card className="p-3 gap-3 meetings-calendar">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridWeek"
@@ -172,7 +207,7 @@ export const MeetingsCalendar = () => {
           slotLabelInterval="01:00"
           views={{
             // A month cell renders timed events as a bare dot by default, which
-            // would drop the type colour the rest of the widget relies on.
+            // would drop the consultant colour the rest of the widget relies on.
             dayGridMonth: {
               eventDisplay: "block",
               dayMaxEvents: MAX_EVENTS_PER_DAY,
@@ -191,6 +226,7 @@ export const MeetingsCalendar = () => {
           eventClick={handleEventClick}
           select={handleSelect}
         />
+        <ConsultantLegend consultants={legend} />
       </Card>
 
       {editedTaskId != null && (

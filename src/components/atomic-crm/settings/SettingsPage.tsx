@@ -22,7 +22,7 @@ import { TextInput } from "@/components/admin/text-input";
 
 import { ColorSwatchInput } from "../misc/ColorSwatchInput";
 import ImageEditorField from "../misc/ImageEditorField";
-import { RdvTypeColorsCard } from "./RdvTypeColorsCard";
+import { ConsultantColorsCard } from "./ConsultantColorsCard";
 import {
   useConfigurationContext,
   useConfigurationUpdater,
@@ -45,9 +45,9 @@ const SECTIONS = [
   { id: "notes", label: "resources.notes.name", fallback: "Notes" },
   { id: "tasks", label: "resources.tasks.name", fallback: "Tasks" },
   {
-    id: "rdv-types",
-    label: "crm.settings.rdv_types.title",
-    fallback: "Meeting types",
+    id: "consultant-colors",
+    label: "crm.settings.consultant_colors.title",
+    fallback: "Consultant colours",
   },
 ];
 
@@ -459,9 +459,9 @@ const SettingsFormFields = () => {
           </CardContent>
         </Card>
 
-        {/* Meeting types live in the `choices` referential, not in the
+        {/* Consultant colours live on the `sales` rows, not in the
             configuration record, so this card saves on its own. */}
-        <RdvTypeColorsCard />
+        <ConsultantColorsCard />
       </div>
 
       {/* Sticky save button */}

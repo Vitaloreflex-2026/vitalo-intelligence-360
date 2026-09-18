@@ -4,35 +4,39 @@ import { Card, CardContent } from "@/components/ui/card";
 
 import { ColorSwatchInput } from "../misc/ColorSwatchInput";
 import { fallbackRdvColor } from "../misc/rdvColors";
-import type { Choice } from "../types";
+import { salesName } from "../sales/salesName";
+import type { Sale } from "../types";
 
-const MAX_MEETING_TYPES = 200;
+const MAX_CONSULTANTS = 200;
 
 /**
  * One row of the list: the swatch tracks the picker while it is open, and the
  * write happens on blur — `input type="color"` fires a change per pixel of
  * drag, and one mutation per pixel is not something to send to the server.
  */
-const MeetingTypeRow = ({ meetingType }: { meetingType: Choice }) => {
+const ConsultantRow = ({ consultant }: { consultant: Sale }) => {
   const [update] = useUpdate();
   const notify = useNotify();
+  const name = salesName(consultant);
   const [color, setColor] = useState(
-    meetingType.color || fallbackRdvColor(meetingType.label),
+    consultant.color || fallbackRdvColor(name),
   );
 
   const handleCommit = () => {
-    if (color === meetingType.color) return;
+    if (color === consultant.color) return;
     update(
-      "choices",
+      "sales",
       {
-        id: meetingType.id,
+        id: consultant.id,
         data: { color },
-        previousData: meetingType,
+        previousData: consultant,
       },
       {
         onError: () => {
-          setColor(meetingType.color || fallbackRdvColor(meetingType.label));
-          notify("crm.settings.rdv_types.save_error", { type: "error" });
+          setColor(consultant.color || fallbackRdvColor(name));
+          notify("crm.settings.consultant_colors.save_error", {
+            type: "error",
+          });
         },
       },
     );
@@ -41,52 +45,54 @@ const MeetingTypeRow = ({ meetingType }: { meetingType: Choice }) => {
   return (
     <div className="flex items-center gap-3">
       <ColorSwatchInput
-        id={`rdv-type-color-${meetingType.id}`}
-        aria-label={meetingType.label}
+        id={`consultant-color-${consultant.id}`}
+        aria-label={name}
         value={color}
         onChange={(event) => setColor(event.target.value)}
         onBlur={handleCommit}
       />
       <label
-        htmlFor={`rdv-type-color-${meetingType.id}`}
+        htmlFor={`consultant-color-${consultant.id}`}
         className="text-sm cursor-pointer"
       >
-        {meetingType.label}
+        {name}
       </label>
     </div>
   );
 };
 
 /**
- * Meeting-type colors, edited on their own because they live in the `choices`
- * referential rather than in the configuration record the rest of this page
+ * Per-consultant calendar colors, edited on their own because they live on the
+ * `sales` rows rather than in the configuration record the rest of this page
  * writes — hence the immediate save instead of the page's save button.
  */
-export const RdvTypeColorsCard = () => {
+export const ConsultantColorsCard = () => {
   const translate = useTranslate();
-  const { data: meetingTypes, isPending } = useGetList<Choice>("choices", {
-    filter: { category: "rdv_type" },
-    pagination: { page: 1, perPage: MAX_MEETING_TYPES },
+  const { data: consultants, isPending } = useGetList<Sale>("sales", {
+    filter: { disabled: false },
+    pagination: { page: 1, perPage: MAX_CONSULTANTS },
     sort: { field: "id", order: "ASC" },
   });
 
   return (
-    <Card id="rdv-types">
+    <Card id="consultant-colors">
       <CardContent className="space-y-4">
         <h2 className="text-xl font-semibold text-muted-foreground">
-          {translate("crm.settings.rdv_types.title")}
+          {translate("crm.settings.consultant_colors.title")}
         </h2>
         <p className="text-sm text-muted-foreground">
-          {translate("crm.settings.rdv_types.hint")}
+          {translate("crm.settings.consultant_colors.hint")}
         </p>
-        {isPending ? null : meetingTypes?.length ? (
+        {isPending ? null : consultants?.length ? (
           <div className="flex flex-col gap-3">
-            {meetingTypes.map((meetingType) => (
-              <MeetingTypeRow key={meetingType.id} meetingType={meetingType} />
+            {consultants.map((consultant) => (
+              <ConsultantRow key={consultant.id} consultant={consultant} />
             ))}
           </div>
         ) : (
-          <p className="text-sm">{translate("crm.settings.rdv_types.empty")}</p>
+          <p className="text-sm">
+            {translate("crm.settings.consultant_colors.empty")}
+          </p>
         )}
       </CardContent>
     </Card>

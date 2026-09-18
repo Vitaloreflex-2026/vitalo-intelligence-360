@@ -19,9 +19,9 @@ const contrastRatio = (a: string, b: string): number => {
 };
 
 describe("fallbackRdvColor", () => {
-  it("returns a palette color for a meeting type with no stored color", () => {
+  it("returns a palette color for a consultant with no stored color", () => {
     // Arrange
-    const label = "Atelier de cadrage";
+    const label = "Alice Martin";
 
     // Act
     const color = fallbackRdvColor(label);
@@ -32,7 +32,7 @@ describe("fallbackRdvColor", () => {
 
   it("returns the same color every time for the same label", () => {
     // Arrange
-    const label = "Rendez-vous de suivi";
+    const label = "Bruno Petit";
 
     // Act
     const first = fallbackRdvColor(label);
@@ -42,18 +42,18 @@ describe("fallbackRdvColor", () => {
     expect(second).toBe(first);
   });
 
-  it("spreads the seeded meeting types over several palette entries", () => {
+  it("spreads a typical team over several palette entries", () => {
     // Arrange
-    const seededTypes = [
-      "Premier contact",
-      "Rendez-vous découverte",
-      "Rendez-vous de suivi",
-      "Restitution",
-      "Bilan annuel",
+    const team = [
+      "Alice Martin",
+      "Bruno Petit",
+      "Chloé Roux",
+      "David Bernard",
+      "Emma Leroy",
     ];
 
     // Act
-    const colors = new Set(seededTypes.map(fallbackRdvColor));
+    const colors = new Set(team.map(fallbackRdvColor));
 
     // Assert — a hash that collapsed everything onto one color would make the
     // calendar unreadable, which is the whole point of the palette.

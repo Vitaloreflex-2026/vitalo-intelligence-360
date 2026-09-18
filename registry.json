@@ -170,15 +170,19 @@
           "type": "registry:component"
         },
         {
-          "path": "src/components/atomic-crm/settings/RdvTypeColorsCard.tsx",
-          "type": "registry:component"
-        },
-        {
           "path": "src/components/atomic-crm/settings/ProfilePage.tsx",
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/settings/ConsultantColorsCard.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/sales/useGetSalesName.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/sales/salesName.ts",
           "type": "registry:component"
         },
         {

@@ -1,14 +1,14 @@
 /**
- * Colors for meeting types.
+ * Colors identifying consultants/trainers on their meetings.
  *
- * Meeting types are user-extensible rows of the `choices` referential, so no
- * color can be hardcoded per type: each row carries its own `color`, seeded by
- * the migration and editable in the settings page. This palette supplies those
- * seeds plus a stable fallback for a type created later without one.
+ * The team is created at runtime, so no color can be hardcoded per consultant:
+ * each `sales` row carries its own `color`, seeded by the migration and
+ * editable in the settings page. This palette supplies those seeds plus a
+ * stable fallback for a consultant added later without one.
  *
  * The hues are deliberately spread around the wheel instead of reusing
  * `tags/colors.ts`: in the dashboard calendar a meeting block is too narrow to
- * hold the type label, so the fill is the only thing telling one type from
+ * hold a name, so the fill is the only thing telling one consultant from
  * another, and the tag pastels sit too close together to carry that.
  */
 export const RDV_PALETTE = [
@@ -30,7 +30,7 @@ const INK_SATURATION = 0.45;
 const INK_LIGHTNESS = 0.28;
 
 /**
- * Stable index for a label, so a meeting type with no stored color keeps the
+ * Stable index for a label, so a consultant with no stored color keeps the
  * same fallback across reloads and across users.
  */
 const hashLabel = (label: string): number => {
@@ -41,7 +41,7 @@ const hashLabel = (label: string): number => {
   return Math.abs(hash);
 };
 
-/** Palette entry a meeting type falls back to when it has no stored color. */
+/** Palette entry a consultant falls back to when they have no stored color. */
 export const fallbackRdvColor = (label: string): string =>
   RDV_PALETTE[hashLabel(label) % RDV_PALETTE.length];
 

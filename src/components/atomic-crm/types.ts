@@ -34,6 +34,9 @@ export type Sale = {
   disabled?: boolean;
   user_id: string;
 
+  /** Hex fill identifying this consultant/trainer in the dashboard calendar. */
+  color?: string | null;
+
   /**
    * This is a copy of the user's email, to make it easier to handle by react admin
    * DO NOT UPDATE this field directly, it should be updated by the backend
@@ -58,8 +61,6 @@ export type RelationshipStatus = "prospect" | "client" | "partner";
 export type Choice = {
   category: string;
   label: string;
-  /** Hex fill, only meaningful for the `rdv_type` category so far. */
-  color?: string | null;
 } & Pick<RaRecord, "id">;
 
 export type Company = {

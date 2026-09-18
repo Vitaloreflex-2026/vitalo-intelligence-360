@@ -891,7 +891,7 @@ export const frenchCrmMessages = {
     },
     dashboard: {
       calendar: {
-        title: "Mes rendez-vous",
+        title: "Les rendez-vous de l'équipe",
         reschedule_error: "Impossible de déplacer ce rendez-vous",
       },
       deals_pipeline: "Pipeline des dossiers",
@@ -959,10 +959,10 @@ export const frenchCrmMessages = {
       tasks: {
         types: "Types",
       },
-      rdv_types: {
-        title: "Types de rendez-vous",
-        hint: "Couleur de chaque type dans le calendrier du tableau de bord. Enregistrée dès que vous fermez le sélecteur.",
-        empty: "Aucun type de rendez-vous pour le moment.",
+      consultant_colors: {
+        title: "Couleurs des consultants",
+        hint: "Couleur de chaque consultant / formateur dans le calendrier du tableau de bord. Enregistrée dès que vous fermez le sélecteur.",
+        empty: "Aucun consultant pour le moment.",
         save_error: "Impossible d'enregistrer cette couleur",
       },
       preferences: "Préférences",

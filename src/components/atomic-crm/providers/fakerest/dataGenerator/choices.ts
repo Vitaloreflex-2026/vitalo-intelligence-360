@@ -1,4 +1,3 @@
-import { RDV_PALETTE } from "../../../misc/rdvColors";
 import type { Choice } from "../../../types";
 import type { Db } from "./types";
 
@@ -49,15 +48,10 @@ export const choiceLabels: Record<string, string[]> = {
 export const generateChoices = (_?: Db): Choice[] => {
   let id = 0;
   return Object.entries(choiceLabels).flatMap(([category, labels]) =>
-    labels.map((label, index) => ({
+    labels.map((label) => ({
       id: id++,
       category,
       label,
-      // Only meeting types are colour-coded, mirroring the migration seed.
-      color:
-        category === "rdv_type"
-          ? RDV_PALETTE[index % RDV_PALETTE.length]
-          : null,
     })),
   );
 };

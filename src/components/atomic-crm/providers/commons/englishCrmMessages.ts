@@ -880,7 +880,7 @@ export const englishCrmMessages = {
     },
     dashboard: {
       calendar: {
-        title: "My meetings",
+        title: "Team meetings",
         reschedule_error: "This meeting could not be moved",
       },
       deals_pipeline: "Deals Pipeline",
@@ -945,10 +945,10 @@ export const englishCrmMessages = {
       tasks: {
         types: "Types",
       },
-      rdv_types: {
-        title: "Meeting types",
-        hint: "Colour of each type in the dashboard calendar. Saved as soon as you close the picker.",
-        empty: "No meeting type yet.",
+      consultant_colors: {
+        title: "Consultant colours",
+        hint: "Colour of each consultant/trainer in the dashboard calendar. Saved as soon as you close the picker.",
+        empty: "No consultant yet.",
         save_error: "This colour could not be saved",
       },
       preferences: "Preferences",
