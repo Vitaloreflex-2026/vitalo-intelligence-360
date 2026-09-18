@@ -45,8 +45,16 @@ const MeetingSection = ({
  * Floating bottom-right panel listing what the current user still has to
  * handle: meetings — overdue first, then today's, each with a "done" and a
  * "postpone" action — followed by the administrative papers to renew or file.
+ *
+ * `bottomOffset` lifts the button above whatever the layout already fixes to
+ * the bottom of the viewport — the mobile navigation bar, which would otherwise
+ * cover it. Desktop leaves it unset and the button sits on the viewport edge.
  */
-export const MeetingNotifications = () => {
+export const MeetingNotifications = ({
+  bottomOffset,
+}: {
+  bottomOffset?: string;
+}) => {
   const translate = useTranslate();
   const { identity } = useGetIdentity();
 
@@ -81,7 +89,15 @@ export const MeetingNotifications = () => {
   const pendingCount = pendingMeetings.length + documents.count;
 
   return (
-    <div className="fixed bottom-4 right-4 z-40">
+    <div
+      className="fixed bottom-4 right-4 z-40"
+      style={
+        bottomOffset
+          ? // The 1rem keeps the same gap the `bottom-4` class gives it.
+            { bottom: `calc(${bottomOffset} + 1rem)` }
+          : undefined
+      }
+    >
       <Popover>
         <PopoverTrigger asChild>
           <Button

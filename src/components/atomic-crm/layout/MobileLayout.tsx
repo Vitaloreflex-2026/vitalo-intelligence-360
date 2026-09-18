@@ -29,7 +29,8 @@ export const MobileLayout = ({ children }: { children: ReactNode }) => {
           </Suspense>
         </ErrorBoundary>
       </div>
-      <MeetingNotifications />
+      {/* Above the bottom bar, which is fixed and would otherwise cover it */}
+      <MeetingNotifications bottomOffset="var(--mobile-nav-height)" />
       <MobileNavigation />
       {/* Sits just above the bottom bar, whatever height the device gives it */}
       <Notification mobileOffset={{ bottom: "var(--mobile-nav-height)" }} />

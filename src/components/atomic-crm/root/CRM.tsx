@@ -55,6 +55,8 @@ import { useIsMobile } from "@/hooks/use-mobile.ts";
 import { MobileTasksList } from "../tasks/MobileTasksList.tsx";
 import { ContactListMobile } from "../contacts/ContactList.tsx";
 import { ContactShow } from "../contacts/ContactShow.tsx";
+import { CompanyListMobile } from "../companies/CompanyListMobile.tsx";
+import { DealListMobile } from "../deals/DealListMobile.tsx";
 import { CompanyShow } from "../companies/CompanyShow.tsx";
 import { NoteShowPage } from "../notes/NoteShowPage.tsx";
 
@@ -330,7 +332,7 @@ const MobileAdmin = (
           purpose-built mobile variant are overridden below; the rest reuse the
           desktop components and are made responsive on their own.
         */}
-        <Resource name="deals" {...deals} />
+        <Resource name="deals" {...deals} list={DealListMobile} />
         <Resource name="assessments" {...assessments} />
         <Resource
           name="contacts"
@@ -340,7 +342,12 @@ const MobileAdmin = (
         >
           <Route path=":id/notes/:noteId" element={<NoteShowPage />} />
         </Resource>
-        <Resource name="companies" {...companies} show={CompanyShow} />
+        <Resource
+          name="companies"
+          {...companies}
+          list={CompanyListMobile}
+          show={CompanyShow}
+        />
         <Resource name="contact_notes" />
         <Resource name="deal_notes" />
         <Resource name="tasks" list={MobileTasksList} />

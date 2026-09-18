@@ -461,6 +461,9 @@ export const frenchCrmMessages = {
         context_links: "URLs de contexte",
         sales_id: "Consultant / Formateur",
       },
+      list: {
+        error_loading: "Erreur lors du chargement des entreprises",
+      },
       empty: {
         description: "Il semble que la liste de vos entreprises soit vide.",
         title: "Aucune entreprise trouvée",
@@ -643,6 +646,10 @@ export const frenchCrmMessages = {
         amount: "Budget",
         expected_closing_date: "Date de clôture prévue",
         stage: "Étape",
+        sales_id: "Consultant / Formateur",
+      },
+      list: {
+        error_loading: "Erreur lors du chargement des dossiers",
       },
       action: {
         add: "Ajouter un dossier",

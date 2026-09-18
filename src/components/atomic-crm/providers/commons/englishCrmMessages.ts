@@ -454,6 +454,9 @@ export const englishCrmMessages = {
         context_links: "Context links",
         sales_id: "Account manager",
       },
+      list: {
+        error_loading: "Error loading companies",
+      },
       empty: {
         description: "It seems your company list is empty.",
         title: "No companies found",
@@ -634,6 +637,10 @@ export const englishCrmMessages = {
         amount: "Budget",
         expected_closing_date: "Expected closing date",
         stage: "Stage",
+        sales_id: "Account manager",
+      },
+      list: {
+        error_loading: "Error loading deals",
       },
       action: {
         add: "Add deal",
