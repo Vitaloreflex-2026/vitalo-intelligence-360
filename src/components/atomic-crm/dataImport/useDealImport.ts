@@ -4,15 +4,14 @@ import { useDataProvider, useGetIdentity, type DataProvider } from "ra-core";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import { useCompanyResolver } from "./useCompanyResolver";
 import { createEachRow } from "./createEachRow";
-import { toConfiguredValue, toInteger, toIsoDate, toText } from "./parseCell";
-import type { ImportCell, ImportRow, ProcessImportBatch } from "./types";
-
-/** Splits a comma-separated CSV cell into the labels it lists. */
-const toList = (cell: ImportCell) =>
-  toText(cell)
-    ?.split(",")
-    .map((label) => label.trim())
-    .filter(Boolean);
+import {
+  toConfiguredValue,
+  toInteger,
+  toIsoDate,
+  toList,
+  toText,
+} from "./parseCell";
+import type { ImportRow, ProcessImportBatch } from "./types";
 
 /** One CSV row, with the values needed before its deal can be created. */
 type DealRow = {

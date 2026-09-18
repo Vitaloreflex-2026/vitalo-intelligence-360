@@ -5,11 +5,13 @@ import { ExportButton } from "@/components/admin/export-button";
 import { List } from "@/components/admin/list";
 import { ReferenceField } from "@/components/admin/reference-field";
 
+import { DataImportButton } from "../dataImport/DataImportButton";
 import { TopToolbar } from "../layout/TopToolbar";
 
 const AssessmentListActions = () => (
   <TopToolbar>
     <ExportButton />
+    <DataImportButton resource="assessments" />
     <CreateButton label="resources.assessments.action.new" />
   </TopToolbar>
 );

@@ -1,75 +1,18 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
-import { useState } from "react";
 
 import { createDataProvider } from "@/components/atomic-crm/providers/fakerest";
 import { DEFAULT_USER } from "@/components/atomic-crm/providers/fakerest/authProvider";
-import type { Db } from "@/components/atomic-crm/providers/fakerest/dataGenerator/types";
 import type { Deal } from "@/components/atomic-crm/types";
 import { createCrmDb, StoryWrapper } from "@/test/StoryWrapper";
-import type { DataProvider } from "ra-core";
+import { listAll, renderImport } from "@/test/importHarness";
 import { DataImportButton } from "./DataImportButton";
 import { AllResources, SingleResource } from "./DataImportButton.stories";
-import type { ImportRow, ProcessImportBatch } from "./types";
 import { useCompanyImport } from "./useCompanyImport";
 import { useDealImport } from "./useDealImport";
 
 const mockIsMobile = vi.hoisted(() => vi.fn(() => false));
 vi.mock("@/hooks/use-mobile", () => ({ useIsMobile: mockIsMobile }));
-
-const listAll = (dataProvider: DataProvider, resource: string) =>
-  dataProvider.getList(resource, {
-    filter: {},
-    pagination: { page: 1, perPage: 25 },
-    sort: { field: "id", order: "ASC" },
-  });
-
-/** Imports one batch on click, so a test controls when the import starts. */
-const ImportHarness = ({
-  rows,
-  useImport,
-}: {
-  rows: ImportRow[];
-  useImport: () => ProcessImportBatch;
-}) => {
-  const processBatch = useImport();
-  const [status, setStatus] = useState("ready");
-  return (
-    <>
-      <button
-        onClick={() => {
-          setStatus("running");
-          processBatch(rows).then(
-            () => setStatus("imported"),
-            () => setStatus("failed"),
-          );
-        }}
-      >
-        run import
-      </button>
-      <span>{status}</span>
-    </>
-  );
-};
-
-/** Renders the harness on its own data provider, so each test owns its records. */
-const renderImport = async (
-  useImport: () => ProcessImportBatch,
-  rows: ImportRow[],
-  db?: Partial<Db>,
-) => {
-  const dataProvider = createDataProvider({
-    db: createCrmDb(db),
-    latency: 0,
-    silent: true,
-  });
-  const screen = await render(
-    <StoryWrapper dataProvider={dataProvider}>
-      <ImportHarness useImport={useImport} rows={rows} />
-    </StoryWrapper>,
-  );
-  return { dataProvider, screen };
-};
 
 /** A CSV file as the file input would hand it to the dialog. */
 const csvFile = (name: string, lines: string[]) =>
@@ -95,12 +38,14 @@ describe("DataImportButton", () => {
     await expect.element(options.getByText("Contacts")).toBeVisible();
     await expect.element(options.getByText("Companies")).toBeVisible();
     await expect.element(options.getByText("Deals")).toBeVisible();
+    await expect.element(options.getByText("Assessments")).toBeVisible();
   });
 
   it.each([
     ["contacts", "Import contacts"],
     ["companies", "Import companies"],
     ["deals", "Import deals"],
+    ["assessments", "Import assessments"],
   ] as const)(
     "imports %s from a dialog with no resource to pick",
     async (resource, heading) => {

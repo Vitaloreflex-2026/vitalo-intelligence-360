@@ -427,6 +427,9 @@ export const frenchCrmMessages = {
           "%{smart_count} étape sur %{total} |||| %{smart_count} étapes sur %{total}",
         complete: "Terminé",
       },
+      import: {
+        title: "Importer des états des lieux",
+      },
       empty: {
         description: "Il semble que votre liste d'états des lieux soit vide.",
         title: "Aucun état des lieux trouvé",

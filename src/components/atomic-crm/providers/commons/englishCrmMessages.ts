@@ -420,6 +420,9 @@ export const englishCrmMessages = {
           "%{smart_count} step out of %{total} |||| %{smart_count} steps out of %{total}",
         complete: "Complete",
       },
+      import: {
+        title: "Import assessments",
+      },
       empty: {
         description: "It seems your assessment list is empty.",
         title: "No assessment found",

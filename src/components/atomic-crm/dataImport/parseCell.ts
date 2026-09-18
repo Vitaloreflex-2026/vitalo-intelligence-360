@@ -67,3 +67,14 @@ export const toConfiguredValue = (
       option.label.toLowerCase() === text,
   )?.value;
 };
+
+/**
+ * Comma-separated cell content, as the list of its trimmed items, or undefined
+ * when the cell is empty. A CSV names several values in one quoted cell, which
+ * Papa Parse hands over as a single string.
+ */
+export const toList = (cell: ImportCell): string[] | undefined =>
+  toText(cell)
+    ?.split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);

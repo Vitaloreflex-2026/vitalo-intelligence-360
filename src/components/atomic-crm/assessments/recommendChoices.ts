@@ -114,3 +114,17 @@ export const RECOMMENDED_PATH_STEPS: JourneyEntry[] = [
   { id: "annual_barometer", icon: BarChart3, color: 5 },
   { id: "managers_club", icon: Users, color: 6 },
 ];
+
+/** The journey steps as a choice list, for the CSV importer. */
+export const JOURNEY_STEP_CHOICES = JOURNEY_STEPS.map(({ id }) => ({
+  id,
+  name: `resources.assessments.recommend.journey_steps.${id}`,
+}));
+
+/** The recommended path steps as a choice list, for the CSV importer. */
+export const RECOMMENDED_PATH_CHOICES = RECOMMENDED_PATH_STEPS.map(
+  ({ id }) => ({
+    id,
+    name: `resources.assessments.recommend.recommended_path.${id}`,
+  }),
+);

@@ -1,7 +1,9 @@
 import { useResourceDefinitions } from "ra-core";
 
+import { useAssessmentImport } from "../assessments/useAssessmentImport";
 import type { ContactImportSchema } from "../contacts/useContactImport";
 import { useContactImport } from "../contacts/useContactImport";
+import assessmentsSampleCsv from "./assessments_sample.csv?raw";
 import companiesSampleCsv from "./companies_sample.csv?raw";
 import dealsSampleCsv from "./deals_sample.csv?raw";
 import contactsSampleCsv from "../contacts/contacts_export.csv?raw";
@@ -10,7 +12,12 @@ import { useCompanyImport } from "./useCompanyImport";
 import { useDealImport } from "./useDealImport";
 
 /** Every resource a CSV can be imported into, in the order the dialog offers them. */
-export const IMPORTABLE_RESOURCES = ["contacts", "companies", "deals"] as const;
+export const IMPORTABLE_RESOURCES = [
+  "contacts",
+  "companies",
+  "deals",
+  "assessments",
+] as const;
 
 export type ImportableResourceName = (typeof IMPORTABLE_RESOURCES)[number];
 
@@ -23,6 +30,7 @@ export function useImportableResources(): ImportableResource[] {
   const processContacts = useContactImport();
   const processCompanies = useCompanyImport();
   const processDeals = useDealImport();
+  const processAssessments = useAssessmentImport();
   const definitions = useResourceDefinitions();
 
   const resources: ImportableResource[] = [
@@ -43,6 +51,11 @@ export function useImportableResources(): ImportableResource[] {
       processBatch: processCompanies,
     },
     { name: "deals", sampleCsv: dealsSampleCsv, processBatch: processDeals },
+    {
+      name: "assessments",
+      sampleCsv: assessmentsSampleCsv,
+      processBatch: processAssessments,
+    },
   ];
 
   return resources.filter(({ name }) => name in definitions);
