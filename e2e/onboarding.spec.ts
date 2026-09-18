@@ -10,7 +10,9 @@ test("user onboarding", async ({ page, isMobile, menu, dismissToast }) => {
   await page.getByLabel("First name").fill("John");
   await page.getByLabel("Last name").fill("Doe");
   await page.getByLabel("Email").fill("john@doe.com");
-  await page.getByLabel("Password").fill("password");
+  await page
+    .getByRole("textbox", { name: "Password", exact: true })
+    .fill("password");
   await page.getByRole("button", { name: "Create account" }).click();
 
   await expect(page.getByText("What's next?")).toBeVisible();

@@ -318,7 +318,12 @@ const getDataProviderWithCustomMethods = () => {
           error,
           "Failed to read the external calendars",
         );
-        throw new HttpError(message, status);
+        // The calendar feeds are a side widget, so their failure must never end
+        // the session: react-admin signs the user out of the whole app on any
+        // 401/403, and an edge function the browser cannot reach is not a
+        // logged-out user. The dashboard reports the failed feeds instead.
+        const isAuthStatus = status === 401 || status === 403;
+        throw new HttpError(message, isAuthStatus ? 500 : status);
       }
 
       return data?.data ?? { feeds: [] };

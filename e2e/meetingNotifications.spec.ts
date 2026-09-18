@@ -11,7 +11,9 @@ const atNoon = (dayOffset: number) => {
 const signIn = async (page: Page) => {
   await page.goto("/");
   await page.getByLabel("Email").fill("john@doe.com");
-  await page.getByLabel("Password").fill("password");
+  await page
+    .getByRole("textbox", { name: "Password", exact: true })
+    .fill("password");
   await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page.getByText("Latest Activity")).toBeVisible();
 };
