@@ -5,7 +5,7 @@ import { useTranslate } from "ra-core";
 import { useRefreshData } from "./useRefreshData";
 
 /**
- * Refreshes the data of the current page. Rendered by <MobileHeader>, so every mobile
+ * Refreshes the data of the current page. Rendered by <MobileTopBar>, so every mobile
  * page has a discoverable, tappable way to refresh — the desktop <RefreshButton> is
  * hidden on small screens, and the <PullToRefresh> gesture is neither visible nor
  * available to everyone.

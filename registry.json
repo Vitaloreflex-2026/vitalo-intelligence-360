@@ -598,6 +598,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/layout/MobileTopBar.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/layout/MobileRefreshButton.tsx",
           "type": "registry:component"
         },
@@ -615,6 +619,10 @@
         },
         {
           "path": "src/components/atomic-crm/layout/MobileHeader.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/layout/MobileCreateButton.tsx",
           "type": "registry:component"
         },
         {

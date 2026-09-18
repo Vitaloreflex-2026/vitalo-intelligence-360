@@ -79,7 +79,7 @@ export const SettingsPageMobile = () => {
         </h1>
       </MobileHeader>
       <MobileContent>
-        <div className="flex flex-col min-h-[calc(100dvh-3.5rem-4.5rem)]">
+        <div className="flex min-h-[calc(100dvh-var(--mobile-topbar-height)-var(--mobile-nav-height))] flex-col">
           <div className="space-y-6">
             <ProfileSection />
             <PreferencesSection />

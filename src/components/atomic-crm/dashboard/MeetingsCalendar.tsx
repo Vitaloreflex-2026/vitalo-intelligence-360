@@ -23,6 +23,7 @@ import {
 } from "ra-core";
 import { useCallback, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
@@ -114,6 +115,7 @@ export const MeetingsCalendar = () => {
   const notify = useNotify();
   const [locale] = useLocaleState();
   const [update] = useUpdate();
+  const isMobile = useIsMobile();
 
   // Computed once on mount: the scroll position is the user's from then on,
   // and re-deriving it on every render would fight them for it.
@@ -268,13 +270,25 @@ export const MeetingsCalendar = () => {
       <Card className="p-3 gap-3 meetings-calendar">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          initialView="timeGridWeek"
+          // Seven day columns are unreadable on a phone, and scrolling the week
+          // sideways would move the drop targets out from under the finger. The
+          // day view keeps both legibility and drag-to-reschedule; the week and
+          // month views stay one tap away.
+          initialView={isMobile ? "timeGridDay" : "timeGridWeek"}
           locale={locale === "fr" ? frLocale : enLocale}
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay",
-          }}
+          headerToolbar={
+            isMobile
+              ? {
+                  left: "prev,next",
+                  center: "title",
+                  right: "timeGridDay,timeGridWeek,dayGridMonth",
+                }
+              : {
+                  left: "prev,next today",
+                  center: "title",
+                  right: "dayGridMonth,timeGridWeek,timeGridDay",
+                }
+          }
           height={GRID_HEIGHT}
           allDaySlot={hasAllDayEvents}
           nowIndicator

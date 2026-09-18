@@ -17,20 +17,13 @@ const Fixture = () => (
 );
 
 describe("MobileMoreMenu", () => {
-  it("lists every section the bottom bar has no room for", async () => {
+  it("lists every screen the bottom bar has no room for", async () => {
     const screen = await render(<Fixture />);
 
     await screen.getByRole("button", { name: "More" }).click();
 
-    // Companies, assessments and deals used to be unreachable on a phone
-    for (const section of [
-      "Companies",
-      "Assessments",
-      "Deals",
-      "Users",
-      "Profile",
-      "Settings",
-    ]) {
+    // The bottom bar carries the five sections; these hang off the menu
+    for (const section of ["Meetings", "Users", "Profile", "Settings"]) {
       await expect
         .element(screen.getByRole("link", { name: section }))
         .toBeVisible();
@@ -41,10 +34,10 @@ describe("MobileMoreMenu", () => {
     const screen = await render(<Fixture />);
 
     await screen.getByRole("button", { name: "More" }).click();
-    await screen.getByRole("link", { name: "Companies" }).click();
+    await screen.getByRole("link", { name: "Settings" }).click();
 
     await expect
-      .element(screen.getByRole("link", { name: "Companies" }))
+      .element(screen.getByRole("link", { name: "Settings" }))
       .not.toBeInTheDocument();
   });
 });

@@ -1,34 +1,20 @@
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { Home, ListTodo, Plus, Users } from "lucide-react";
 import { useTranslate } from "ra-core";
-import { Link, matchPath, useLocation, useMatch } from "react-router";
-import { ContactCreateSheet } from "../contacts/ContactCreateSheet";
-import { useState } from "react";
-import { NoteCreateSheet } from "../notes/NoteCreateSheet";
-import { TaskCreateSheet } from "../tasks/TaskCreateSheet";
-import { MobileMoreMenu } from "./MobileMoreMenu";
+import { Link, useLocation } from "react-router";
 
+import { HEADER_SECTIONS, matchHeaderSection } from "./headerSections";
+
+/**
+ * The mobile bottom bar. It lists the very same top-level sections as the
+ * desktop header, so nothing the app offers is one tap away on one surface and
+ * buried on the other. Creating a record and the secondary screens (tasks,
+ * team, profile, settings) live in <MobileTopBar> instead.
+ */
 export const MobileNavigation = () => {
   const location = useLocation();
   const translate = useTranslate();
-
-  let currentPath: string | boolean = "/";
-  if (matchPath("/", location.pathname)) {
-    currentPath = "/";
-  } else if (matchPath("/contacts/*", location.pathname)) {
-    currentPath = "/contacts";
-  } else if (matchPath("/tasks/*", location.pathname)) {
-    currentPath = "/tasks";
-  } else {
-    currentPath = false;
-  }
+  const currentPath = matchHeaderSection(location.pathname);
 
   return (
     <nav
@@ -38,123 +24,31 @@ export const MobileNavigation = () => {
       // asks for `viewport-fit=cover`; off a notched device it is simply 0.
       className="fixed bottom-0 left-0 right-0 z-50 bg-secondary pb-[env(safe-area-inset-bottom)]"
     >
-      <div className="flex h-14 justify-center">
-        <>
-          <NavigationButton
-            href="/"
-            Icon={Home}
-            label={translate("ra.page.dashboard")}
-            isActive={currentPath === "/"}
-          />
-          <NavigationButton
-            href="/contacts"
-            Icon={Users}
-            label={translate("resources.contacts.name", {
-              smart_count: 2,
-            })}
-            isActive={currentPath === "/contacts"}
-          />
-          <CreateButton />
-          <NavigationButton
-            href="/tasks"
-            Icon={ListTodo}
-            label={translate("resources.tasks.name", { smart_count: 2 })}
-            isActive={currentPath === "/tasks"}
-          />
-          <MobileMoreMenu />
-        </>
+      <div className="flex h-16 justify-center">
+        {HEADER_SECTIONS.map(({ to, label, icon: Icon, options }) => (
+          <Button
+            key={to}
+            asChild
+            variant="ghost"
+            className={cn(
+              // Five slots share a screen as narrow as 360px
+              "h-auto min-w-0 max-w-20 flex-1 flex-col gap-1 rounded-md px-0.5 py-1",
+              currentPath === to ? null : "text-muted-foreground",
+            )}
+          >
+            <Link
+              to={to}
+              aria-current={currentPath === to ? "page" : undefined}
+            >
+              <Icon className="size-6" />
+              {/* A long label ("États des lieux") wraps rather than overflows */}
+              <span className="line-clamp-2 text-center text-[0.6rem] leading-tight font-medium">
+                {translate(label, options)}
+              </span>
+            </Link>
+          </Button>
+        ))}
       </div>
     </nav>
-  );
-};
-
-const NavigationButton = ({
-  href,
-  Icon,
-  label,
-  isActive,
-}: {
-  href: string;
-  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  label: string;
-  isActive: boolean;
-}) => (
-  <Button
-    asChild
-    variant="ghost"
-    className={cn(
-      "flex-col gap-1 h-auto py-2 px-1 rounded-md w-16",
-      isActive ? null : "text-muted-foreground",
-    )}
-  >
-    <Link to={href}>
-      <Icon className="size-6" />
-      <span className="text-[0.6rem] font-medium">{label}</span>
-    </Link>
-  </Button>
-);
-
-const CreateButton = () => {
-  const translate = useTranslate();
-  const contact_id = useMatch("/contacts/:id/*")?.params.id;
-  const [contactCreateOpen, setContactCreateOpen] = useState(false);
-  const [noteCreateOpen, setNoteCreateOpen] = useState(false);
-  const [taskCreateOpen, setTaskCreateOpen] = useState(false);
-
-  return (
-    <>
-      <ContactCreateSheet
-        open={contactCreateOpen}
-        onOpenChange={setContactCreateOpen}
-      />
-      <NoteCreateSheet
-        open={noteCreateOpen}
-        onOpenChange={setNoteCreateOpen}
-        contact_id={contact_id}
-      />
-      <TaskCreateSheet
-        open={taskCreateOpen}
-        onOpenChange={setTaskCreateOpen}
-        contact_id={contact_id}
-      />
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="default"
-            size="icon"
-            className="h-16 w-16 rounded-full -mt-3"
-            aria-label={translate("ra.action.create")}
-          >
-            <Plus className="size-10" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem
-            className="h-12 px-4 text-base"
-            onSelect={() => {
-              setContactCreateOpen(true);
-            }}
-          >
-            {translate("resources.contacts.forcedCaseName")}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="h-12 px-4 text-base"
-            onSelect={() => {
-              setNoteCreateOpen(true);
-            }}
-          >
-            {translate("resources.notes.forcedCaseName")}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="h-12 px-4 text-base"
-            onSelect={() => {
-              setTaskCreateOpen(true);
-            }}
-          >
-            {translate("resources.tasks.forcedCaseName")}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
   );
 };

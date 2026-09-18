@@ -2,8 +2,9 @@ import { type ReactNode } from "react";
 
 export const MobileContent = ({ children }: { children: ReactNode }) => (
   <main
-    // The room for the bottom navigation is reserved by <MobileLayout>
-    className="max-w-screen-xl mx-auto pt-18 px-4 pb-6 min-h-screen overflow-y-auto"
+    // The room for both fixed bars is reserved by <MobileLayout>; this only
+    // adds breathing room below the top one.
+    className="mx-auto max-w-screen-xl overflow-y-auto px-4 pt-4 pb-6"
     id="main-content"
   >
     {children}

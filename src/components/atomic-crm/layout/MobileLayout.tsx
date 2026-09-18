@@ -7,6 +7,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { MeetingNotifications } from "../notifications/MeetingNotifications";
 import { useConfigurationLoader } from "../root/useConfigurationLoader";
 import { MobileNavigation } from "./MobileNavigation";
+import { MobileTopBar } from "./MobileTopBar";
 import { PullToRefresh } from "./PullToRefresh";
 
 export const MobileLayout = ({ children }: { children: ReactNode }) => {
@@ -14,13 +15,14 @@ export const MobileLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <PullToRefresh />
+      <MobileTopBar />
       {/*
-        <MobileNavigation> is fixed to the bottom of the viewport, so every page
-        — including the ones reusing a desktop screen — needs room for it. The
-        top inset is reserved here rather than per page, which also covers the
-        screens that have no <MobileHeader> (login, set password…).
+        <MobileTopBar> and <MobileNavigation> are both fixed to the edges of the
+        viewport, so every page — including the ones reusing a desktop screen —
+        needs room for them. Reserving it here rather than per page is what
+        covers the screens that have no <MobileHeader> of their own.
       */}
-      <div className="pt-[env(safe-area-inset-top)] pb-[var(--mobile-nav-height)]">
+      <div className="pt-[var(--mobile-topbar-height)] pb-[var(--mobile-nav-height)]">
         <ErrorBoundary FallbackComponent={Error}>
           <Suspense fallback={<Skeleton className="h-12 w-12 rounded-full" />}>
             {children}

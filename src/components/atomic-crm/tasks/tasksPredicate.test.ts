@@ -5,6 +5,7 @@ import {
   isDueTomorrow,
   isDueThisWeek,
   isDueLater,
+  WEEK_STARTS_ON,
 } from "./tasksPredicate";
 import { startOfToday } from "date-fns/startOfToday";
 import { endOfToday } from "date-fns/endOfToday";
@@ -174,7 +175,7 @@ describe("tasksPredicate", () => {
 
     it("should consider date equal to end of week as due later only", () => {
       const endOfWeekDate = endOfWeek(new Date(), {
-        weekStartsOn: 0,
+        weekStartsOn: WEEK_STARTS_ON,
       }).toISOString();
       expect(isOverdue(endOfWeekDate)).toBe(false);
       expect(isDueToday(endOfWeekDate)).toBe(false);
@@ -185,7 +186,7 @@ describe("tasksPredicate", () => {
 
     it("should consider date equal to end of week minus 1 ms as due this week only", () => {
       const justBeforeEndOfWeek = new Date(
-        endOfWeek(new Date(), { weekStartsOn: 0 }).getTime() - 1,
+        endOfWeek(new Date(), { weekStartsOn: WEEK_STARTS_ON }).getTime() - 1,
       ).toISOString();
       expect(isOverdue(justBeforeEndOfWeek)).toBe(false);
       expect(isDueToday(justBeforeEndOfWeek)).toBe(false);
@@ -203,6 +204,30 @@ describe("tasksPredicate", () => {
       expect(isDueTomorrow(twoDaysFromNow)).toBe(false);
       expect(isDueThisWeek(twoDaysFromNow)).toBe(true);
       expect(isDueLater(twoDaysFromNow)).toBe(false);
+    });
+  });
+
+  // Weeks run Monday to Sunday. With date-fns' Sunday default, "this week"
+  // spanned from the end of tomorrow to the end of Saturday, so on a Friday it
+  // was an empty range and weekend meetings fell into "later" — which the
+  // dashboard widget hides.
+  describe("week running Monday to Sunday", () => {
+    const FRIDAY = new Date("2026-09-18T12:00:00Z");
+
+    beforeEach(() => {
+      vi.setSystemTime(FRIDAY);
+    });
+
+    it("counts a Sunday meeting as due this week when today is Friday", () => {
+      const sunday = new Date("2026-09-20T10:00:00Z").toISOString();
+      expect(isDueThisWeek(sunday)).toBe(true);
+      expect(isDueLater(sunday)).toBe(false);
+    });
+
+    it("counts the following Monday as due later when today is Friday", () => {
+      const nextMonday = new Date("2026-09-21T10:00:00Z").toISOString();
+      expect(isDueThisWeek(nextMonday)).toBe(false);
+      expect(isDueLater(nextMonday)).toBe(true);
     });
   });
 });
