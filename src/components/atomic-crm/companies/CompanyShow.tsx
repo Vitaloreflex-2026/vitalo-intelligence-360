@@ -123,7 +123,7 @@ const CompanyShowContent = () => {
               <CompanyAssessmentProgress />
             </div>
             <Tabs value={currentTab} onValueChange={handleTabChange}>
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="w-full">
                 <TabsTrigger value="contacts">
                   {record.nb_contacts === 0
                     ? translate("resources.companies.no_contacts")

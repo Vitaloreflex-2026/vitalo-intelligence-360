@@ -72,7 +72,9 @@ export const DealListContent = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex gap-4">
+      {/* Below the board's natural width the columns scroll rather than
+          shrink, which would make the cards unreadable */}
+      <div className="flex gap-4 overflow-x-auto pb-2">
         {dealStages.map((stage) => (
           <DealColumn
             stage={stage.value}

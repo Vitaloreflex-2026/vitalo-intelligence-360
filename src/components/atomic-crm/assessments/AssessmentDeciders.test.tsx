@@ -57,11 +57,11 @@ describe("AssessmentDeciders", () => {
     });
 
     await screen
-      .getByRole("row", { name: /management/ })
+      .getByRole("group", { name: "management" })
       .getByRole("radio", { name: "high" })
       .click();
     await screen
-      .getByRole("row", { name: /^hr/ })
+      .getByRole("group", { name: "hr" })
       .getByRole("radio", { name: "low" })
       .click();
     await screen.getByRole("button", { name: /save/i }).click();
@@ -81,7 +81,7 @@ describe("AssessmentDeciders", () => {
 
     await expect
       .element(
-        screen.getByRole("row", { name: /cse/ }).getByRole("radio", {
+        screen.getByRole("group", { name: "cse" }).getByRole("radio", {
           name: "medium",
         }),
       )

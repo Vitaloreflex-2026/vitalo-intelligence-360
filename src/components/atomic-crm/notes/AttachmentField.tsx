@@ -65,7 +65,7 @@ export const AttachmentField = (props: FileFieldProps) => {
             alt={titleValue}
             title={titleValue}
             src={srcValue}
-            className="w-[200px] h-[100px] object-cover cursor-pointer object-left border border-border"
+            className="w-full max-w-[200px] h-[100px] object-cover cursor-pointer object-left border border-border"
           />
         </a>
       ) : (

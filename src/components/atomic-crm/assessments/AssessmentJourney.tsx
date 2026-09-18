@@ -35,14 +35,16 @@ export const AssessmentJourneyInput = () => {
   const { id, values, toggle } = useCheckedSet("journey_steps");
 
   return (
-    <div className="flex flex-row items-stretch gap-1">
+    // Six steps side by side need about 700px, so they wrap into a grid first
+    // and only become the single printed line at `lg`.
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:flex lg:flex-row lg:items-stretch lg:gap-1">
       {JOURNEY_STEPS.map((step, index) => {
         const color = STEP_COLORS[step.color - 1];
         const inputId = `${id}-${step.id}`;
         return (
           <div
             key={step.id}
-            className="flex min-w-0 flex-1 flex-row items-center gap-1"
+            className="flex min-w-0 w-full flex-row items-center gap-1 lg:flex-1"
           >
             <Label
               htmlFor={inputId}
@@ -87,7 +89,8 @@ export const AssessmentJourneyInput = () => {
             {index < JOURNEY_STEPS.length - 1 && (
               <ArrowRight
                 aria-hidden
-                className="size-4 shrink-0 text-muted-foreground"
+                // The arrow only reads as a chain on the single-line layout
+                className="hidden size-4 shrink-0 text-muted-foreground lg:block"
               />
             )}
           </div>

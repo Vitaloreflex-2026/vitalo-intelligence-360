@@ -136,7 +136,7 @@ const ContactShowContentMobile = () => {
         </div>
 
         <Tabs defaultValue="deals" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 h-10">
+          <TabsList className="w-full h-10">
             <TabsTrigger value="deals">
               {translate("resources.deals.name", { smart_count: 2 })}
             </TabsTrigger>
@@ -302,7 +302,7 @@ const ContactShowContent = () => {
               </div>
             </div>
             <Tabs defaultValue="deals" className="w-full mt-4">
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="w-full">
                 <TabsTrigger value="deals">
                   {translate("resources.deals.name", { smart_count: 2 })}
                 </TabsTrigger>

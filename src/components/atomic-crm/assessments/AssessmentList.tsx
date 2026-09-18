@@ -3,6 +3,7 @@ import { DataTable } from "@/components/admin/data-table";
 import { ExportButton } from "@/components/admin/export-button";
 import { List } from "@/components/admin/list";
 import { ReferenceField } from "@/components/admin/reference-field";
+import { SortButton } from "@/components/admin/sort-button";
 import { TextField } from "@/components/admin/text-field";
 
 import { DataImportButton } from "../dataImport/DataImportButton";
@@ -12,6 +13,9 @@ import { AssessmentStepStatus } from "./AssessmentStepStatus";
 
 const AssessmentListActions = () => (
   <TopToolbar>
+    {/* Below the mobile breakpoint the DataTable drops its sortable header,
+        so the sort has to stay reachable from the toolbar. */}
+    <SortButton fields={["company_id", "created_at"]} />
     <ExportButton />
     <DataImportButton resource="assessments" />
     <CreateButton label="resources.assessments.action.new" />

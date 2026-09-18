@@ -318,21 +318,34 @@ const MobileAdmin = (
           <Route path={OAuthConsentPage.path} element={<OAuthConsentPage />} />
         </CustomRoutes>
         <CustomRoutes>
+          <Route path={ProfilePage.path} element={<ProfilePage />} />
           <Route
             path={SettingsPageMobile.path}
             element={<SettingsPageMobile />}
           />
         </CustomRoutes>
+        {/*
+          Mobile registers the same resources as the desktop app, so every route
+          and internal link resolves on a phone too. Only the screens that have a
+          purpose-built mobile variant are overridden below; the rest reuse the
+          desktop components and are made responsive on their own.
+        */}
+        <Resource name="deals" {...deals} />
+        <Resource name="assessments" {...assessments} />
         <Resource
           name="contacts"
+          {...contacts}
           list={ContactListMobile}
           show={ContactShow}
-          recordRepresentation={contacts.recordRepresentation}
         >
           <Route path=":id/notes/:noteId" element={<NoteShowPage />} />
         </Resource>
-        <Resource name="companies" show={CompanyShow} />
+        <Resource name="companies" {...companies} show={CompanyShow} />
+        <Resource name="contact_notes" />
+        <Resource name="deal_notes" />
         <Resource name="tasks" list={MobileTasksList} />
+        <Resource name="sales" {...sales} />
+        <Resource name="tags" />
       </Admin>
     </PersistQueryClientProvider>
   );

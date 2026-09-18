@@ -3,17 +3,17 @@ import { useWatch } from "react-hook-form";
 import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { RadioButtonGroupInput } from "@/components/admin/radio-button-group-input";
 import { ReferenceInput } from "@/components/admin/reference-input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
 import { contactOptionText } from "../misc/ContactOption";
 import { DECIDER_ROLES, INFLUENCE_LEVEL_CHOICES } from "./concretizeChoices";
+
+/**
+ * Column template of the printed table. Below `md` the rows become stacked
+ * cards instead: the three columns need about 600px, and a table of inputs is
+ * awkward to fill in through a horizontal scroll.
+ */
+const ROW_CLASS =
+  "md:grid md:grid-cols-[10rem_1fr_20rem] md:items-start md:gap-4";
 
 /** The deciders are people of the client company, so they are picked among its contacts. */
 const DeciderContactInput = ({ role }: { role: string }) => {
@@ -41,44 +41,59 @@ const DeciderContactInput = ({ role }: { role: string }) => {
  */
 export const AssessmentDeciders = () => {
   const translate = useTranslate();
+  const nameLabel = translate("resources.assessments.concretize.deciders.name");
+  const influenceLabel = translate(
+    "resources.assessments.concretize.deciders.influence",
+  );
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-40">
-            {translate("resources.assessments.concretize.deciders.role")}
-          </TableHead>
-          <TableHead>
-            {translate("resources.assessments.concretize.deciders.name")}
-          </TableHead>
-          <TableHead className="w-80">
-            {translate("resources.assessments.concretize.deciders.influence")}
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {DECIDER_ROLES.map((role) => (
-          <TableRow key={role}>
-            <TableCell className="font-medium">
-              {translate(
-                `resources.assessments.concretize.decider_roles.${role}`,
-              )}
-            </TableCell>
-            <TableCell>
+    <div className="flex flex-col gap-4 md:gap-0">
+      {/* The column headers only make sense once the rows are laid out as a
+          table; stacked cards label each field inline instead. */}
+      <div
+        className={`hidden border-b pb-2 text-sm font-medium text-muted-foreground ${ROW_CLASS}`}
+      >
+        <span>
+          {translate("resources.assessments.concretize.deciders.role")}
+        </span>
+        <span>{nameLabel}</span>
+        <span>{influenceLabel}</span>
+      </div>
+
+      {DECIDER_ROLES.map((role) => {
+        const roleLabel = translate(
+          `resources.assessments.concretize.decider_roles.${role}`,
+        );
+        return (
+          <div
+            key={role}
+            // Groups the inputs of one decision maker whether the row is laid
+            // out as a table row or, below `md`, as a stacked card.
+            role="group"
+            aria-label={roleLabel}
+            className={`flex flex-col gap-3 rounded-lg border p-3 md:rounded-none md:border-0 md:border-b md:p-0 md:py-3 ${ROW_CLASS}`}
+          >
+            <span className="font-medium">{roleLabel}</span>
+            <div className="flex flex-col gap-1">
+              <span className="text-xs text-muted-foreground md:hidden">
+                {nameLabel}
+              </span>
               <DeciderContactInput role={role} />
-            </TableCell>
-            <TableCell>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-xs text-muted-foreground md:hidden">
+                {influenceLabel}
+              </span>
               <RadioButtonGroupInput
                 source={`decider_${role}_influence`}
                 label={false}
                 choices={INFLUENCE_LEVEL_CHOICES}
                 row
               />
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 };

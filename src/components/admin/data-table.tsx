@@ -1,5 +1,12 @@
 import type { ReactNode } from "react";
-import { Children, createElement, isValidElement, useCallback } from "react";
+import {
+  Children,
+  createContext,
+  createElement,
+  isValidElement,
+  useCallback,
+  useContext,
+} from "react";
 import type {
   DataTableBaseProps,
   ExtractRecordPaths,
@@ -52,6 +59,7 @@ import {
   ColumnsSelector,
   ColumnsSelectorItem,
 } from "@/components/admin/columns-button";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { NumberField } from "@/components/admin/number-field";
 import {
   BulkActionsToolbar,
@@ -59,6 +67,16 @@ import {
 } from "@/components/admin/bulk-actions-toolbar";
 
 const defaultBulkActionButtons = <BulkActionsToolbarChildren />;
+
+/**
+ * True while the columns render as stacked cards rather than table cells.
+ *
+ * A table of more than two or three columns cannot fit a phone: the container
+ * scrolls sideways, which hides most of every record behind a gesture. Below
+ * the mobile breakpoint each record becomes a card of label/value pairs
+ * instead, built from the very same <DataTable.Col> children.
+ */
+const DataTableCardContext = createContext(false);
 
 /**
  * A powerful data table with sorting, selection, and column customization.
@@ -98,6 +116,7 @@ export function DataTable<RecordType extends RaRecord = RaRecord>(
     ...rest
   } = props;
   const hasBulkActions = !!bulkActionsToolbar || bulkActionButtons !== false;
+  const isMobile = useIsMobile();
   const resourceFromContext = useResourceContext(props);
   const storeKey = props.storeKey || `${resourceFromContext}.datatable`;
   const [columnRanks] = useStore<number[]>(`${storeKey}_columnRanks`);
@@ -112,16 +131,27 @@ export function DataTable<RecordType extends RaRecord = RaRecord>(
       empty={<DataTableEmpty />}
       {...rest}
     >
-      <div className={cn("rounded-md border", className)}>
-        <Table>
-          <DataTableRenderContext.Provider value="header">
-            <DataTableHead>{columns}</DataTableHead>
-          </DataTableRenderContext.Provider>
-          <DataTableBody<RecordType> rowClassName={rowClassName}>
+      {isMobile ? (
+        <DataTableCardContext.Provider value={true}>
+          <DataTableCards<RecordType>
+            className={className}
+            rowClassName={rowClassName}
+          >
             {columns}
-          </DataTableBody>
-        </Table>
-      </div>
+          </DataTableCards>
+        </DataTableCardContext.Provider>
+      ) : (
+        <div className={cn("rounded-md border", className)}>
+          <Table>
+            <DataTableRenderContext.Provider value="header">
+              <DataTableHead>{columns}</DataTableHead>
+            </DataTableRenderContext.Provider>
+            <DataTableBody<RecordType> rowClassName={rowClassName}>
+              {columns}
+            </DataTableBody>
+          </Table>
+        </div>
+      )}
       {bulkActionsToolbar ??
         (bulkActionButtons !== false && (
           <BulkActionsToolbar>
@@ -208,13 +238,37 @@ const DataTableBody = <RecordType extends RaRecord = RaRecord>({
   );
 };
 
-const DataTableRow = ({
+const DataTableCards = <RecordType extends RaRecord = RaRecord>({
   children,
   className,
+  rowClassName,
 }: {
   children: ReactNode;
   className?: string;
+  rowClassName?: (record: RecordType) => string | undefined;
 }) => {
+  const data = useDataTableDataContext();
+  return (
+    <div className={cn("flex flex-col gap-2", className)}>
+      {data?.map((record, rowIndex) => (
+        <RecordContextProvider
+          value={record}
+          key={record.id ?? `card${rowIndex}`}
+        >
+          <DataTableCard className={rowClassName?.(record)}>
+            {children}
+          </DataTableCard>
+        </RecordContextProvider>
+      ))}
+    </div>
+  );
+};
+
+/**
+ * Click and selection behaviour, shared by a table row and its card
+ * counterpart so the two can never drift apart.
+ */
+const useDataTableRow = () => {
   const { rowClick, handleToggleItem } = useDataTableCallbacksContext();
   const selectedIds = useDataTableSelectedIdsContext();
   const { hasBulkActions = false } = useDataTableConfigContext();
@@ -262,6 +316,32 @@ const DataTableRow = ({
     });
   }, [record, resource, rowClick, navigate, getPathForRecord]);
 
+  return {
+    record,
+    rowClick,
+    hasBulkActions,
+    selectedIds,
+    handleToggle,
+    handleClick,
+  };
+};
+
+const DataTableRow = ({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) => {
+  const {
+    record,
+    rowClick,
+    hasBulkActions,
+    selectedIds,
+    handleToggle,
+    handleClick,
+  } = useDataTableRow();
+
   return (
     <TableRow
       key={record.id}
@@ -278,6 +358,44 @@ const DataTableRow = ({
       ) : null}
       {children}
     </TableRow>
+  );
+};
+
+const DataTableCard = ({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) => {
+  const {
+    record,
+    rowClick,
+    hasBulkActions,
+    selectedIds,
+    handleToggle,
+    handleClick,
+  } = useDataTableRow();
+
+  return (
+    <div
+      onClick={handleClick}
+      className={cn(
+        "flex flex-col gap-1 rounded-md border p-3",
+        rowClick !== false && "cursor-pointer",
+        className,
+      )}
+    >
+      {hasBulkActions ? (
+        <div className="pb-1" onClick={handleToggle}>
+          <Checkbox
+            checked={selectedIds?.includes(record.id)}
+            onClick={handleToggle}
+          />
+        </div>
+      ) : null}
+      {children}
+    </div>
   );
 };
 
@@ -436,6 +554,7 @@ function DataTableCell<
     render,
     field,
     source,
+    label,
     className,
     cellClassName,
     conditionalClassName,
@@ -444,11 +563,42 @@ function DataTableCell<
   const { storeKey, defaultHiddenColumns } = useDataTableStoreContext();
   const [hiddenColumns] = useStore<string[]>(storeKey, defaultHiddenColumns);
   const record = useRecordContext<RecordType>();
+  const resource = useResourceContext();
+  const isCard = useContext(DataTableCardContext);
   const isColumnHidden = hiddenColumns.includes(source!);
   if (isColumnHidden) return null;
   if (!render && !field && !children && !source) {
     throw new Error(
       "DataTableColumn: Missing at least one of the following props: render, field, children, or source",
+    );
+  }
+
+  const content =
+    children ??
+    (render
+      ? record && render(record)
+      : field
+        ? createElement(field, { source })
+        : get(record, source!));
+
+  if (isCard) {
+    return (
+      <div
+        className={cn(
+          "flex items-start justify-between gap-4 text-sm",
+          className,
+          cellClassName,
+          record && conditionalClassName?.(record),
+        )}
+      >
+        {/* The card carries the column header the table no longer shows */}
+        {label === false ? null : (
+          <span className="shrink-0 text-muted-foreground">
+            <FieldTitle label={label} source={source} resource={resource} />
+          </span>
+        )}
+        <span className="min-w-0 text-right">{content}</span>
+      </div>
     );
   }
 
@@ -461,12 +611,7 @@ function DataTableCell<
         record && conditionalClassName?.(record),
       )}
     >
-      {children ??
-        (render
-          ? record && render(record)
-          : field
-            ? createElement(field, { source })
-            : get(record, source!))}
+      {content}
     </TableCell>
   );
 }

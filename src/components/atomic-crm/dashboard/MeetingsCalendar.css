@@ -179,3 +179,32 @@
     transition: none !important;
   }
 }
+
+/*
+ * Narrow viewport: the toolbar lays its three chunks (prev/next/today, title,
+ * view switcher) on one row, which overflows the card well before the grid
+ * itself does. Let them stack and centre instead.
+ *
+ * The grid itself is deliberately left alone: giving the day columns a minimum
+ * width and scrolling the week sideways moves the drop targets out from under
+ * the pointer, so drag-and-drop rescheduling stops landing on the right slot.
+ * A readable week on a phone needs a different view (timeGridDay / listWeek),
+ * not a scrolled one.
+ */
+@media (max-width: 40rem) {
+  .meetings-calendar .fc .fc-toolbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .meetings-calendar .fc .fc-toolbar-chunk {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .meetings-calendar .fc .fc-toolbar-title {
+    font-size: 0.875rem;
+    text-align: center;
+  }
+}

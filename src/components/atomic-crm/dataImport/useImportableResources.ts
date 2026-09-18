@@ -23,7 +23,7 @@ export type ImportableResourceName = (typeof IMPORTABLE_RESOURCES)[number];
 
 /**
  * The importable resources, restricted to those the running Admin registers:
- * the mobile app has no deals screens, so it must not offer to import records
+ * an app that has no screen for a resource must not offer to import records
  * the user would never be able to see.
  */
 export function useImportableResources(): ImportableResource[] {

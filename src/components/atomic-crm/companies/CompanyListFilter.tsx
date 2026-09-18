@@ -1,14 +1,9 @@
 import { Building, Truck, Users } from "lucide-react";
-import {
-  FilterLiveForm,
-  useGetIdentity,
-  useGetList,
-  useTranslate,
-} from "ra-core";
+import { useGetIdentity, useGetList, useTranslate } from "ra-core";
 import { ToggleFilterButton } from "@/components/admin/toggle-filter-button";
-import { SearchInput } from "@/components/admin/search-input";
 
 import { FilterCategory } from "../filters/FilterCategory";
+import { ResponsiveFilters } from "../misc/ResponsiveFilters";
 import type { Choice } from "../types";
 import { AccountManagerFilter } from "../sales/AccountManagerInput";
 import { getTranslatedCompanySizeLabel } from "./getTranslatedCompanySizeLabel";
@@ -27,11 +22,7 @@ export const CompanyListFilter = () => {
     name: getTranslatedCompanySizeLabel(size, translate),
   }));
   return (
-    <div className="w-52 min-w-52 flex flex-col gap-8">
-      <FilterLiveForm>
-        <SearchInput source="q" />
-      </FilterLiveForm>
-
+    <ResponsiveFilters>
       <FilterCategory
         icon={<Building className="h-4 w-4" />}
         label="resources.companies.fields.size"
@@ -71,6 +62,6 @@ export const CompanyListFilter = () => {
         />
         <AccountManagerFilter className="w-full justify-between" />
       </FilterCategory>
-    </div>
+    </ResponsiveFilters>
   );
 };

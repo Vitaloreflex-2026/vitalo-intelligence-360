@@ -1048,6 +1048,8 @@ export const englishCrmMessages = {
     language: "Language",
     navigation: {
       label: "CRM navigation",
+      more: "More",
+      more_title: "All sections",
     },
     profile: {
       calendar: {

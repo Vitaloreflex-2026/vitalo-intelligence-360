@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense, type ReactNode } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { MeetingNotifications } from "../notifications/MeetingNotifications";
 import { useConfigurationLoader } from "../root/useConfigurationLoader";
 import { MobileNavigation } from "./MobileNavigation";
 import { PullToRefresh } from "./PullToRefresh";
@@ -13,13 +14,23 @@ export const MobileLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <PullToRefresh />
-      <ErrorBoundary FallbackComponent={Error}>
-        <Suspense fallback={<Skeleton className="h-12 w-12 rounded-full" />}>
-          {children}
-        </Suspense>
-      </ErrorBoundary>
+      {/*
+        <MobileNavigation> is fixed to the bottom of the viewport, so every page
+        — including the ones reusing a desktop screen — needs room for it. The
+        top inset is reserved here rather than per page, which also covers the
+        screens that have no <MobileHeader> (login, set password…).
+      */}
+      <div className="pt-[env(safe-area-inset-top)] pb-[var(--mobile-nav-height)]">
+        <ErrorBoundary FallbackComponent={Error}>
+          <Suspense fallback={<Skeleton className="h-12 w-12 rounded-full" />}>
+            {children}
+          </Suspense>
+        </ErrorBoundary>
+      </div>
+      <MeetingNotifications />
       <MobileNavigation />
-      <Notification mobileOffset={{ bottom: "72px" }} />
+      {/* Sits just above the bottom bar, whatever height the device gives it */}
+      <Notification mobileOffset={{ bottom: "var(--mobile-nav-height)" }} />
     </>
   );
 };

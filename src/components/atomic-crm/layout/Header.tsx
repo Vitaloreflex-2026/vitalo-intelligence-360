@@ -1,42 +1,31 @@
 import { Settings, User, Users } from "lucide-react";
 import { CanAccess, useTranslate, useUserMenu } from "ra-core";
-import { Link, matchPath, useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 import { RefreshButton } from "@/components/admin/refresh-button";
 import { ThemeModeToggle } from "@/components/admin/theme-mode-toggle";
 import { UserMenu } from "@/components/admin/user-menu";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
+import { HeaderMenuButton } from "./HeaderMenuButton";
+import { HEADER_SECTIONS, matchHeaderSection } from "./headerSections";
 
 const Header = () => {
   const { darkModeLogo, lightModeLogo, title } = useConfigurationContext();
   const location = useLocation();
   const translate = useTranslate();
 
-  let currentPath: string | boolean = "/";
-  if (matchPath("/", location.pathname)) {
-    currentPath = "/";
-  } else if (matchPath("/contacts/*", location.pathname)) {
-    currentPath = "/contacts";
-  } else if (matchPath("/companies/*", location.pathname)) {
-    currentPath = "/companies";
-  } else if (matchPath("/assessments/*", location.pathname)) {
-    currentPath = "/assessments";
-  } else if (matchPath("/deals/*", location.pathname)) {
-    currentPath = "/deals";
-  } else {
-    currentPath = false;
-  }
+  const currentPath = matchHeaderSection(location.pathname);
 
   return (
     <>
       <nav className="grow">
         <header className="bg-secondary">
           <div className="px-4">
-            <div className="flex justify-between items-center flex-1">
+            <div className="flex justify-between items-center flex-1 gap-2">
               <Link
                 to="/"
-                className="flex items-center gap-2 text-secondary-foreground no-underline"
+                className="flex items-center gap-2 text-secondary-foreground no-underline min-w-0"
               >
                 <img
                   className="[.light_&]:hidden h-6"
@@ -48,46 +37,27 @@ const Header = () => {
                   src={lightModeLogo}
                   alt={title}
                 />
-                <h1 className="text-xl font-semibold">{title}</h1>
+                <h1 className="text-xl font-semibold truncate">{title}</h1>
               </Link>
               <div>
-                <nav className="flex">
-                  <NavigationTab
-                    label={translate("ra.page.dashboard")}
-                    to="/"
-                    isActive={currentPath === "/"}
-                  />
-                  <NavigationTab
-                    label={translate("resources.companies.name", {
-                      smart_count: 2,
-                    })}
-                    to="/companies"
-                    isActive={currentPath === "/companies"}
-                  />
-                  <NavigationTab
-                    label={translate("resources.contacts.name", {
-                      smart_count: 2,
-                    })}
-                    to="/contacts"
-                    isActive={currentPath === "/contacts"}
-                  />
-                  <NavigationTab
-                    label={translate("resources.assessments.name", {
-                      smart_count: 2,
-                    })}
-                    to="/assessments"
-                    isActive={currentPath === "/assessments"}
-                  />
-                  <NavigationTab
-                    label={translate("resources.deals.name", {
-                      smart_count: 2,
-                    })}
-                    to="/deals"
-                    isActive={currentPath === "/deals"}
-                  />
+                {/*
+                  The five tabs plus the logo and the user menu need about
+                  950px; below `lg` they move into <HeaderMenuButton>. This
+                  header only ever renders at >= 768px, since narrower
+                  viewports get the mobile app and its bottom bar instead.
+                */}
+                <nav className="hidden lg:flex">
+                  {HEADER_SECTIONS.map(({ to, label, options }) => (
+                    <NavigationTab
+                      key={to}
+                      label={translate(label, options)}
+                      to={to}
+                      isActive={currentPath === to}
+                    />
+                  ))}
                 </nav>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center shrink-0">
                 <ThemeModeToggle />
                 <RefreshButton />
                 <UserMenu>
@@ -99,6 +69,7 @@ const Header = () => {
                     <SettingsMenu />
                   </CanAccess>
                 </UserMenu>
+                <HeaderMenuButton />
               </div>
             </div>
           </div>
@@ -119,7 +90,8 @@ const NavigationTab = ({
 }) => (
   <Link
     to={to}
-    className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
+    aria-current={isActive ? "page" : undefined}
+    className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 whitespace-nowrap ${
       isActive
         ? "text-secondary-foreground border-secondary-foreground"
         : "text-secondary-foreground/70 border-transparent hover:text-secondary-foreground/80"

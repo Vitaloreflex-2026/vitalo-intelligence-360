@@ -59,7 +59,7 @@ const DealShowContent = () => {
       <div className="space-y-2">
         {record.archived_at ? <ArchivedTitle /> : null}
         <div className="flex-1">
-          <div className="flex justify-between items-start mb-8">
+          <div className="flex flex-wrap justify-between items-start gap-4 mb-8">
             <div className="flex items-center gap-4">
               <ReferenceField
                 source="company_id"
@@ -85,8 +85,10 @@ const DealShowContent = () => {
             </div>
           </div>
 
-          <div className="flex gap-8 m-4">
-            <div className="flex flex-col mr-10">
+          {/* The metadata strip wraps instead of running off the dialog;
+              the gap replaces the right margin each block carried */}
+          <div className="flex flex-wrap gap-x-10 gap-y-4 m-4">
+            <div className="flex flex-col">
               <span className="text-xs text-muted-foreground tracking-wide">
                 {translate("resources.deals.fields.expected_closing_date")}
               </span>
@@ -104,7 +106,7 @@ const DealShowContent = () => {
               </div>
             </div>
 
-            <div className="flex flex-col mr-10">
+            <div className="flex flex-col">
               <span className="text-xs text-muted-foreground tracking-wide">
                 {translate("resources.deals.fields.amount")}
               </span>
@@ -120,7 +122,7 @@ const DealShowContent = () => {
             </div>
 
             {record.reference && (
-              <div className="flex flex-col mr-10">
+              <div className="flex flex-col">
                 <span className="text-xs text-muted-foreground tracking-wide">
                   {translate("resources.deals.fields.reference")}
                 </span>
@@ -129,7 +131,7 @@ const DealShowContent = () => {
             )}
 
             {record.confidentiality && (
-              <div className="flex flex-col mr-10">
+              <div className="flex flex-col">
                 <span className="text-xs text-muted-foreground tracking-wide">
                   {translate("resources.deals.fields.confidentiality")}
                 </span>
@@ -142,7 +144,7 @@ const DealShowContent = () => {
             )}
 
             {record.origin && (
-              <div className="flex flex-col mr-10">
+              <div className="flex flex-col">
                 <span className="text-xs text-muted-foreground tracking-wide">
                   {translate("resources.deals.fields.origin")}
                 </span>
@@ -151,7 +153,7 @@ const DealShowContent = () => {
             )}
 
             {record.category && (
-              <div className="flex flex-col mr-10">
+              <div className="flex flex-col">
                 <span className="text-xs text-muted-foreground tracking-wide">
                   {translate("resources.deals.fields.category")}
                 </span>
@@ -162,7 +164,7 @@ const DealShowContent = () => {
               </div>
             )}
 
-            <div className="flex flex-col mr-10">
+            <div className="flex flex-col">
               <span className="text-xs text-muted-foreground tracking-wide">
                 {translate("resources.deals.fields.stage")}
               </span>
@@ -174,7 +176,7 @@ const DealShowContent = () => {
 
           {!!record.contact_ids?.length && (
             <div className="m-4">
-              <div className="flex flex-col min-h-12 mr-10">
+              <div className="flex flex-col min-h-12">
                 <span className="text-xs text-muted-foreground tracking-wide">
                   {translate("resources.deals.fields.contact_ids")}
                 </span>

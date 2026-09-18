@@ -1063,6 +1063,8 @@ export const frenchCrmMessages = {
     language: "Langue",
     navigation: {
       label: "Navigation CRM",
+      more: "Plus",
+      more_title: "Toutes les sections",
     },
     profile: {
       calendar: {

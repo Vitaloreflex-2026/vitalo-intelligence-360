@@ -17,7 +17,7 @@ export const DealColumn = ({
   const { dealStages, currency } = useConfigurationContext();
   const [locale = "en"] = useLocaleState();
   return (
-    <div className="flex-1 pb-8">
+    <div className="flex-1 min-w-52 pb-8">
       <div className="flex flex-col items-center">
         <h3 className="text-base font-medium">
           {findDealLabel(dealStages, stage)}

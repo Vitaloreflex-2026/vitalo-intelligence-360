@@ -244,3 +244,24 @@ body {
     overscroll-behavior-y: none;
   }
 }
+
+/* The room <MobileNavigation> takes at the bottom of the viewport: its 3.5rem
+   bar, plus whatever the device keeps below it (the iOS home indicator). Both
+   the page padding and the toast offset read it here rather than repeating a
+   pixel value that silently drifts from the bar. `viewport-fit=cover` in
+   index.html is what makes env() report a real inset instead of 0. */
+:root {
+  --mobile-nav-height: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* A fingertip is a far coarser pointer than a mouse, so on touch devices every
+   button gets at least the ~44px target the platform guidelines ask for. This
+   is a floor, not a size: buttons already taller than that are untouched, and
+   `pointer: coarse` leaves mouse-driven desktops exactly as they were. */
+@media (pointer: coarse) {
+  [data-slot="button"],
+  [data-slot="dropdown-menu-item"],
+  [data-slot="select-trigger"] {
+    min-height: 2.75rem;
+  }
+}

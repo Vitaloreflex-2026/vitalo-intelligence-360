@@ -1,3 +1,5 @@
+import { ResourceDefinitionContextProvider } from "ra-core";
+import type { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -13,6 +15,26 @@ import { useDealImport } from "./useDealImport";
 
 const mockIsMobile = vi.hoisted(() => vi.fn(() => false));
 vi.mock("@/hooks/use-mobile", () => ({ useIsMobile: mockIsMobile }));
+
+/**
+ * Shadows the resource definitions the surrounding Admin registered, so the
+ * import button sees an app that has no deals screens. Testing the rule this
+ * way keeps it independent of which resources the mobile and desktop apps
+ * happen to register today.
+ */
+const WithoutDeals = ({ children }: { children: ReactNode }) => (
+  <StoryWrapper>
+    <ResourceDefinitionContextProvider
+      definitions={{
+        contacts: { name: "contacts" },
+        companies: { name: "companies" },
+        assessments: { name: "assessments" },
+      }}
+    >
+      {children}
+    </ResourceDefinitionContextProvider>
+  </StoryWrapper>
+);
 
 /** A CSV file as the file input would hand it to the dialog. */
 const csvFile = (name: string, lines: string[]) =>
@@ -117,10 +139,13 @@ describe("DataImportButton", () => {
   });
 
   it("hides a resource the running app does not register", async () => {
-    // The mobile app has no deals screens, so importing deals would create
-    // records the user could never see.
-    mockIsMobile.mockReturnValue(true);
-    const screen = await render(<AllResources />);
+    // Importing into a resource the app has no screen for would create records
+    // the user could never see.
+    const screen = await render(
+      <WithoutDeals>
+        <DataImportButton />
+      </WithoutDeals>,
+    );
 
     await screen.getByRole("button", { name: "Import data" }).click();
     await screen.getByLabelText("Resource").click();
@@ -131,12 +156,30 @@ describe("DataImportButton", () => {
   });
 
   it("renders nothing for a resource the running app does not register", async () => {
-    mockIsMobile.mockReturnValue(true);
-    const screen = await render(<SingleResource resource="deals" />);
+    const screen = await render(
+      <WithoutDeals>
+        <DataImportButton resource="deals" />
+      </WithoutDeals>,
+    );
 
     await expect
       .element(screen.getByRole("button", { name: "Import CSV" }))
       .not.toBeInTheDocument();
+  });
+
+  it("offers every importable resource on mobile too", async () => {
+    // The mobile app registers the same resources as the desktop one, so a CSV
+    // can be imported from a phone into any of them.
+    mockIsMobile.mockReturnValue(true);
+    const screen = await render(<AllResources />);
+
+    await screen.getByRole("button", { name: "Import data" }).click();
+    await screen.getByLabelText("Resource").click();
+    const options = screen.getByRole("listbox");
+
+    await expect.element(options.getByText("Contacts")).toBeVisible();
+    await expect.element(options.getByText("Deals")).toBeVisible();
+    await expect.element(options.getByText("Assessments")).toBeVisible();
   });
 
   it("imports deals, reusing one company and defaulting a missing stage", async () => {

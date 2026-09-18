@@ -6,12 +6,16 @@ import { ExportButton } from "@/components/admin/export-button";
 import { List } from "@/components/admin/list";
 import { SearchInput } from "@/components/admin/search-input";
 import { SelectAllButton } from "@/components/admin/select-all-button";
+import { SortButton } from "@/components/admin/sort-button";
 import { Badge } from "@/components/ui/badge";
 
 import { TopToolbar } from "../layout/TopToolbar";
 
 const SalesListActions = () => (
   <TopToolbar>
+    {/* Below the mobile breakpoint the DataTable drops its sortable header,
+        so the sort has to stay reachable from the toolbar. */}
+    <SortButton fields={["first_name", "last_name", "email"]} />
     <ExportButton />
     <CreateButton label="resources.sales.action.new" />
   </TopToolbar>
