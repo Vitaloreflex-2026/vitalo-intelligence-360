@@ -35,10 +35,12 @@ export const choiceLabels: Record<string, string[]> = {
   ],
   rdv_mode: ["Présentiel", "Visioconférence", "Téléphone", "Salon"],
   user_document_type: [
-    "Carte d'identité",
-    "RIB",
-    "Attestation de vigilance URSSAF",
-    "Attestation d'assurance responsabilité civile professionnelle",
+    "Certificat d'immatriculation de - de 3 mois",
+    "CV professionnel",
+    "Attestation URSSAF (à jour des cotisations)",
+    "Attestation d'assurance en cours de validité",
+    "CNI recto/verso",
+    "IBAN professionnel",
   ],
   rdv_type: [
     "Premier contact",
@@ -51,11 +53,13 @@ export const choiceLabels: Record<string, string[]> = {
   ],
 };
 
-/** Document types whose paper expires one year after it was filed. */
-const RENEWABLE_DOCUMENT_LABELS = [
-  "Attestation de vigilance URSSAF",
-  "Attestation d'assurance responsabilité civile professionnelle",
-];
+/**
+ * Document types whose paper expires one year after it was filed. None of the
+ * papers expected from a network member does: each is replaced on demand rather
+ * than on a yearly timer. The list stays here because an administrator can flag
+ * a type as renewable from the settings page.
+ */
+const RENEWABLE_DOCUMENT_LABELS: string[] = [];
 
 export const generateChoices = (_?: Db): Choice[] => {
   let id = 0;

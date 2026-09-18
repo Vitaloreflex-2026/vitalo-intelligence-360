@@ -1032,7 +1032,7 @@ export const frenchCrmMessages = {
         hint: "Pièces administratives demandées à chaque utilisateur. Chaque modification est enregistrée immédiatement.",
         empty: "Aucune pièce demandée pour le moment.",
         add: "Ajouter",
-        new_placeholder: "Nom de la pièce (ex. : Carte d'identité)",
+        new_placeholder: "Nom de la pièce (ex. : CNI recto/verso)",
         requires_renewal: "À renouveler chaque année",
         save_error: "Impossible d'enregistrer cette pièce",
       },
