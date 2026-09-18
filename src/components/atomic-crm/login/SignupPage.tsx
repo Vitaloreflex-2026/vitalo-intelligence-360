@@ -12,6 +12,7 @@ import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { SignUpData } from "../types";
 import { LoginSkeleton } from "./LoginSkeleton";
 import { Notification } from "@/components/admin/notification";
+import { PasswordInput } from "@/components/admin/password-input";
 import { ConfirmationRequired } from "./ConfirmationRequired";
 import { SSOAuthButton } from "./SSOAuthButton";
 import { googleWorkplaceDomain } from "./authConfig";
@@ -152,10 +153,9 @@ export const SignupPage = () => {
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="password">{translate("ra.auth.password")}</Label>
-              <Input
+              <PasswordInput
                 {...register("password", { required: true })}
                 id="password"
-                type="password"
                 required
               />
             </div>

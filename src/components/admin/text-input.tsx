@@ -9,6 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { InputHelperText } from "@/components/admin/input-helper-text";
+import { PasswordInput } from "@/components/admin/password-input";
 
 export type TextInputProps = InputProps & {
   multiline?: boolean;
@@ -67,6 +68,8 @@ export const TextInput = (props: TextInputProps) => {
       <FormControl>
         {multiline ? (
           <Textarea {...rest} {...field} className={inputClassName} />
+        ) : rest.type === "password" ? (
+          <PasswordInput {...rest} {...field} className={inputClassName} />
         ) : (
           <Input {...rest} {...field} className={inputClassName} />
         )}

@@ -833,6 +833,8 @@ export const englishCrmMessages = {
       recovery_email_sent:
         "If you're a registered user, you should receive a password recovery email shortly.",
       sign_in_failed: "Failed to log in.",
+      hide_password: "Hide password",
+      show_password: "Show password",
       sign_in_google_workspace: "Sign in with Google Workplace",
       signup: {
         create_account: "Create account",
