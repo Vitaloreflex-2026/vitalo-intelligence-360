@@ -62,12 +62,13 @@ create policy "Enable read access for authenticated users" on public.sales for s
 create policy "Enable update for admins" on public.sales for update to authenticated using (public.is_admin()) with check (public.is_admin());
 
 -- Sales Documents
--- Identity papers and bank details are personal: a consultant is the only one
--- who may file or remove their own, and only administrators read everyone's.
+-- Identity papers and bank details are personal: a consultant handles their
+-- own, and administrators handle everyone's — they read them, and file them on
+-- a consultant's behalf when the paper reaches them instead.
 create policy "Enable read for owner and admins" on public.sales_documents for select to authenticated using (public.is_own_sale(sales_id) or public.is_admin());
-create policy "Enable insert for owner" on public.sales_documents for insert to authenticated with check (public.is_own_sale(sales_id));
-create policy "Enable update for owner" on public.sales_documents for update to authenticated using (public.is_own_sale(sales_id)) with check (public.is_own_sale(sales_id));
-create policy "Enable delete for owner" on public.sales_documents for delete to authenticated using (public.is_own_sale(sales_id));
+create policy "Enable insert for owner and admins" on public.sales_documents for insert to authenticated with check (public.is_own_sale(sales_id) or public.is_admin());
+create policy "Enable update for owner and admins" on public.sales_documents for update to authenticated using (public.is_own_sale(sales_id) or public.is_admin()) with check (public.is_own_sale(sales_id) or public.is_admin());
+create policy "Enable delete for owner and admins" on public.sales_documents for delete to authenticated using (public.is_own_sale(sales_id) or public.is_admin());
 
 -- Tags
 create policy "Enable read access for authenticated users" on public.tags for select to authenticated using (true);

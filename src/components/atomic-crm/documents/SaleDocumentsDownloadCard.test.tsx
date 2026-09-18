@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { userEvent } from "vitest/browser";
 import { render } from "vitest-browser-react";
 import { Default, NothingProvided } from "./SaleDocumentsDownloadCard.stories";
 
@@ -39,14 +40,22 @@ describe("SaleDocumentsDownloadCard", () => {
       .toBeDisabled();
   });
 
-  it("does not offer to upload on someone else's page", async () => {
+  it("lets an administrator file a document on the user's behalf", async () => {
     // Arrange
     const screen = await render(<Default />);
     await expect.element(screen.getByText("RIB")).toBeInTheDocument();
+    const input = screen.getByLabelText("Upload RIB");
+
+    // Act
+    await userEvent.upload(
+      input,
+      new File(["bank details"], "rib.pdf", { type: "application/pdf" }),
+    );
 
     // Assert
+    await expect.element(screen.getByText("Missing")).not.toBeInTheDocument();
     expect(
-      await screen.getByRole("button", { name: /upload|replace/i }).elements(),
-    ).toHaveLength(0);
+      await screen.getByRole("button", { name: /^replace$/i }).elements(),
+    ).toHaveLength(2);
   });
 });

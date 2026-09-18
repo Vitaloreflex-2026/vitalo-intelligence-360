@@ -586,6 +586,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/layout/headerSections.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/layout/TopToolbar.tsx",
           "type": "registry:component"
         },
@@ -602,6 +606,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/layout/MobileMoreMenu.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/layout/MobileLayout.tsx",
           "type": "registry:component"
         },
@@ -615,6 +623,10 @@
         },
         {
           "path": "src/components/atomic-crm/layout/Layout.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/layout/HeaderMenuButton.tsx",
           "type": "registry:component"
         },
         {

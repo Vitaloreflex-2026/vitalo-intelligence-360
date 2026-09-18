@@ -5,16 +5,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-import { DocumentDownloadButton } from "./DocumentDownloadButton";
-import { DocumentStatusBadge } from "./DocumentStatusBadge";
-import { useFormatDocumentDate } from "./useFormatDocumentDate";
+import { SaleDocumentRow } from "./SaleDocumentRow";
 import { downloadDocumentsArchive } from "./documentFiles";
 import { useSaleDocumentSlots } from "./useSaleDocuments";
 
 /**
- * Read-only view of one consultant's papers, for an administrator: every filed
- * document is downloadable on its own, and the whole set as a single archive.
- * Uploading stays on the consultant's own profile.
+ * One consultant's papers seen by an administrator: the same per-document
+ * actions the consultant has on their own profile — an administrator files a
+ * paper handed to them directly — plus the whole set as a single archive.
  */
 export const SaleDocumentsDownloadCard = ({
   salesId,
@@ -25,7 +23,6 @@ export const SaleDocumentsDownloadCard = ({
 }) => {
   const translate = useTranslate();
   const notify = useNotify();
-  const formatDate = useFormatDocumentDate();
   const { slots, isPending } = useSaleDocumentSlots(salesId);
   const [isArchiving, setArchiving] = useState(false);
 
@@ -66,27 +63,11 @@ export const SaleDocumentsDownloadCard = ({
         ) : (
           <ul className="divide-y">
             {slots.map((slot) => (
-              <li
+              <SaleDocumentRow
                 key={slot.type.id}
-                className="flex items-center justify-between gap-3 py-2"
-              >
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium truncate">
-                      {slot.type.label}
-                    </span>
-                    <DocumentStatusBadge slot={slot} />
-                  </div>
-                  <p className="text-xs text-muted-foreground truncate">
-                    {slot.document
-                      ? translate("crm.documents.filed_on", {
-                          date: formatDate(slot.document.created_at),
-                        })
-                      : translate("crm.documents.not_filed")}
-                  </p>
-                </div>
-                <DocumentDownloadButton slot={slot} />
-              </li>
+                slot={slot}
+                salesId={salesId}
+              />
             ))}
           </ul>
         )}
