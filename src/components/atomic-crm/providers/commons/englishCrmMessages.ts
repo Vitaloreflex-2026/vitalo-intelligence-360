@@ -419,6 +419,8 @@ export const englishCrmMessages = {
         steps:
           "%{smart_count} step out of %{total} |||| %{smart_count} steps out of %{total}",
         complete: "Complete",
+        step_filled: "Filled in",
+        step_empty: "Not filled in",
       },
       import: {
         title: "Import assessments",

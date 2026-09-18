@@ -1,19 +1,30 @@
 import type { Assessment } from "../types";
 
 /**
- * The answer fields of each wizard step, in wizard order. The company selection
- * step is left out on purpose: picking the company is a prerequisite, not part
- * of the three steps the progress is measured against.
+ * The answer steps of the discovery form, in wizard order. The company selection
+ * step is left out on purpose: picking the company is a prerequisite, not part of
+ * the three steps the progress is measured against. Each name matches its
+ * `resources.assessments.steps.*` translation key.
+ */
+export const ASSESSMENT_STEPS = [
+  "diagnostic",
+  "recommend",
+  "concretize",
+] as const;
+
+export type AssessmentStep = (typeof ASSESSMENT_STEPS)[number];
+
+/**
+ * The answer fields of each step.
  *
  * The record holds no per-step marker, so progress is derived from the answers:
- * a step counts as started as soon as one of its fields holds a value. The
+ * a step counts as filled as soon as one of its fields holds a value. The
  * `*_other` free-text fields are skipped, since they are only editable once
  * their parent checkbox group has the matching option ticked — they can never
  * be the only answer of a step.
  */
-const STEP_FIELDS: (keyof Assessment)[][] = [
-  // Diagnose
-  [
+const STEP_FIELDS: Record<AssessmentStep, (keyof Assessment)[]> = {
+  diagnostic: [
     "governance_maturity",
     "governance_owners",
     "governance_forums",
@@ -41,8 +52,7 @@ const STEP_FIELDS: (keyof Assessment)[][] = [
     "overall_profile_level",
     "overall_profile_comments",
   ],
-  // Recommend
-  [
+  recommend: [
     "diagnostic_summary",
     "support_objectives",
     "journey_steps",
@@ -56,8 +66,7 @@ const STEP_FIELDS: (keyof Assessment)[][] = [
     "success_factors",
     "watch_points",
   ],
-  // Concretize
-  [
+  concretize: [
     "interview_summary",
     "decider_management_contact_id",
     "decider_management_influence",
@@ -88,15 +97,23 @@ const STEP_FIELDS: (keyof Assessment)[][] = [
     "closed_at",
     "next_action",
   ],
-];
+};
 
 /** How many steps the progress of an assessment is measured against. */
-export const ASSESSMENT_STEP_COUNT = STEP_FIELDS.length;
+export const ASSESSMENT_STEP_COUNT = ASSESSMENT_STEPS.length;
 
 const hasAnswer = (value: unknown): boolean => {
   if (Array.isArray(value)) return value.length > 0;
   return value !== null && value !== undefined && value !== "";
 };
+
+/** Whether one step of an assessment holds at least one answer. */
+export const isAssessmentStepFilled = (
+  assessment: Assessment | null | undefined,
+  step: AssessmentStep,
+): boolean =>
+  assessment != null &&
+  STEP_FIELDS[step].some((field) => hasAnswer(assessment[field]));
 
 /**
  * How many of the three answer steps hold at least one answer, from 0 (empty or
@@ -105,8 +122,5 @@ const hasAnswer = (value: unknown): boolean => {
 export const getCompletedAssessmentSteps = (
   assessment?: Assessment | null,
 ): number =>
-  assessment
-    ? STEP_FIELDS.filter((fields) =>
-        fields.some((field) => hasAnswer(assessment[field])),
-      ).length
-    : 0;
+  ASSESSMENT_STEPS.filter((step) => isAssessmentStepFilled(assessment, step))
+    .length;

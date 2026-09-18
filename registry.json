@@ -994,6 +994,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/assessments/AssessmentStepStatus.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/assessments/AssessmentSection.tsx",
           "type": "registry:component"
         },

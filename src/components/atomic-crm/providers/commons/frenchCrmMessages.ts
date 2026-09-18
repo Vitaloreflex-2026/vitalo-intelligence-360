@@ -426,6 +426,8 @@ export const frenchCrmMessages = {
         steps:
           "%{smart_count} étape sur %{total} |||| %{smart_count} étapes sur %{total}",
         complete: "Terminé",
+        step_filled: "Renseignée",
+        step_empty: "Non renseignée",
       },
       import: {
         title: "Importer des états des lieux",
