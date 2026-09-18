@@ -674,6 +674,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/dataImport/useEmailResolver.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/dataImport/useDealImport.ts",
           "type": "registry:component"
         },
@@ -687,6 +691,10 @@
         },
         {
           "path": "src/components/atomic-crm/dataImport/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/dataImport/parseChoice.ts",
           "type": "registry:component"
         },
         {
@@ -930,7 +938,23 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/assessments/useCompanyLatestAssessment.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/useAssessmentImport.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/assessments/recommendChoices.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/parseAssessmentNextSteps.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/parseAssessmentColumn.ts",
           "type": "registry:component"
         },
         {
@@ -943,6 +967,18 @@
         },
         {
           "path": "src/components/atomic-crm/assessments/concretizeChoices.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/assessmentProgress.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/assessmentImportColumns.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/assessments/CompanyAssessmentProgress.tsx",
           "type": "registry:component"
         },
         {
