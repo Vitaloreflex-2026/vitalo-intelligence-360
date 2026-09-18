@@ -15,13 +15,17 @@ import { Card, CardContent } from "@/components/ui/card";
 
 import type { CrmDataProvider } from "../providers/types";
 import type { Sale, SalesFormData } from "../types";
+import { ResendInvitationButton } from "./ResendInvitationButton";
 import { SalesInputs } from "./SalesInputs";
 
 function EditToolbar() {
   return (
-    <div className="flex justify-end gap-4">
-      <CancelButton />
-      <SaveButton />
+    <div className="flex justify-between gap-4">
+      <ResendInvitationButton />
+      <div className="flex gap-4">
+        <CancelButton />
+        <SaveButton />
+      </div>
     </div>
   );
 }

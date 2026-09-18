@@ -735,6 +735,16 @@ export const englishCrmMessages = {
       action: {
         new: "New user",
       },
+      reinvite: {
+        action: "Resend invitation",
+        already_active:
+          "This user has already activated their account. Send them a password reset instead.",
+        error: "The invitation email could not be sent. Please try again.",
+        success:
+          "A new invitation email has been sent. The previous link no longer works.",
+        too_many_requests:
+          "An invitation email was just sent. Please wait a minute before asking for another one.",
+      },
     },
     tasks: {
       name: "Meeting |||| Meetings",

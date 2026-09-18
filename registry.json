@@ -206,6 +206,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/sales/ResendInvitationButton.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/sales/AccountManagerInput.tsx",
           "type": "registry:component"
         },

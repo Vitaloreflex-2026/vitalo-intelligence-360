@@ -186,6 +186,27 @@ const getDataProviderWithCustomMethods = () => {
 
       return updatedData.data;
     },
+    /**
+     * Regenerates the one-time activation link of a user who never used theirs
+     * and mails it again. Only administrators may do this.
+     */
+    async salesReinvite(id: Identifier) {
+      const { error } = await getSupabaseClient().functions.invoke("users", {
+        method: "PUT",
+        body: { sales_id: id },
+      });
+
+      if (error) {
+        console.error("salesReinvite.error", error);
+        const { status, message } = await parseFunctionError(
+          error,
+          "Failed to send the invitation",
+        );
+        throw new HttpError(message, status);
+      }
+
+      return true as const;
+    },
     async updatePassword(id: Identifier) {
       const { error } = await getSupabaseClient().functions.invoke(
         "update_password",

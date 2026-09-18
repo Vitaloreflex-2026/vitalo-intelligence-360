@@ -745,6 +745,17 @@ export const frenchCrmMessages = {
       action: {
         new: "Nouvel utilisateur",
       },
+      reinvite: {
+        action: "Renvoyer l'invitation",
+        already_active:
+          "Cet utilisateur a déjà activé son compte. Envoyez-lui plutôt une réinitialisation de mot de passe.",
+        error:
+          "L'email d'invitation n'a pas pu être envoyé. Veuillez réessayer.",
+        success:
+          "Un nouvel email d'invitation a été envoyé. Le lien précédent ne fonctionne plus.",
+        too_many_requests:
+          "Un email d'invitation vient d'être envoyé. Veuillez patienter une minute avant d'en demander un autre.",
+      },
     },
     tasks: {
       name: "Rendez-vous |||| Rendez-vous",

@@ -178,6 +178,43 @@ async function inviteUser(req: Request, currentUserSale: any) {
   }
 }
 
+async function reinviteUser(req: Request, currentUserSale: any) {
+  if (!currentUserSale.administrator) {
+    return createErrorResponse(401, "Not Authorized");
+  }
+
+  const { sales_id } = await req.json();
+  const { data: sale } = await supabaseAdmin
+    .from("sales")
+    .select("email")
+    .eq("id", sales_id)
+    .single();
+
+  if (!sale) {
+    return createErrorResponse(404, "Not Found");
+  }
+
+  // Invalidates the previous single-use activation link and mails a fresh one.
+  // Auth refuses it once the user confirmed their email (422 email_exists) or
+  // when a mail was just sent (429): forward the status so the caller explains.
+  const { error } = await supabaseAdmin.auth.admin.inviteUserByEmail(
+    sale.email,
+  );
+
+  if (error) {
+    console.error(`Error reinviting user, email_error=${error}`);
+    return createErrorResponse(
+      error.status ?? 500,
+      error.message || "Failed to send invitation mail",
+      { code: error.code },
+    );
+  }
+
+  return new Response(JSON.stringify({ data: { id: sales_id } }), {
+    headers: { "Content-Type": "application/json", ...corsHeaders },
+  });
+}
+
 async function patchUser(req: Request, currentUserSale: any) {
   const {
     sales_id,
@@ -270,6 +307,10 @@ Deno.serve(async (req: Request) =>
 
         if (req.method === "POST") {
           return inviteUser(req, currentUserSale);
+        }
+
+        if (req.method === "PUT") {
+          return reinviteUser(req, currentUserSale);
         }
 
         if (req.method === "PATCH") {

@@ -271,6 +271,10 @@ export const createDataProvider = ({
       }
       return true;
     },
+    salesReinvite: async (_id: Identifier): Promise<true> => {
+      // No mail is sent in demo mode.
+      return true;
+    },
     updatePassword: async (id: Identifier): Promise<true> => {
       const currentUser = await getIdentity();
       if (!currentUser) {
