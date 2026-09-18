@@ -39,7 +39,8 @@ export type MeetingEvent = {
   textColor: string;
   classNames: string[];
   extendedProps: {
-    taskId: Identifier;
+    /** The full record, so a drag can send it as `previousData` on update. */
+    task: Task;
     type: string;
     salesId: Identifier | null;
     isDone: boolean;
@@ -109,7 +110,7 @@ export const useMeetingEvents = (range: CalendarRange | undefined) => {
           textColor: rdvInkColor(fill),
           classNames: isDone ? ["meeting-event--done"] : [],
           extendedProps: {
-            taskId: task.id,
+            task,
             type: task.type,
             salesId: task.sales_id ?? null,
             isDone,

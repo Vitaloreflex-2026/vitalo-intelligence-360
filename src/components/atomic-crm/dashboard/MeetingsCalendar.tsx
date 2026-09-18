@@ -19,6 +19,7 @@ import { useCallback, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 
 import { rdvInkColor } from "../misc/rdvColors";
+import type { Task } from "../types";
 import { TaskEdit } from "../tasks/TaskEdit";
 import { calendarScrollTime } from "./calendarScrollTime";
 import { MeetingCreateDialog } from "./MeetingCreateDialog";
@@ -110,12 +111,7 @@ export const MeetingsCalendar = () => {
    * back where it was when the server refuses the change.
    */
   const rescheduleMeeting = useCallback(
-    (
-      taskId: string,
-      start: Date | null,
-      end: Date | null,
-      revert: () => void,
-    ) => {
+    (task: Task, start: Date | null, end: Date | null, revert: () => void) => {
       if (!start) {
         revert();
         return;
@@ -123,13 +119,15 @@ export const MeetingsCalendar = () => {
       update(
         "tasks",
         {
-          id: taskId,
+          id: task.id,
           data: {
             due_date: start.toISOString(),
             duration_minutes: end
               ? minutesBetween(start, end)
               : DEFAULT_MEETING_MINUTES,
           },
+          // The provider diffs data against previousData, and throws without it.
+          previousData: task,
         },
         {
           onError: () => {
@@ -147,7 +145,7 @@ export const MeetingsCalendar = () => {
   const handleEventDrop = useCallback(
     (arg: EventDropArg) => {
       rescheduleMeeting(
-        arg.event.id,
+        arg.event.extendedProps.task,
         arg.event.start,
         arg.event.end,
         arg.revert,
@@ -159,7 +157,7 @@ export const MeetingsCalendar = () => {
   const handleEventResize = useCallback(
     (arg: EventResizeDoneArg) => {
       rescheduleMeeting(
-        arg.event.id,
+        arg.event.extendedProps.task,
         arg.event.start,
         arg.event.end,
         arg.revert,
@@ -169,7 +167,7 @@ export const MeetingsCalendar = () => {
   );
 
   const handleEventClick = useCallback((arg: EventClickArg) => {
-    setEditedTaskId(arg.event.extendedProps.taskId);
+    setEditedTaskId(arg.event.extendedProps.task.id);
   }, []);
 
   const handleSelect = useCallback((arg: DateSelectArg) => {
