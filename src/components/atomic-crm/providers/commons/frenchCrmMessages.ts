@@ -874,9 +874,6 @@ export const frenchCrmMessages = {
       loading: "Chargement...",
       me: "Moi",
     },
-    changelog: {
-      title: "Notes de version",
-    },
     activity: {
       added_company: "%{name} a ajouté l'entreprise",
       you_added_company: "Vous avez ajouté l'entreprise",
@@ -938,7 +935,6 @@ export const frenchCrmMessages = {
       update_image: "Mettre à jour l'image",
     },
     settings: {
-      about: "À propos",
       companies: {
         sectors_hint:
           "Les secteurs d'activité se gèrent directement depuis le formulaire d'une entreprise : saisissez un nouveau secteur pour l'ajouter à la liste partagée.",

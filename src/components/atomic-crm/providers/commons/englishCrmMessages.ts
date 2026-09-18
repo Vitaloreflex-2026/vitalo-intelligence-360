@@ -863,9 +863,6 @@ export const englishCrmMessages = {
       me: "Me",
       task_count: "%{smart_count} meeting |||| %{smart_count} meetings",
     },
-    changelog: {
-      title: "Changelog",
-    },
     activity: {
       added_company: "%{name} added company",
       you_added_company: "You added company",
@@ -924,7 +921,6 @@ export const englishCrmMessages = {
       update_image: "Update Image",
     },
     settings: {
-      about: "About",
       companies: {
         sectors_hint:
           "Sectors are managed from the company form: type a new sector to add it to the shared list.",
