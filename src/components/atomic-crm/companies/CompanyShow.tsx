@@ -24,6 +24,7 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ActivityLog } from "../activity/ActivityLog";
 import { CompanyAssessmentButton } from "../assessments/CompanyAssessmentButton";
+import { CompanyAssessmentProgress } from "../assessments/CompanyAssessmentProgress";
 import { Avatar } from "../contacts/Avatar";
 import { TagsList } from "../contacts/TagsList";
 import { DealsIterator } from "../deals/DealsIterator";
@@ -117,6 +118,9 @@ const CompanyShowContent = () => {
               <CompanyAvatar />
               <h5 className="text-xl ml-2 flex-1">{record.name}</h5>
               <CompanyAssessmentButton />
+            </div>
+            <div className="mb-4">
+              <CompanyAssessmentProgress />
             </div>
             <Tabs value={currentTab} onValueChange={handleTabChange}>
               <TabsList className="grid w-full grid-cols-3">

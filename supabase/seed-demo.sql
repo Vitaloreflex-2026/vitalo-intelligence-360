@@ -5,9 +5,10 @@
 -- picked up by `supabase db reset`: only `supabase/seed.sql` (the reference data)
 -- is, so the e2e instance stays empty.
 --
--- DESTRUCTIVE: it wipes tags, companies, contacts, deals, notes and tasks before
--- inserting, so it can be re-run at will. It never touches `sales`, `auth.users`,
--- `choices`, `configuration` or `favicons_excluded_domains`.
+-- DESTRUCTIVE: it wipes tags, companies, contacts, deals, notes, tasks and
+-- assessments before inserting, so it can be re-run at will. It never touches
+-- `sales`, `auth.users`, `choices`, `configuration` or
+-- `favicons_excluded_domains`.
 --
 -- Ownership: every seeded row is assigned to the first sales account. If the
 -- database has none (fresh `supabase db reset`), a demo administrator is created:
@@ -66,6 +67,7 @@ $$;
 -- 2. Reset the business tables. FK cascades would cover most of it, but being
 --    explicit keeps the order obvious and the identity sequences easy to reset.
 --
+delete from public.assessments;
 delete from public.tasks;
 delete from public.contact_notes;
 delete from public.deal_notes;
@@ -210,8 +212,309 @@ insert into public.tasks (contact_id, type, mode, location, text, due_date, done
     (20, 'Rendez-vous de suivi',            'Téléphone',       null,                         'Remercier pour les recommandations et faire un point trimestriel.', now() - interval '10 days', now() - interval '10 days');
 
 --
--- 9. Ownership — the insert triggers read auth.uid(), which is null outside a
---    request, so assign everything to the first sales account here.
+-- 9. Assessments ("états des lieux"). One row per company at a different stage
+--    of the discovery form, so the progress bar of the company show page has
+--    every level to display: company 4 keeps an untouched assessment (0 %),
+--    companies 6 and 7 stopped after the diagnosis (33 %), companies 2 and 5
+--    also have the recommendation (66 %), companies 1 and 3 are complete
+--    (100 %), and company 8 has no assessment at all. Company 1 has two, the
+--    show page reading the most recent one.
+--    Array values are the choice ids of `*Choices.ts`, not labels.
+--
+insert into public.assessments (
+    id, company_id, created_at,
+    governance_maturity, governance_owners, governance_forums,
+    existing_programs, existing_programs_comments,
+    manager_training, manager_confidence,
+    priority_issues, priority_issues_comments,
+    company_strengths, identified_barriers, identified_barriers_comments,
+    urgency_level, urgency_comments,
+    client_priority_1, client_priority_2, client_priority_3,
+    impact_awareness, impact_management, impact_prevention,
+    impact_steering, impact_culture, impact_measurement,
+    overall_profile_level, overall_profile_comments,
+    diagnostic_summary, support_objectives, journey_steps, recommended_path,
+    consultant_recommendations, target_audiences,
+    deployment_short_term, deployment_medium_term,
+    expected_benefits, success_factors, watch_points
+) values (
+    1, 1, now() - interval '15 months',
+    'occasional_actions', '{hr_department,hse_department}', '{cssct,duerp}',
+    '{occupational_health,safety_days}', 'Actions menées agence par agence, sans pilotage central ni suivi dans le temps.',
+    '{none}', 'not_very_comfortable',
+    '{fatigue,absenteeism,recruitment_difficulties}', 'Sinistralité TMS concentrée sur les équipes gros œuvre. Les arrêts courts se multiplient depuis deux ans.',
+    '{mobilized_managers,internal_network}', '{time,team_availability}', 'Difficile de mobiliser les compagnons plus de deux heures en dehors des chantiers.',
+    'three_to_six_months', 'La direction veut des premiers résultats avant la négociation annuelle.',
+    'Réduire les arrêts liés aux TMS', 'Outiller les chefs de chantier', 'Structurer un suivi chiffré',
+    2, 2, 1, 1, 2, 1,
+    2, 'Des actions réelles mais dispersées, sans gouvernance ni mesure. Profil en cours de structuration.',
+    'Douze agences, une sinistralité TMS forte et des managers de proximité démunis. Tout est à construire côté pilotage, mais le relais QHSE est solide.',
+    '{raise_awareness,structure_prevention}', '{raise_awareness,train}', '{psmt_awareness,psmm_managers}',
+    '{psmt,psmm}', '{managers,all_employees}',
+    '{under_three_months}', '{three_to_six_months}',
+    'Des chefs de chantier capables de repérer les signaux faibles, et un indicateur d''absentéisme suivi par agence.',
+    '{management_commitment,involved_managers}',
+    'Les sessions doivent tenir en deux heures maximum et se dérouler sur site, sinon la participation s''effondre.'
+);
+
+insert into public.assessments (
+    id, company_id, created_at,
+    governance_maturity, governance_owners, governance_forums,
+    existing_programs, existing_programs_comments,
+    manager_training, manager_confidence,
+    priority_issues, priority_issues_comments,
+    company_strengths, company_strengths_comments,
+    identified_barriers, urgency_level, urgency_comments,
+    client_priority_1, client_priority_2, client_priority_3,
+    impact_awareness, impact_management, impact_prevention,
+    impact_steering, impact_culture, impact_measurement,
+    overall_profile_level, overall_profile_comments,
+    diagnostic_summary, support_objectives, journey_steps, recommended_path,
+    consultant_recommendations, target_audiences,
+    deployment_short_term, deployment_medium_term, deployment_long_term,
+    expected_benefits, success_factors, watch_points,
+    interview_summary,
+    decider_hr_contact_id, decider_hr_influence,
+    decider_manager_contact_id, decider_manager_influence,
+    decider_cse_contact_id, decider_cse_influence,
+    decision_process, expected_decision_date,
+    budget_status, estimated_budget, next_steps,
+    documents_to_send, next_follow_up_date, next_follow_up_mode,
+    opportunity_rating, opportunity_rating_comments,
+    follow_up_status, follow_up_comments,
+    development_opportunities, development_comments,
+    closing_checklist, closed_at, next_action
+) values (
+    2, 1, now() - interval '5 months',
+    'being_structured', '{executive_management,hr_department,hse_department}', '{codir_comex,cssct,duerp}',
+    '{occupational_health,safety_days,awareness_sessions,manager_training}', 'Sensibilisation PSMT déployée sur les 4 agences pilotes, formation managers engagée.',
+    '{weak_signals,struggling_employee}', 'fairly_comfortable',
+    '{fatigue,absenteeism,turnover}', 'Les arrêts liés aux TMS ont baissé de 22 % sur les agences pilotes. Reste la rotation des compagnons.',
+    '{engaged_management,mobilized_managers,internal_network}', 'La DRH porte le sujet en CODIR, les chefs de chantier relaient sans réticence.',
+    '{budget,competing_priorities}', 'three_to_six_months', 'Extension aux 8 agences restantes à arbitrer au budget de l''exercice suivant.',
+    'Étendre le dispositif aux 8 agences restantes', 'Former 20 référents supplémentaires', 'Mettre en place un baromètre annuel',
+    3, 3, 3, 2, 3, 2,
+    3, 'Démarche installée sur les agences pilotes, gouvernance en place. La mesure reste le point faible.',
+    'Le dispositif fonctionne sur les 4 agences pilotes : baisse mesurée des arrêts TMS et managers en confiance. L''enjeu est désormais l''essaimage et la mesure continue.',
+    '{managerial_skills,structure_prevention,strengthen_culture}', '{raise_awareness,train,deploy,measure}',
+    '{psmt_awareness,psmm_managers,impact_360_deployment,annual_barometer}',
+    '{psmm,impact_360,barometer}', '{all_employees,managers,cssct}',
+    '{under_three_months}', '{three_to_six_months}', '{over_twelve_months}',
+    'Un dispositif homogène sur les 12 agences et un indicateur TMS consolidé au niveau groupe.',
+    '{management_commitment,involved_managers,regular_steering,results_measurement}',
+    'Le calendrier chantiers de l''été laisse peu de créneaux : caler les sessions avant juin.',
+    'Restitution des résultats en CSE le mois dernier. La direction valide l''extension aux 8 agences restantes et demande un baromètre annuel pour objectiver la suite.',
+    1, 'high',
+    2, 'medium',
+    3, 'medium',
+    '{management_decision,budget_approval}', (now() - interval '4 months')::date,
+    'approved', 48000,
+    jsonb_build_array(
+        jsonb_build_object('action', 'Planifier les sessions PSMM des 8 agences restantes', 'due_date', (now() + interval '25 days')::date),
+        jsonb_build_object('action', 'Cadrer le questionnaire du baromètre annuel', 'due_date', (now() + interval '2 months')::date)
+    ),
+    '{commercial_proposal,client_references,quote,barometer}', (now() + interval '20 days')::date, 'in_person',
+    5, 'Client installé, budget voté, ambassadeur interne. Potentiel de reconduction annuelle.',
+    '{discovery_done,proposal_sent,support_approved}', 'Mission pilote clôturée, extension signée.',
+    '{several_sites,manager_training,annual_barometer,three_year_support}', 'Les 8 agences restantes représentent environ 1 200 compagnons.',
+    '{crm_complete,documents_sent,follow_up_scheduled}', (now() - interval '3 months')::date,
+    'Préparer la restitution du baromètre annuel avec la DRH.'
+);
+
+insert into public.assessments (
+    id, company_id, created_at,
+    governance_maturity, governance_owners, governance_forums,
+    existing_programs, existing_programs_comments,
+    manager_training, manager_confidence,
+    priority_issues, priority_issues_comments,
+    company_strengths, identified_barriers, identified_barriers_comments,
+    urgency_level, urgency_comments,
+    client_priority_1, client_priority_2,
+    impact_awareness, impact_management, impact_prevention,
+    impact_steering, impact_culture, impact_measurement,
+    overall_profile_level, overall_profile_comments,
+    diagnostic_summary, support_objectives, journey_steps, recommended_path,
+    consultant_recommendations, target_audiences,
+    deployment_short_term, deployment_medium_term,
+    expected_benefits, success_factors, watch_points
+) values (
+    3, 2, now() - interval '3 months',
+    'being_structured', '{hr_department,cse}', '{cse,cssct}',
+    '{occupational_health,listening_unit,psychological_support}', 'Cellule d''écoute externalisée, peu sollicitée par les soignants de nuit.',
+    '{struggling_employee}', 'not_very_comfortable',
+    '{chronic_stress,fatigue,burnout,absenteeism}', 'Absentéisme de 11 % sur les équipes de nuit, contre 6 % en journée.',
+    '{dialogue_culture,willingness_to_improve}', '{team_availability,organizational_difficulties}', 'Les plannings de nuit rendent toute session collective très difficile à organiser.',
+    'immediate', 'Deux arrêts longs sur le service de chirurgie depuis le début de l''année.',
+    'Faire baisser l''absentéisme de nuit', 'Outiller les cadres de santé',
+    2, 1, 2, 1, 2, 2,
+    2, 'Dispositifs d''écoute existants mais peu appropriés par les équipes de nuit. Encadrement à outiller en priorité.',
+    'Un absentéisme de nuit deux fois supérieur au jour, des cadres de santé en première ligne sans outillage, et une cellule d''écoute qui ne touche pas sa cible.',
+    '{managerial_skills,reduce_psychosocial_risks,train_first_aiders}', '{raise_awareness,train,support}',
+    '{psmm_managers,pssm_training}',
+    '{psmm,pssm,in_depth_diagnostic}', '{managers,hr,target_population}',
+    '{immediate}', '{three_to_six_months}',
+    'Des cadres de santé capables d''intervenir tôt et un premier réseau de secouristes en santé mentale sur les trois établissements.',
+    '{involved_managers,employee_participation,regular_steering}',
+    'Format à adapter aux horaires de nuit : sessions courtes en chevauchement de relève, sinon personne ne viendra.'
+);
+
+insert into public.assessments (
+    id, company_id, created_at,
+    governance_maturity, governance_owners, governance_forums,
+    existing_programs, existing_programs_comments,
+    manager_training, manager_confidence,
+    priority_issues, priority_issues_comments,
+    company_strengths, company_strengths_comments, identified_barriers,
+    urgency_level, client_priority_1, client_priority_2, client_priority_3,
+    impact_awareness, impact_management, impact_prevention,
+    impact_steering, impact_culture, impact_measurement,
+    overall_profile_level, overall_profile_comments,
+    diagnostic_summary, support_objectives, journey_steps, recommended_path,
+    consultant_recommendations, target_audiences,
+    deployment_short_term, deployment_medium_term, deployment_long_term,
+    expected_benefits, success_factors, watch_points,
+    interview_summary,
+    decider_management_contact_id, decider_management_influence,
+    decider_hr_contact_id, decider_hr_influence,
+    decision_process, expected_decision_date,
+    budget_status, estimated_budget, next_steps,
+    documents_to_send, next_follow_up_date, next_follow_up_mode,
+    opportunity_rating, opportunity_rating_comments,
+    follow_up_status, follow_up_comments,
+    development_opportunities, development_comments,
+    closing_checklist, next_action
+) values (
+    4, 3, now() - interval '2 months',
+    'integrated_in_qvct', '{executive_management,qvct_lead,cse}', '{codir_comex,cse,manager_meetings,duerp}',
+    '{social_barometer,qvct_survey,workshops,awareness_sessions,manager_training}', 'Baromètre social annuel depuis trois ans, ateliers QVCT sur les sites industriels.',
+    '{weak_signals,psychosocial_risks}', 'fairly_comfortable',
+    '{mental_load,disengagement,reorganization}', 'Réorganisation en cours sur 6 sites, charge mentale signalée par les équipes de maintenance.',
+    '{engaged_management,existing_qvct_approach,internal_communication,internal_network}', 'Accord QVCT signé avec les organisations syndicales, réseau de référents déjà constitué.',
+    '{competing_priorities}',
+    'three_to_six_months', 'Déployer sur les 24 sites', 'Former le réseau de référents', 'Mesurer avant / après',
+    3, 3, 3, 3, 4, 3,
+    3, 'Démarche mature et outillée. Le déploiement multi-sites est le vrai sujet.',
+    'Accord QVCT signé, réseau de référents en place, baromètre existant : la maturité est là. Le besoin porte sur l''homogénéité du déploiement sur 24 sites et la montée en compétence du réseau.',
+    '{structure_prevention,strengthen_culture,support_transformation}', '{train,deploy,measure,sustain}',
+    '{psmm_managers,impact_360_deployment,annual_barometer,managers_club}',
+    '{impact_360,psmm,barometer,strategic_support}', '{all_employees,managers,qvct_leads,cse}',
+    '{under_three_months}', '{three_to_six_months,six_to_twelve_months}', '{over_twelve_months}',
+    'Un socle commun sur les 24 sites, un réseau de référents autonome et un baromètre comparable d''une année sur l''autre.',
+    '{management_commitment,internal_communication,regular_steering,results_measurement,ambassador_network}',
+    'La réorganisation en cours peut faire passer le sujet au second plan sur les 6 sites concernés.',
+    'Comité de lancement tenu avec les référents des 4 sites pilotes. Déploiement validé par vagues, un site tous les quinze jours.',
+    6, 'high',
+    7, 'medium',
+    '{consultation,management_decision,budget_approval}', (now() - interval '6 weeks')::date,
+    'approved', 96000,
+    jsonb_build_array(
+        jsonb_build_object('action', 'Lancer la vague 1 sur les 4 sites pilotes', 'due_date', (now() + interval '10 days')::date),
+        jsonb_build_object('action', 'Former le réseau de 24 référents QVCT', 'due_date', (now() + interval '6 weeks')::date),
+        jsonb_build_object('action', 'Caler le baromètre de mi-parcours', 'due_date', (now() + interval '4 months')::date)
+    ),
+    '{commercial_proposal,agreement,psmm_program,barometer}', (now() + interval '12 days')::date, 'video',
+    5, 'Déploiement groupe engagé, accord QVCT à l''appui. Reconduction très probable.',
+    '{discovery_done,proposal_sent,support_approved}', 'Convention signée, première vague en cours.',
+    '{national_rollout,several_sites,annual_barometer,three_year_support,vitalo_app}', '24 sites, dont 6 en réorganisation à traiter en dernier.',
+    '{crm_complete,documents_sent}',
+    'Suivre la vague 1 et préparer le comité de pilotage trimestriel.'
+);
+
+-- Company 4 opened an assessment during the discovery call but nothing has been
+-- filled in yet: the progress bar must show 0 % on an existing record.
+insert into public.assessments (id, company_id, created_at) values
+    (5, 4, now() - interval '3 weeks');
+
+insert into public.assessments (
+    id, company_id, created_at,
+    governance_maturity, governance_owners, governance_forums,
+    existing_programs, existing_programs_comments,
+    manager_training, manager_confidence,
+    priority_issues, priority_issues_other, priority_issues_comments,
+    company_strengths, identified_barriers, identified_barriers_comments,
+    urgency_level, urgency_comments,
+    client_priority_1, client_priority_2,
+    impact_awareness, impact_management, impact_prevention,
+    impact_steering, impact_culture, impact_measurement,
+    overall_profile_level, overall_profile_comments,
+    diagnostic_summary, support_objectives, journey_steps, recommended_path,
+    consultant_recommendations, target_audiences, target_audience_other,
+    deployment_short_term, deployment_medium_term,
+    expected_benefits, success_factors, watch_points
+) values (
+    6, 5, now() - interval '6 weeks',
+    'occasional_actions', '{hr_department,cse}', '{cse,cssct,manager_meetings}',
+    '{social_barometer,listening_unit,occupational_health}', 'Baromètre social annuel, résultats dégradés sur les plateaux téléphoniques.',
+    '{none}', 'struggling',
+    '{chronic_stress,mental_load,relational_tensions,turnover,other}', 'Incivilités des assurés au téléphone', 'Turnover de 28 % sur les plateaux, remontées d''incivilités quotidiennes.',
+    '{dialogue_culture,willingness_to_improve}', '{change_resistance,lack_of_buy_in}', 'Les responsables de plateau craignent une remise en cause de leur management.',
+    'immediate', 'Le CSSCT a inscrit le sujet à l''ordre du jour de la prochaine commission.',
+    'Réduire les RPS sur les plateaux', 'Former les responsables d''équipe',
+    2, 1, 1, 2, 2, 2,
+    2, 'Outils d''écoute présents mais encadrement de proximité non formé. Les plateaux concentrent le risque.',
+    'Un turnover de 28 % et des incivilités quotidiennes sur les plateaux téléphoniques, avec un encadrement de proximité non formé aux RPS. Le CSSCT est moteur.',
+    '{reduce_psychosocial_risks,managerial_skills,improve_internal_dialogue}', '{raise_awareness,train,measure}',
+    '{psmt_awareness,psmm_managers,annual_barometer}',
+    '{psmm,in_depth_diagnostic,thematic_workshops}', '{managers,cssct,target_population}', 'Conseillers des plateaux téléphoniques',
+    '{immediate}', '{three_to_six_months}',
+    'Des responsables de plateau formés au repérage, et un turnover ramené sous les 20 %.',
+    '{involved_managers,employee_participation,regular_steering}',
+    'Associer les responsables de plateau dès le cadrage, sinon la démarche sera vécue comme un audit de leur management.'
+);
+
+insert into public.assessments (
+    id, company_id, created_at,
+    governance_maturity, governance_owners, governance_forums,
+    existing_programs, existing_programs_comments,
+    manager_training, manager_confidence,
+    priority_issues, priority_issues_comments,
+    company_strengths, identified_barriers, identified_barriers_comments,
+    urgency_level, urgency_comments,
+    client_priority_1, client_priority_2,
+    impact_awareness, impact_management, impact_prevention,
+    impact_steering, impact_culture, impact_measurement,
+    overall_profile_level, overall_profile_comments
+) values (
+    7, 6, now() - interval '4 weeks',
+    'no_approach', '{executive_management}', '{never}',
+    '{none}', 'Aucun dispositif à ce jour, l''entreprise a doublé d''effectif en dix-huit mois.',
+    '{none}', 'struggling',
+    '{mental_load,fatigue,disengagement,turnover}', 'Manageurs promus sans formation, aucun relais RH sur le site de Toulouse.',
+    '{engaged_management,willingness_to_improve}', '{time,team_availability}', 'Hypercroissance : personne ne se dégage plus d''une demi-journée.',
+    'three_to_six_months', 'Le CPO veut agir avant la prochaine vague de recrutements.',
+    'Former les nouveaux manageurs', 'Poser un premier cadre de prévention',
+    1, 1, 1, 1, 2, 1,
+    1, 'Point de départ : aucun dispositif, aucune gouvernance. Tout est à poser, mais la direction est demandeuse.'
+);
+
+insert into public.assessments (
+    id, company_id, created_at,
+    governance_maturity, governance_owners, governance_forums,
+    existing_programs, existing_programs_comments,
+    manager_training, manager_confidence,
+    priority_issues, priority_issues_comments,
+    company_strengths, identified_barriers,
+    urgency_level, urgency_comments,
+    client_priority_1, client_priority_2,
+    impact_awareness, impact_management, impact_prevention,
+    impact_steering, impact_culture, impact_measurement,
+    overall_profile_level, overall_profile_comments
+) values (
+    8, 7, now() - interval '2 weeks',
+    'occasional_actions', '{hr_department,qvct_lead,cssct}', '{cssct,duerp}',
+    '{occupational_health,safety_days}', 'Journées sécurité annuelles, volet santé mentale absent du DUERP.',
+    '{none}', 'not_very_comfortable',
+    '{chronic_stress,relational_tensions,absenteeism}', 'Agents d''accueil et services techniques particulièrement exposés.',
+    '{dialogue_culture,internal_network}', '{budget,organizational_difficulties}',
+    'immediate', 'Mise à jour du DUERP obligatoire avant la fin de l''année.',
+    'Intégrer les RPS au DUERP', 'Sensibiliser les six services',
+    1, 2, 1, 2, 2, 1,
+    2, 'Obligation réglementaire comme point d''entrée. La conseillère en prévention est un relais fiable.'
+);
+
+--
+-- 10. Ownership — the insert triggers read auth.uid(), which is null outside a
+--     request, so assign everything to the first sales account here.
 --
 do $$
 declare
@@ -225,17 +528,27 @@ begin
     update public.deals         set sales_id = owner_id where sales_id is null;
     update public.deal_notes    set sales_id = owner_id where sales_id is null;
     update public.tasks         set sales_id = owner_id where sales_id is null;
+
+    -- Assessments carry no sales_id, but the closed one names who closed it and
+    -- every planned next step names an owner.
+    update public.assessments set closed_by_id = owner_id where closed_at is not null;
+    update public.assessments
+    set next_steps = (
+        select jsonb_agg(jsonb_set(step, '{owner_id}', to_jsonb(owner_id)))
+        from jsonb_array_elements(next_steps) as step
+    )
+    where next_steps is not null;
 end
 $$;
 
 --
--- 10. Realign the identity sequences after the explicit ids above.
+-- 11. Realign the identity sequences after the explicit ids above.
 --
 do $$
 declare
     tbl text;
 begin
-    foreach tbl in array array['tags', 'companies', 'contacts', 'deals', 'contact_notes', 'deal_notes', 'tasks']
+    foreach tbl in array array['tags', 'companies', 'contacts', 'deals', 'contact_notes', 'deal_notes', 'tasks', 'assessments']
     loop
         execute format(
             'select setval(pg_get_serial_sequence(%L, %L), coalesce((select max(id) from public.%I), 1))',

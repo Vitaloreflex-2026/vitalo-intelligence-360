@@ -420,6 +420,13 @@ export const frenchCrmMessages = {
         create: "Créer un état des lieux",
         new: "Nouvel état des lieux",
       },
+      progress: {
+        label: "Avancement de l'état des lieux",
+        not_started: "Non commencé",
+        steps:
+          "%{smart_count} étape sur %{total} |||| %{smart_count} étapes sur %{total}",
+        complete: "Terminé",
+      },
       empty: {
         description: "Il semble que votre liste d'états des lieux soit vide.",
         title: "Aucun état des lieux trouvé",

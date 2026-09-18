@@ -413,6 +413,13 @@ export const englishCrmMessages = {
         create: "Create an assessment",
         new: "New assessment",
       },
+      progress: {
+        label: "Assessment progress",
+        not_started: "Not started",
+        steps:
+          "%{smart_count} step out of %{total} |||| %{smart_count} steps out of %{total}",
+        complete: "Complete",
+      },
       empty: {
         description: "It seems your assessment list is empty.",
         title: "No assessment found",
