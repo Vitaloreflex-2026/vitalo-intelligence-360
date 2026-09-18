@@ -13,51 +13,52 @@ permissions:
     contents: write
 
 jobs:
-    deploy-demo:
-        name: 🚀 Deploy (demo)
-        runs-on: ubuntu-latest
-        timeout-minutes: 10
-        # Published into the /demo subfolder of the same Pages site as the
-        # supabase build, which owns the root. That deploy cleans the whole
-        # branch, so it has to finish first.
-        needs: deploy-supabase
-
-        env:
-            VITE_IS_DEMO: true
-            VITE_INBOUND_EMAIL: ${{ vars.VITE_INBOUND_EMAIL }}
-            VITE_ATTACHMENTS_BUCKET: ${{ vars.VITE_ATTACHMENTS_BUCKET || 'attachments' }}
-            PRODUCTION_REMOTE: https://git:${{ secrets.DEPLOY_TOKEN || secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-
-        steps:
-            - name: 📥 Checkout repo
-              uses: actions/checkout@v4
-
-            - name: ⚙️ Setup node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 22
-                  cache: npm
-
-            - name: ⚙️ Setup git
-              run: |
-                  echo Deploying to pages to ${{ github.repository }}
-                  git remote set-url origin https://git:${{ secrets.DEPLOY_TOKEN || secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-                  git remote add production $PRODUCTION_REMOTE
-                  git config --global user.email support+actions@github.com
-                  git config --global user.name github-actions-bot
-
-            - name: 📥 Download deps
-              run: npm ci
-
-            - name: 🔨 Build
-              run: npm run build:demo
-
-            - name: 📡 Deploy GitHub pages
-              # --dest demo: serve at <pages-url>/demo/. gh-pages scopes its
-              # cleanup to --dest, so this only replaces the demo/ subtree.
-              run: npx gh-pages --remote production -d dist --dest demo -b ${{ vars.DEPLOY_BRANCH || 'gh-pages' }}
-              env:
-                  GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN || secrets.GITHUB_TOKEN }}
+    # Disabled: the FakeRest demo build is no longer published to <pages-url>/demo/.
+    # deploy-demo:
+    #     name: 🚀 Deploy (demo)
+    #     runs-on: ubuntu-latest
+    #     timeout-minutes: 10
+    #     # Published into the /demo subfolder of the same Pages site as the
+    #     # supabase build, which owns the root. That deploy cleans the whole
+    #     # branch, so it has to finish first.
+    #     needs: deploy-supabase
+    #
+    #     env:
+    #         VITE_IS_DEMO: true
+    #         VITE_INBOUND_EMAIL: ${{ vars.VITE_INBOUND_EMAIL }}
+    #         VITE_ATTACHMENTS_BUCKET: ${{ vars.VITE_ATTACHMENTS_BUCKET || 'attachments' }}
+    #         PRODUCTION_REMOTE: https://git:${{ secrets.DEPLOY_TOKEN || secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+    #
+    #     steps:
+    #         - name: 📥 Checkout repo
+    #           uses: actions/checkout@v4
+    #
+    #         - name: ⚙️ Setup node
+    #           uses: actions/setup-node@v4
+    #           with:
+    #               node-version: 22
+    #               cache: npm
+    #
+    #         - name: ⚙️ Setup git
+    #           run: |
+    #               echo Deploying to pages to ${{ github.repository }}
+    #               git remote set-url origin https://git:${{ secrets.DEPLOY_TOKEN || secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+    #               git remote add production $PRODUCTION_REMOTE
+    #               git config --global user.email support+actions@github.com
+    #               git config --global user.name github-actions-bot
+    #
+    #         - name: 📥 Download deps
+    #           run: npm ci
+    #
+    #         - name: 🔨 Build
+    #           run: npm run build:demo
+    #
+    #         - name: 📡 Deploy GitHub pages
+    #           # --dest demo: serve at <pages-url>/demo/. gh-pages scopes its
+    #           # cleanup to --dest, so this only replaces the demo/ subtree.
+    #           run: npx gh-pages --remote production -d dist --dest demo -b ${{ vars.DEPLOY_BRANCH || 'gh-pages' }}
+    #           env:
+    #               GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN || secrets.GITHUB_TOKEN }}
 
     deploy-supabase:
         name: 🚀 Deploy (supabase)
