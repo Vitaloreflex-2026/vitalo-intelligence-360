@@ -10,7 +10,7 @@ export const defaultLightModeLogo = lightModeLogo;
 
 export const defaultCurrency = "USD";
 
-export const defaultTitle = "Vital Ô Réflex 360°";
+export const defaultTitle = "VitalÔréflex 360°";
 
 // Labels are runtime data shown as-is on the Kanban columns (admins can edit
 // them in Settings), so they ship in the language of the app: French.
