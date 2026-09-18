@@ -271,9 +271,9 @@ export const createDataProvider = ({
       }
       return true;
     },
-    salesReinvite: async (_id: Identifier): Promise<true> => {
+    salesReinvite: async (_id: Identifier) => {
       // No mail is sent in demo mode.
-      return true;
+      return { kind: "invite" as const };
     },
     updatePassword: async (id: Identifier): Promise<true> => {
       const currentUser = await getIdentity();

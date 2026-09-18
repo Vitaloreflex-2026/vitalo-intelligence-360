@@ -8,20 +8,19 @@ import {
 } from "ra-core";
 import { Button } from "@/components/ui/button";
 
-import type { CrmDataProvider } from "../providers/types";
+import type { CrmDataProvider, SalesReinviteResult } from "../providers/types";
 import type { Sale } from "../types";
 
-const getErrorMessageKey = (status?: number) => {
-  // The account is already activated, so there is nothing left to invite to.
-  if (status === 422) return "resources.sales.reinvite.already_active";
-  // An invitation email was sent a moment ago and the auth rate limit kicked in.
-  if (status === 429) return "resources.sales.reinvite.too_many_requests";
-  return "resources.sales.reinvite.error";
-};
+// An invitation email was sent a moment ago and the auth rate limit kicked in.
+const getErrorMessageKey = (status?: number) =>
+  status === 429
+    ? "resources.sales.reinvite.too_many_requests"
+    : "resources.sales.reinvite.error";
 
 /**
- * Regenerates the single-use activation link of a user who never used theirs
- * and mails it again. The previous link stops working.
+ * Mails a user a fresh single-use link to get into the app, for when the first
+ * invitation was lost or expired. The previous link stops working. Users who
+ * already activated their account get a password link instead.
  */
 export function ResendInvitationButton() {
   const record = useRecordContext<Sale>();
@@ -41,12 +40,17 @@ export function ResendInvitationButton() {
       }
       return dataProvider.salesReinvite(record.id);
     },
-    onSuccess: () => {
-      notify("resources.sales.reinvite.success", {
-        messageArgs: {
-          _: "A new invitation email has been sent.",
+    onSuccess: ({ kind }: SalesReinviteResult) => {
+      notify(
+        kind === "recovery"
+          ? "resources.sales.reinvite.password_link_sent"
+          : "resources.sales.reinvite.success",
+        {
+          messageArgs: {
+            _: "A new invitation email has been sent.",
+          },
         },
-      });
+      );
     },
     onError: (error: Error & { status?: number }) => {
       notify(getErrorMessageKey(error.status), {

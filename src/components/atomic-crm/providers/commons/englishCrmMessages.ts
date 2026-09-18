@@ -737,8 +737,8 @@ export const englishCrmMessages = {
       },
       reinvite: {
         action: "Resend invitation",
-        already_active:
-          "This user has already activated their account. Send them a password reset instead.",
+        password_link_sent:
+          "This user had already activated their account: a password reset email has been sent instead.",
         error: "The invitation email could not be sent. Please try again.",
         success:
           "A new invitation email has been sent. The previous link no longer works.",

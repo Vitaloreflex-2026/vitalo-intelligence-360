@@ -41,6 +41,8 @@ const parseFunctionError = async (
   }
 };
 
+export type SalesReinviteResult = { kind: "invite" | "recovery" };
+
 const getBaseDataProvider = () =>
   supabaseDataProvider({
     instanceUrl: import.meta.env.VITE_SUPABASE_URL,
@@ -187,16 +189,19 @@ const getDataProviderWithCustomMethods = () => {
       return updatedData.data;
     },
     /**
-     * Regenerates the one-time activation link of a user who never used theirs
-     * and mails it again. Only administrators may do this.
+     * Mails a user a fresh single-use link to get into the app. Answers which
+     * kind was sent: a new activation link, or a password link when the account
+     * turned out to be activated already. Administrators only.
      */
-    async salesReinvite(id: Identifier) {
-      const { error } = await getSupabaseClient().functions.invoke("users", {
+    async salesReinvite(id: Identifier): Promise<SalesReinviteResult> {
+      const { data, error } = await getSupabaseClient().functions.invoke<{
+        data: SalesReinviteResult;
+      }>("users", {
         method: "PUT",
         body: { sales_id: id },
       });
 
-      if (error) {
+      if (error || !data) {
         console.error("salesReinvite.error", error);
         const { status, message } = await parseFunctionError(
           error,
@@ -205,7 +210,7 @@ const getDataProviderWithCustomMethods = () => {
         throw new HttpError(message, status);
       }
 
-      return true as const;
+      return data.data;
     },
     async updatePassword(id: Identifier) {
       const { error } = await getSupabaseClient().functions.invoke(

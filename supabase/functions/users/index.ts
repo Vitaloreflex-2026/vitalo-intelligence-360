@@ -195,24 +195,50 @@ async function reinviteUser(req: Request, currentUserSale: any) {
   }
 
   // Invalidates the previous single-use activation link and mails a fresh one.
-  // Auth refuses it once the user confirmed their email (422 email_exists) or
-  // when a mail was just sent (429): forward the status so the caller explains.
   const { error } = await supabaseAdmin.auth.admin.inviteUserByEmail(
     sale.email,
   );
 
-  if (error) {
-    console.error(`Error reinviting user, email_error=${error}`);
-    return createErrorResponse(
-      error.status ?? 500,
-      error.message || "Failed to send invitation mail",
-      { code: error.code },
-    );
+  // Auth refuses to invite a user who already confirmed their email. That
+  // account exists, so mail a password link instead: either way the user ends
+  // up with a fresh single-use link to get in.
+  if (error?.code === "email_exists" || error?.status === 422) {
+    const { error: recoveryError } =
+      await supabaseAdmin.auth.resetPasswordForEmail(sale.email);
+
+    if (recoveryError) {
+      return reinviteError(recoveryError);
+    }
+
+    return reinviteResponse(sales_id, "recovery");
   }
 
-  return new Response(JSON.stringify({ data: { id: sales_id } }), {
+  if (error) {
+    return reinviteError(error);
+  }
+
+  return reinviteResponse(sales_id, "invite");
+}
+
+function reinviteResponse(sales_id: string, kind: "invite" | "recovery") {
+  return new Response(JSON.stringify({ data: { id: sales_id, kind } }), {
     headers: { "Content-Type": "application/json", ...corsHeaders },
   });
+}
+
+// Forward the auth status as-is: the caller needs it to explain the failure
+// (429 when a mail was requested too recently).
+function reinviteError(error: {
+  status?: number;
+  message: string;
+  code?: string;
+}) {
+  console.error(`Error reinviting user, email_error=${error.message}`);
+  return createErrorResponse(
+    error.status ?? 500,
+    error.message || "Failed to send invitation mail",
+    { code: error.code },
+  );
 }
 
 async function patchUser(req: Request, currentUserSale: any) {

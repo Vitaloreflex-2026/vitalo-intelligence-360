@@ -747,8 +747,8 @@ export const frenchCrmMessages = {
       },
       reinvite: {
         action: "Renvoyer l'invitation",
-        already_active:
-          "Cet utilisateur a déjà activé son compte. Envoyez-lui plutôt une réinitialisation de mot de passe.",
+        password_link_sent:
+          "Cet utilisateur avait déjà activé son compte : un email de réinitialisation de mot de passe lui a été envoyé.",
         error:
           "L'email d'invitation n'a pas pu être envoyé. Veuillez réessayer.",
         success:

@@ -1,1 +1,4 @@
-export type { CrmDataProvider } from "./supabase/dataProvider";
+export type {
+  CrmDataProvider,
+  SalesReinviteResult,
+} from "./supabase/dataProvider";

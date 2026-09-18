@@ -17,7 +17,7 @@ const renderButton = (salesReinvite: () => Promise<unknown>) =>
 describe("ResendInvitationButton", () => {
   it("confirms the new invitation when the email is sent", async () => {
     // Arrange
-    const screen = await renderButton(async () => true);
+    const screen = await renderButton(async () => ({ kind: "invite" }));
 
     // Act
     await screen.getByRole("button", { name: "Resend invitation" }).click();
@@ -32,16 +32,9 @@ describe("ResendInvitationButton", () => {
       .toBeVisible();
   });
 
-  it("explains that the account is already activated", async () => {
+  it("reports the password link sent to an already activated account", async () => {
     // Arrange
-    const screen = await renderButton(() =>
-      Promise.reject(
-        new HttpError(
-          "A user with this email address has already been registered",
-          422,
-        ),
-      ),
-    );
+    const screen = await renderButton(async () => ({ kind: "recovery" }));
 
     // Act
     await screen.getByRole("button", { name: "Resend invitation" }).click();
@@ -50,7 +43,7 @@ describe("ResendInvitationButton", () => {
     await expect
       .element(
         screen.getByText(
-          "This user has already activated their account. Send them a password reset instead.",
+          "This user had already activated their account: a password reset email has been sent instead.",
         ),
       )
       .toBeVisible();
