@@ -4,7 +4,7 @@ import { Default } from "./MeetingNotifications.stories";
 
 const openPanel = async () => {
   const screen = await render(<Default />);
-  await screen.getByRole("button", { name: /meetings to handle/i }).click();
+  await screen.getByRole("button", { name: /notifications/i }).click();
   return screen;
 };
 
@@ -37,7 +37,7 @@ describe("MeetingNotifications", () => {
 
     // Assert
     expect(headings.map((heading) => heading.textContent)).toEqual([
-      "Meetings to handle",
+      "Notifications",
       "Overdue",
       "Today",
     ]);

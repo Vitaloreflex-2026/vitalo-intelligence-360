@@ -66,7 +66,7 @@ test.describe("meetings to handle notifications", () => {
   }) => {
     await signIn(page);
 
-    await page.getByRole("button", { name: "Meetings to handle" }).click();
+    await page.getByRole("button", { name: "Notifications" }).click();
 
     await expect(
       page.getByRole("dialog").getByText("Bilan de formation"),
@@ -85,7 +85,7 @@ test.describe("meetings to handle notifications", () => {
     await signIn(page);
 
     const panelTrigger = page.getByRole("button", {
-      name: "Meetings to handle",
+      name: "Notifications",
     });
     await expect(panelTrigger).toContainText("2");
     await panelTrigger.click();
@@ -101,7 +101,7 @@ test.describe("meetings to handle notifications", () => {
   test("postpones an overdue meeting to tomorrow", async ({ page }) => {
     await signIn(page);
 
-    await page.getByRole("button", { name: "Meetings to handle" }).click();
+    await page.getByRole("button", { name: "Notifications" }).click();
     await expect(
       page.getByRole("dialog").getByText("Rendez-vous oublie"),
     ).toBeVisible();
@@ -120,7 +120,7 @@ test.describe("meetings to handle notifications", () => {
   test("opens the edit dialog from the postpone menu", async ({ page }) => {
     await signIn(page);
 
-    await page.getByRole("button", { name: "Meetings to handle" }).click();
+    await page.getByRole("button", { name: "Notifications" }).click();
     await page.getByRole("button", { name: "Postpone" }).first().click();
     await page.getByRole("menuitem", { name: "Edit" }).click();
 

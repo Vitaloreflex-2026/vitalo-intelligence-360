@@ -23,6 +23,7 @@ import { TextInput } from "@/components/admin/text-input";
 import { ColorSwatchInput } from "../misc/ColorSwatchInput";
 import ImageEditorField from "../misc/ImageEditorField";
 import { ConsultantColorsCard } from "./ConsultantColorsCard";
+import { DocumentTypesCard } from "./DocumentTypesCard";
 import {
   useConfigurationContext,
   useConfigurationUpdater,
@@ -48,6 +49,11 @@ const SECTIONS = [
     id: "consultant-colors",
     label: "crm.settings.consultant_colors.title",
     fallback: "Consultant colours",
+  },
+  {
+    id: "documents",
+    label: "crm.settings.sections.documents",
+    fallback: "User documents",
   },
 ];
 
@@ -462,6 +468,9 @@ const SettingsFormFields = () => {
         {/* Consultant colours live on the `sales` rows, not in the
             configuration record, so this card saves on its own. */}
         <ConsultantColorsCard />
+
+        {/* Same arrangement: document types live in the `choices` table. */}
+        <DocumentTypesCard />
       </div>
 
       {/* Sticky save button */}

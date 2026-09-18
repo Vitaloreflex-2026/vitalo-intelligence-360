@@ -31,6 +31,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import { SaleDocumentsCard } from "../documents/SaleDocumentsCard";
 import ImageEditorField from "../misc/ImageEditorField";
 import type { CrmDataProvider } from "../providers/types";
 import type { Sale, SalesFormData } from "../types";
@@ -85,7 +86,7 @@ export const ProfilePage = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-8">
+    <div className="max-w-lg mx-auto mt-8 space-y-4">
       <Form onSubmit={handleOnSubmit} record={data}>
         <ProfileForm isEditMode={isEditMode} setEditMode={setEditMode} />
       </Form>
@@ -204,6 +205,8 @@ const ProfileForm = ({
           </div>
         </CardContent>
       </Card>
+      {/* Each document saves on its own, independently of the form around it. */}
+      <SaleDocumentsCard />
       {import.meta.env.VITE_INBOUND_EMAIL && (
         <Card>
           <CardContent>

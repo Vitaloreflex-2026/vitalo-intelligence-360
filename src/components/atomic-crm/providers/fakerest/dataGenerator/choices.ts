@@ -34,6 +34,12 @@ export const choiceLabels: Record<string, string[]> = {
     "Répondre à une obligation",
   ],
   rdv_mode: ["Présentiel", "Visioconférence", "Téléphone", "Salon"],
+  user_document_type: [
+    "Carte d'identité",
+    "RIB",
+    "Attestation de vigilance URSSAF",
+    "Attestation d'assurance responsabilité civile professionnelle",
+  ],
   rdv_type: [
     "Premier contact",
     "Rendez-vous découverte",
@@ -45,6 +51,12 @@ export const choiceLabels: Record<string, string[]> = {
   ],
 };
 
+/** Document types whose paper expires one year after it was filed. */
+const RENEWABLE_DOCUMENT_LABELS = [
+  "Attestation de vigilance URSSAF",
+  "Attestation d'assurance responsabilité civile professionnelle",
+];
+
 export const generateChoices = (_?: Db): Choice[] => {
   let id = 0;
   return Object.entries(choiceLabels).flatMap(([category, labels]) =>
@@ -52,6 +64,7 @@ export const generateChoices = (_?: Db): Choice[] => {
       id: id++,
       category,
       label,
+      requires_renewal: RENEWABLE_DOCUMENT_LABELS.includes(label),
     })),
   );
 };

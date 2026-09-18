@@ -834,11 +834,43 @@ export const frenchCrmMessages = {
   },
   crm: {
     notifications: {
-      title: "Rendez-vous à traiter",
-      empty: "Aucun rendez-vous à traiter",
+      title: "Notifications",
+      empty: "Rien à traiter pour le moment",
       actions: {
         done: "Marquer comme fait",
         postpone: "Reporter",
+      },
+    },
+    documents: {
+      title: "Mes documents",
+      title_other: "Documents",
+      hint: "Pièces administratives à fournir. Elles ne sont visibles que par vous et par les administrateurs.",
+      no_types: "Aucune pièce n'est demandée pour le moment",
+      not_filed: "Aucun fichier déposé",
+      filed_on: "Déposé le %{date}",
+      expired_on: "À renouveler avant le %{date}",
+      uploaded: "Document déposé",
+      replaced: "Document remplacé",
+      removed: "Document supprimé",
+      save_error: "Une erreur est survenue. Veuillez réessayer.",
+      download_error: "Le téléchargement a échoué",
+      status: {
+        missing: "Manquant",
+        expired: "Expiré",
+        expiring_on: "À renouveler avant le %{date}",
+        valid: "À jour",
+      },
+      sections: {
+        renewals: "Documents à renouveler",
+        missing: "Documents à fournir",
+      },
+      actions: {
+        upload: "Déposer",
+        replace: "Remplacer",
+        remove: "Supprimer",
+        download: "Télécharger",
+        download_all: "Tout télécharger",
+        file: "Déposer",
       },
     },
     wizard: {
@@ -988,11 +1020,20 @@ export const frenchCrmMessages = {
         empty: "Aucun consultant pour le moment.",
         save_error: "Impossible d'enregistrer cette couleur",
       },
+      documents: {
+        hint: "Pièces administratives demandées à chaque utilisateur. Chaque modification est enregistrée immédiatement.",
+        empty: "Aucune pièce demandée pour le moment.",
+        add: "Ajouter",
+        new_placeholder: "Nom de la pièce (ex. : Carte d'identité)",
+        requires_renewal: "À renouveler chaque année",
+        save_error: "Impossible d'enregistrer cette pièce",
+      },
       preferences: "Préférences",
       title: "Paramètres",
       app_title: "Titre de l'application",
       sections: {
         branding: "Image de marque",
+        documents: "Documents des utilisateurs",
       },
       validation: {
         duplicate: "%{display_name} en double : %{items}",

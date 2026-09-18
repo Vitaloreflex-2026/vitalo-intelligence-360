@@ -9,11 +9,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 
 import { isOverdue } from "../tasks/tasksPredicate";
 import type { Task } from "../types";
+import { DocumentNotifications } from "./DocumentNotifications";
 import { MeetingNotification } from "./MeetingNotification";
+import { NotificationSection } from "./NotificationSection";
+import { useDocumentAlerts } from "./useDocumentAlerts";
 
 const MeetingSection = ({
   meetings,
@@ -29,30 +31,20 @@ const MeetingSection = ({
   if (!meetings.length) return null;
 
   return (
-    <section className="px-4 pb-2">
-      <h3
-        className={cn(
-          "text-xs font-semibold uppercase tracking-wide pt-2 pb-1",
-          titleClassName,
-        )}
-      >
-        {title}
-      </h3>
-      <ul className="divide-y">
-        {meetings.map((meeting) => (
-          <li key={meeting.id}>
-            <MeetingNotification meeting={meeting} showDate={showDate} />
-          </li>
-        ))}
-      </ul>
-    </section>
+    <NotificationSection title={title} titleClassName={titleClassName}>
+      {meetings.map((meeting) => (
+        <li key={meeting.id}>
+          <MeetingNotification meeting={meeting} showDate={showDate} />
+        </li>
+      ))}
+    </NotificationSection>
   );
 };
 
 /**
- * Floating bottom-right panel listing the current user's meetings that still
- * need handling — overdue ones first, then today's — each with a "done" and a
- * "postpone" action.
+ * Floating bottom-right panel listing what the current user still has to
+ * handle: meetings — overdue first, then today's, each with a "done" and a
+ * "postpone" action — followed by the administrative papers to renew or file.
  */
 export const MeetingNotifications = () => {
   const translate = useTranslate();
@@ -85,7 +77,8 @@ export const MeetingNotifications = () => {
     (meeting) => !isOverdue(meeting.due_date),
   );
 
-  const pendingCount = pendingMeetings.length;
+  const documents = useDocumentAlerts();
+  const pendingCount = pendingMeetings.length + documents.count;
 
   return (
     <div className="fixed bottom-4 right-4 z-40">
@@ -116,7 +109,7 @@ export const MeetingNotifications = () => {
           <h2 className="text-sm font-semibold px-4 pt-4 pb-2">
             {translate("crm.notifications.title")}
           </h2>
-          {pendingMeetings.length === 0 ? (
+          {pendingCount === 0 ? (
             <p className="text-sm text-muted-foreground px-4 pb-4">
               {translate("crm.notifications.empty")}
             </p>
@@ -131,6 +124,10 @@ export const MeetingNotifications = () => {
               <MeetingSection
                 meetings={todayMeetings}
                 title={translate("resources.tasks.filters.today")}
+              />
+              <DocumentNotifications
+                missing={documents.missing}
+                renewals={documents.renewals}
               />
             </>
           )}

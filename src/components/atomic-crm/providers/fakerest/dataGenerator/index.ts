@@ -15,6 +15,9 @@ export default (): Db => {
   // Business columns are not defined yet, so there is nothing to fake here.
   db.assessments = [];
   db.sales = generateSales(db);
+  // Consultants file their own papers from their profile, so the demo starts
+  // with none — which is exactly what the notification panel reports.
+  db.sales_documents = [];
   db.tags = generateTags(db);
   db.choices = generateChoices(db);
   db.companies = generateCompanies(db);

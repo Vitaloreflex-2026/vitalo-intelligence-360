@@ -53,6 +53,10 @@ grant all on function public.is_admin() to anon;
 grant all on function public.is_admin() to authenticated;
 grant all on function public.is_admin() to service_role;
 
+grant all on function public.is_own_sale(bigint) to anon;
+grant all on function public.is_own_sale(bigint) to authenticated;
+grant all on function public.is_own_sale(bigint) to service_role;
+
 grant all on function public.lowercase_email_jsonb() to anon;
 grant all on function public.lowercase_email_jsonb() to authenticated;
 grant all on function public.lowercase_email_jsonb() to service_role;
@@ -97,6 +101,10 @@ grant all on table public.sales to service_role;
 grant all on table public.choices to anon;
 grant all on table public.choices to authenticated;
 grant all on table public.choices to service_role;
+
+grant all on table public.sales_documents to anon;
+grant all on table public.sales_documents to authenticated;
+grant all on table public.sales_documents to service_role;
 
 grant all on table public.tags to anon;
 grant all on table public.tags to authenticated;
@@ -163,6 +171,10 @@ grant all on sequence public.favicons_excluded_domains_id_seq to service_role;
 grant all on sequence public.sales_id_seq to anon;
 grant all on sequence public.sales_id_seq to authenticated;
 grant all on sequence public.sales_id_seq to service_role;
+
+grant all on sequence public.sales_documents_id_seq to anon;
+grant all on sequence public.sales_documents_id_seq to authenticated;
+grant all on sequence public.sales_documents_id_seq to service_role;
 
 grant all on sequence public.choices_id_seq to anon;
 grant all on sequence public.choices_id_seq to authenticated;

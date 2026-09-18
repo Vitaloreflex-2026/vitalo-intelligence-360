@@ -10,6 +10,7 @@ const adminSupabase = createClient(
 // Tables in FK-safe deletion order (children before parents)
 const TABLES = [
   "tasks",
+  "sales_documents",
   "contact_notes",
   "deal_notes",
   "deals",
@@ -27,11 +28,40 @@ async function resetDb() {
     await adminSupabase.from(table).delete().not("id", "is", null);
   }
 
+  // Seeded document types would make every user owe paperwork, which shows up
+  // in the notification panel of every spec. Tests that need one create it.
+  await adminSupabase
+    .from("choices")
+    .delete()
+    .eq("category", DOCUMENT_TYPE_CATEGORY);
+
   // Delete all auth users (cascades to sales via DB trigger)
   const { data } = await adminSupabase.auth.admin.listUsers();
   await Promise.all(
     data.users.map((user) => adminSupabase.auth.admin.deleteUser(user.id)),
   );
+}
+
+const DOCUMENT_TYPE_CATEGORY = "user_document_type";
+
+async function createDocumentType({
+  label,
+  requires_renewal = false,
+}: {
+  label: string;
+  requires_renewal?: boolean;
+}) {
+  const { data, error } = await adminSupabase
+    .from("choices")
+    .insert({ category: DOCUMENT_TYPE_CATEGORY, label, requires_renewal })
+    .select("id")
+    .single();
+
+  if (error) {
+    throw new Error(`Failed to create document type: ${error.message}`);
+  }
+
+  return data;
 }
 
 async function createUser({
@@ -272,6 +302,7 @@ export const test = base.extend<{
   createContact: typeof createContact;
   createNotes: typeof createNotes;
   createTask: typeof createTask;
+  createDocumentType: typeof createDocumentType;
   menu: ReturnType<typeof getMenuMethod>;
   dismissToast: (content: string) => Promise<void>;
 }>({
@@ -312,6 +343,10 @@ export const test = base.extend<{
   // eslint-disable-next-line no-empty-pattern
   createTask: async ({}, cb) => {
     await cb(createTask);
+  },
+  // eslint-disable-next-line no-empty-pattern
+  createDocumentType: async ({}, cb) => {
+    await cb(createDocumentType);
   },
   menu: async ({ page, isMobile }, cb) => {
     await cb(getMenuMethod({ page, isMobile }));

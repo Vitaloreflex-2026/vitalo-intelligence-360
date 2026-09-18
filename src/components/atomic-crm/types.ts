@@ -61,6 +61,20 @@ export type RelationshipStatus = "prospect" | "client" | "partner";
 export type Choice = {
   category: string;
   label: string;
+  /** Only meaningful for the `user_document_type` category. */
+  requires_renewal?: boolean;
+} & Pick<RaRecord, "id">;
+
+/**
+ * An administrative paper filed by a consultant (ID card, bank details…).
+ * `type` holds the `user_document_type` choice LABEL, and there is at most one
+ * document per (consultant, type) — re-uploading replaces the previous file.
+ */
+export type SaleDocument = {
+  sales_id: Identifier;
+  type: string;
+  file: RAFile;
+  created_at: string;
 } & Pick<RaRecord, "id">;
 
 export type Company = {

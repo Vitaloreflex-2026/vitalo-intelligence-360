@@ -822,11 +822,43 @@ export const englishCrmMessages = {
   },
   crm: {
     notifications: {
-      title: "Meetings to handle",
-      empty: "No meeting to handle",
+      title: "Notifications",
+      empty: "Nothing to handle right now",
       actions: {
         done: "Mark as done",
         postpone: "Postpone",
+      },
+    },
+    documents: {
+      title: "My documents",
+      title_other: "Documents",
+      hint: "Administrative papers you must provide. Only you and administrators can see them.",
+      no_types: "No document is required yet",
+      not_filed: "No file uploaded",
+      filed_on: "Uploaded on %{date}",
+      expired_on: "To be renewed before %{date}",
+      uploaded: "Document uploaded",
+      replaced: "Document replaced",
+      removed: "Document removed",
+      save_error: "An error occurred. Please try again.",
+      download_error: "The download failed",
+      status: {
+        missing: "Missing",
+        expired: "Expired",
+        expiring_on: "Renew before %{date}",
+        valid: "Up to date",
+      },
+      sections: {
+        renewals: "Documents to renew",
+        missing: "Documents to provide",
+      },
+      actions: {
+        upload: "Upload",
+        replace: "Replace",
+        remove: "Remove",
+        download: "Download",
+        download_all: "Download all",
+        file: "Upload",
       },
     },
     wizard: {
@@ -973,11 +1005,20 @@ export const englishCrmMessages = {
         empty: "No consultant yet.",
         save_error: "This colour could not be saved",
       },
+      documents: {
+        hint: "Administrative papers required from every user. Each change is saved immediately.",
+        empty: "No document required yet.",
+        add: "Add",
+        new_placeholder: "Document name (e.g. ID card)",
+        requires_renewal: "Renew every year",
+        save_error: "This document type could not be saved",
+      },
       preferences: "Preferences",
       title: "Settings",
       app_title: "App Title",
       sections: {
         branding: "Branding",
+        documents: "User documents",
       },
       validation: {
         duplicate: "Duplicate %{display_name}: %{items}",

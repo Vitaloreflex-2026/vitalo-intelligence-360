@@ -15,6 +15,7 @@ import type {
   Deal,
   DealNote,
   Sale,
+  SaleDocument,
   SalesFormData,
   SignUpData,
   Task,
@@ -609,6 +610,21 @@ export const createDataProvider = ({
         resource: "deal_notes",
         beforeSave: async (params) => preserveAttachmentMimeType(params),
       } satisfies ResourceCallbacks<DealNote>,
+      {
+        resource: "sales_documents",
+        // No bucket in demo mode: inline the file so downloading it still works.
+        beforeSave: async (document) =>
+          document.file?.rawFile instanceof File
+            ? {
+                ...document,
+                file: {
+                  ...document.file,
+                  src: await convertFileToBase64(document.file),
+                  type: document.file.type ?? document.file.rawFile.type,
+                },
+              }
+            : document,
+      } satisfies ResourceCallbacks<SaleDocument>,
     ],
   ) as CrmDataProvider;
 

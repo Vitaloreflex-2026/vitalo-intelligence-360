@@ -273,6 +273,17 @@ begin
 end;
 $$;
 
+CREATE OR REPLACE FUNCTION "public"."is_own_sale"("sale_id" bigint) RETURNS boolean
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO ''
+    AS $$
+begin
+  return exists (
+    select 1 from public.sales where id = sale_id and user_id = auth.uid()
+  );
+end;
+$$;
+
 CREATE OR REPLACE FUNCTION "public"."merge_contacts"("loser_id" bigint, "winner_id" bigint) RETURNS bigint
     LANGUAGE "plpgsql"
     SET "search_path" TO 'public'

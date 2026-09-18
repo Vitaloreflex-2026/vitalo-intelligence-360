@@ -11,6 +11,7 @@ alter table public.contact_notes enable row level security;
 alter table public.deals enable row level security;
 alter table public.deal_notes enable row level security;
 alter table public.sales enable row level security;
+alter table public.sales_documents enable row level security;
 alter table public.tags enable row level security;
 alter table public.tasks enable row level security;
 alter table public.choices enable row level security;
@@ -59,6 +60,14 @@ create policy "Enable read access for authenticated users" on public.sales for s
 -- service role; this policy exists so administrators can set the calendar color
 -- straight from the settings page.
 create policy "Enable update for admins" on public.sales for update to authenticated using (public.is_admin()) with check (public.is_admin());
+
+-- Sales Documents
+-- Identity papers and bank details are personal: a consultant is the only one
+-- who may file or remove their own, and only administrators read everyone's.
+create policy "Enable read for owner and admins" on public.sales_documents for select to authenticated using (public.is_own_sale(sales_id) or public.is_admin());
+create policy "Enable insert for owner" on public.sales_documents for insert to authenticated with check (public.is_own_sale(sales_id));
+create policy "Enable update for owner" on public.sales_documents for update to authenticated using (public.is_own_sale(sales_id)) with check (public.is_own_sale(sales_id));
+create policy "Enable delete for owner" on public.sales_documents for delete to authenticated using (public.is_own_sale(sales_id));
 
 -- Tags
 create policy "Enable read access for authenticated users" on public.tags for select to authenticated using (true);

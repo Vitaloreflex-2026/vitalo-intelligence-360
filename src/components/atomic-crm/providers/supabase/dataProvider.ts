@@ -13,6 +13,7 @@ import type {
   DealNote,
   RAFile,
   Sale,
+  SaleDocument,
   SalesFormData,
   SignUpData,
 } from "../../types";
@@ -340,6 +341,15 @@ const lifeCycleCallbacks: ResourceCallbacks[] = [
         data.attachments = await Promise.all(
           data.attachments.map((fi) => uploadToBucket(fi)),
         );
+      }
+      return data;
+    },
+  },
+  {
+    resource: "sales_documents",
+    beforeSave: async (data: SaleDocument, _, __) => {
+      if (data.file) {
+        await uploadToBucket(data.file);
       }
       return data;
     },
