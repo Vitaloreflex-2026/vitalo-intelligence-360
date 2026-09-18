@@ -510,6 +510,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/misc/MobileListItems.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/misc/MobileBackButton.tsx",
           "type": "registry:component"
         },
@@ -711,6 +715,14 @@
         },
         {
           "path": "src/components/atomic-crm/deals/DealShow.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/deals/DealListMobile.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/deals/DealListFilter.tsx",
           "type": "registry:component"
         },
         {
@@ -995,6 +1007,10 @@
         },
         {
           "path": "src/components/atomic-crm/companies/CompanyShow.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/companies/CompanyListMobile.tsx",
           "type": "registry:component"
         },
         {
