@@ -731,6 +731,7 @@ export const englishCrmMessages = {
         email: "Email",
         administrator: "Admin",
         disabled: "Disabled",
+        ical_urls: "Calendar addresses (iCal)",
       },
       create: {
         error: "An error occurred while creating the user.",
@@ -936,6 +937,13 @@ export const englishCrmMessages = {
       calendar: {
         title: "Team meetings",
         reschedule_error: "This meeting could not be moved",
+        external: {
+          toggle: "My external calendars",
+          legend: "External calendars",
+          busy: "Busy",
+          error:
+            "An external calendar could not be read. Check its address in your profile. |||| %{smart_count} external calendars could not be read. Check their addresses in your profile.",
+        },
       },
       deals_pipeline: "Deals Pipeline",
       latest_activity: "Latest Activity",
@@ -1042,6 +1050,23 @@ export const englishCrmMessages = {
       label: "CRM navigation",
     },
     profile: {
+      calendar: {
+        title: "External calendars",
+        description:
+          "Paste the iCal address of each personal calendar you want to see. Their events appear on the dashboard as read-only busy time; the CRM never writes to them.",
+        placeholder: "https://calendar.google.com/calendar/ical/.../basic.ics",
+        help: {
+          google:
+            "Google Calendar: Settings > Settings for my calendars > your calendar > Integrate calendar > Secret address in iCal format.",
+          apple:
+            "Apple Calendar: on icloud.com/calendar, the information button next to the calendar > turn on Public Calendar > Copy. On iPhone: Calendars > information button > Public Calendar > Share Link.",
+        },
+        caution:
+          "Keep these addresses to yourself: anyone holding one can read that calendar.",
+        empty: "No calendar",
+        invalid:
+          "One of these calendar addresses is not valid. Each must be a public https:// or webcal:// link.",
+      },
       inbound: {
         description:
           "You can start sending emails to your server's inbound email address, e.g. by adding it to the %{field} field. Atomic CRM will process the emails and add notes to the corresponding contacts.",

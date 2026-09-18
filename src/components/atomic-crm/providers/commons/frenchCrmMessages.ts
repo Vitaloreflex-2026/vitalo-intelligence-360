@@ -740,6 +740,7 @@ export const frenchCrmMessages = {
         email: "E-mail",
         administrator: "Admin",
         disabled: "Désactivé",
+        ical_urls: "Adresses des agendas (iCal)",
       },
       create: {
         error:
@@ -948,6 +949,13 @@ export const frenchCrmMessages = {
       calendar: {
         title: "Les rendez-vous de l'équipe",
         reschedule_error: "Impossible de déplacer ce rendez-vous",
+        external: {
+          toggle: "Mes agendas externes",
+          legend: "Agendas externes",
+          busy: "Occupé",
+          error:
+            "Un agenda externe n'a pas pu être lu. Vérifiez son adresse dans votre profil. |||| %{smart_count} agendas externes n'ont pas pu être lus. Vérifiez leurs adresses dans votre profil.",
+        },
       },
       deals_pipeline: "Pipeline des dossiers",
       latest_activity: "Dernière activité",
@@ -1057,6 +1065,23 @@ export const frenchCrmMessages = {
       label: "Navigation CRM",
     },
     profile: {
+      calendar: {
+        title: "Agendas externes",
+        description:
+          "Collez l'adresse iCal de chaque agenda personnel que vous voulez voir. Leurs événements apparaissent sur le tableau de bord comme des créneaux occupés, en lecture seule ; le CRM n'y écrit jamais.",
+        placeholder: "https://calendar.google.com/calendar/ical/.../basic.ics",
+        help: {
+          google:
+            "Google Agenda : Paramètres > Paramètres de mes agendas > votre agenda > Intégrer l'agenda > Adresse secrète au format iCal.",
+          apple:
+            "Calendrier Apple : sur icloud.com/calendar, bouton d'information à côté de l'agenda > activez Agenda public > Copier. Sur iPhone : Calendriers > bouton d'information > Agenda public > Partager le lien.",
+        },
+        caution:
+          "Gardez ces adresses pour vous : toute personne qui en détient une peut lire cet agenda.",
+        empty: "Aucun agenda",
+        invalid:
+          "Une de ces adresses d'agenda n'est pas valide. Chacune doit être un lien public en https:// ou webcal://.",
+      },
       inbound: {
         description:
           "Vous pouvez commencer à envoyer des e-mails vers l'adresse de réception de votre serveur, par exemple en l'ajoutant au champ %{field}. Atomic CRM traitera les e-mails et ajoutera des notes aux contacts correspondants.",

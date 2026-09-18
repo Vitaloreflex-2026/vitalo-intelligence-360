@@ -146,6 +146,34 @@
   text-decoration: line-through;
 }
 
+/*
+ * Imported blocks: the hatching is what says "this comes from somewhere else
+ * and cannot be touched here". The fill and the stroke arrive inline as theme
+ * variables, so only the texture and the cursor belong in CSS.
+ */
+.meetings-calendar .fc .external-event,
+.external-event-swatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklch, var(--muted-foreground) 22%, transparent) 0,
+    color-mix(in oklch, var(--muted-foreground) 22%, transparent) 2px,
+    transparent 2px,
+    transparent 6px
+  );
+}
+
+.external-event-swatch {
+  background-color: var(--muted);
+}
+
+.meetings-calendar .fc .external-event {
+  cursor: default;
+}
+
+.meetings-calendar .fc .external-event .fc-event-title {
+  font-weight: 500;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .meetings-calendar .fc * {
     transition: none !important;

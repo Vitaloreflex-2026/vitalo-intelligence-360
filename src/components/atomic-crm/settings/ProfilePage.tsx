@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import type { HttpError } from "ra-core";
 import { Check, CircleX, Copy, Pencil, Save } from "lucide-react";
 import {
   Form,
@@ -9,11 +10,14 @@ import {
   useLocales,
   useNotify,
   useRecordContext,
+  ResourceContextProvider,
   useTranslate,
 } from "ra-core";
 import { useState } from "react";
 import { useFormState } from "react-hook-form";
+import { ArrayInput } from "@/components/admin/array-input";
 import { RecordField } from "@/components/admin/record-field";
+import { SimpleFormIterator } from "@/components/admin/simple-form-iterator";
 import { TextInput } from "@/components/admin/text-input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -69,17 +73,32 @@ export const ProfilePage = () => {
         },
       });
     },
-    onError: (_) => {
-      notify("crm.profile.update_error", {
-        type: "error",
-        messageArgs: {
-          _: "An error occurred. Please try again",
+    onError: (error: unknown) => {
+      // A calendar URL the server refuses is the user's to fix, so it gets its
+      // own message instead of the generic "try again".
+      const isInvalidFeed =
+        (error as HttpError)?.body?.code === "invalid_ical_url";
+
+      notify(
+        isInvalidFeed
+          ? "crm.profile.calendar.invalid"
+          : "crm.profile.update_error",
+        {
+          type: "error",
+          messageArgs: {
+            _: isInvalidFeed
+              ? "This calendar address is not valid. It must be a public https:// or webcal:// link."
+              : "An error occurred. Please try again",
+          },
         },
-      });
+      );
     },
   });
 
-  if (!identity) return null;
+  // The form takes its initial values from the record once, on mount.
+  // Rendering it before the profile has loaded would start it from nothing,
+  // and a save from that state would blank fields the user never touched.
+  if (!identity || !data) return null;
 
   const handleOnSubmit = async (values: any) => {
     mutate(values);
@@ -170,6 +189,8 @@ const ProfileForm = ({
             <LanguageSelector />
           </div>
 
+          <ExternalCalendarField isEditMode={isEditMode} />
+
           <div className="flex flex-row justify-end gap-2">
             {!isEditMode && (
               <>
@@ -244,6 +265,96 @@ const ProfileForm = ({
           </div>
         </CardContent>
       </Card>
+    </div>
+  );
+};
+
+/** Order matters only for reading: the most common one first. */
+const CALENDAR_PROVIDERS = ["google", "apple"] as const;
+
+/**
+ * The user's own external calendar feeds. Read-only for the CRM: the dashboard
+ * overlays them as busy time and never writes back, so the field carries the
+ * explanation of where each address is found rather than leaving the user to
+ * guess which of a calendar app's several URLs is the right one.
+ */
+const ExternalCalendarField = ({ isEditMode }: { isEditMode: boolean }) => {
+  const translate = useTranslate();
+
+  return (
+    <div className="space-y-2 mb-4">
+      <h3 className="text-sm font-semibold text-muted-foreground">
+        {translate("crm.profile.calendar.title", { _: "External calendars" })}
+      </h3>
+      <p className="text-xs text-muted-foreground">
+        {translate("crm.profile.calendar.description")}
+      </p>
+      {isEditMode ? (
+        <>
+          {/* The profile is a standalone form, not a resource page, and the
+              iterator's rows read the resource from context — so name it. */}
+          <ResourceContextProvider value="sales">
+            <ArrayInput source="ical_urls" label={false} helperText={false}>
+              <SimpleFormIterator disableReordering>
+                <TextInput
+                  source=""
+                  label={false}
+                  helperText={false}
+                  placeholder={translate("crm.profile.calendar.placeholder")}
+                />
+              </SimpleFormIterator>
+            </ArrayInput>
+          </ResourceContextProvider>
+          {/* Each calendar app buries this address somewhere different, and
+              picking the wrong one of the several URLs they offer is the usual
+              way this fails — so spell out the path. */}
+          <ul className="text-xs text-muted-foreground list-disc pl-4 space-y-1">
+            {CALENDAR_PROVIDERS.map((provider) => (
+              <li key={provider}>
+                {translate(`crm.profile.calendar.help.${provider}`)}
+              </li>
+            ))}
+          </ul>
+          <p className="text-xs text-muted-foreground">
+            {translate("crm.profile.calendar.caution")}
+          </p>
+        </>
+      ) : (
+        <ExternalCalendarList />
+      )}
+    </div>
+  );
+};
+
+/**
+ * A feed address is long, opaque and not meant to be read — it only has to be
+ * recognisable. So each line is clipped to the card's width with an ellipsis,
+ * and the full address stays available on hover rather than wrapping over four
+ * lines and pushing the rest of the form down.
+ */
+const ExternalCalendarList = () => {
+  const translate = useTranslate();
+  const record = useRecordContext<Sale>();
+  const urls = record?.ical_urls ?? [];
+
+  return (
+    <div className="space-y-1">
+      <p className="text-xs text-muted-foreground">
+        {translate("resources.sales.fields.ical_urls")}
+      </p>
+      {urls.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          {translate("crm.profile.calendar.empty", { _: "No calendar" })}
+        </p>
+      ) : (
+        <ul className="space-y-1">
+          {urls.map((url) => (
+            <li key={url} className="text-sm truncate" title={url}>
+              {url}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

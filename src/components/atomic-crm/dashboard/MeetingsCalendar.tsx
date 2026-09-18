@@ -14,9 +14,17 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { CalendarDays } from "lucide-react";
 import type { Identifier } from "ra-core";
-import { useLocaleState, useNotify, useTranslate, useUpdate } from "ra-core";
+import {
+  useLocaleState,
+  useNotify,
+  useStore,
+  useTranslate,
+  useUpdate,
+} from "ra-core";
 import { useCallback, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 import { rdvInkColor } from "../misc/rdvColors";
 import type { Task } from "../types";
@@ -24,6 +32,7 @@ import { TaskEdit } from "../tasks/TaskEdit";
 import { calendarScrollTime } from "./calendarScrollTime";
 import { MeetingCreateDialog } from "./MeetingCreateDialog";
 import { meetingSlotFromSelection } from "./meetingSlot";
+import { useExternalCalendarEvents } from "./useExternalCalendarEvents";
 import "./MeetingsCalendar.css";
 import {
   DEFAULT_MEETING_MINUTES,
@@ -42,6 +51,9 @@ const GRID_HEIGHT = 520;
 const MAX_EVENTS_PER_DAY = 3;
 const MINUTE_MS = 60 * 1000;
 
+/** Remembered per browser, so the overlay stays how the user left it. */
+const SHOW_EXTERNAL_STORE_KEY = "dashboard.calendar.showExternalEvents";
+
 const minutesBetween = (start: Date, end: Date): number =>
   Math.max(1, Math.round((end.getTime() - start.getTime()) / MINUTE_MS));
 
@@ -51,10 +63,13 @@ const minutesBetween = (start: Date, end: Date): number =>
  */
 const ConsultantLegend = ({
   consultants,
+  showsExternal,
 }: {
   consultants: MeetingConsultant[];
+  showsExternal: boolean;
 }) => {
-  if (!consultants.length) return null;
+  const translate = useTranslate();
+  if (!consultants.length && !showsExternal) return null;
   return (
     <ul className="flex flex-wrap gap-x-4 gap-y-1 px-1">
       {consultants.map((consultant) => (
@@ -73,6 +88,17 @@ const ConsultantLegend = ({
           {consultant.name}
         </li>
       ))}
+      {showsExternal && (
+        <li className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span
+            aria-hidden
+            className="inline-block w-3 h-3 rounded-sm border border-border external-event-swatch"
+          />
+          {translate("crm.dashboard.calendar.external.legend", {
+            _: "External calendar",
+          })}
+        </li>
+      )}
     </ul>
   );
 };
@@ -100,7 +126,27 @@ export const MeetingsCalendar = () => {
   const [editedTaskId, setEditedTaskId] = useState<Identifier>();
   const [createdSlot, setCreatedSlot] = useState<CalendarRange>();
 
+  const [showExternal, setShowExternal] = useStore<boolean>(
+    SHOW_EXTERNAL_STORE_KEY,
+    true,
+  );
+
   const { events, legend } = useMeetingEvents(range);
+  const { events: externalEvents, failedCount: failedFeedCount } =
+    useExternalCalendarEvents(range, showExternal);
+
+  const allEvents = useMemo(
+    () => [...events, ...externalEvents],
+    [events, externalEvents],
+  );
+
+  // The grid hides its all-day row by default: CRM meetings always have a time.
+  // An imported holiday or offsite does not, and would otherwise be invisible
+  // everywhere but the month view.
+  const hasAllDayEvents = useMemo(
+    () => externalEvents.some((event) => event.allDay),
+    [externalEvents],
+  );
 
   const handleDatesSet = useCallback((arg: DatesSetArg) => {
     setRange({ start: arg.start, end: arg.end });
@@ -144,6 +190,10 @@ export const MeetingsCalendar = () => {
 
   const handleEventDrop = useCallback(
     (arg: EventDropArg) => {
+      if (arg.event.extendedProps.isExternal) {
+        arg.revert();
+        return;
+      }
       rescheduleMeeting(
         arg.event.extendedProps.task,
         arg.event.start,
@@ -156,6 +206,10 @@ export const MeetingsCalendar = () => {
 
   const handleEventResize = useCallback(
     (arg: EventResizeDoneArg) => {
+      if (arg.event.extendedProps.isExternal) {
+        arg.revert();
+        return;
+      }
       rescheduleMeeting(
         arg.event.extendedProps.task,
         arg.event.start,
@@ -167,6 +221,8 @@ export const MeetingsCalendar = () => {
   );
 
   const handleEventClick = useCallback((arg: EventClickArg) => {
+    // An imported block is somebody else's record; there is nothing to edit.
+    if (arg.event.extendedProps.isExternal) return;
     setEditedTaskId(arg.event.extendedProps.task.id);
   }, []);
 
@@ -183,7 +239,31 @@ export const MeetingsCalendar = () => {
         <h2 className="text-xl font-semibold text-muted-foreground flex-1">
           {translate("crm.dashboard.calendar.title", { _: "Team meetings" })}
         </h2>
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id="show-external-calendar"
+            checked={showExternal}
+            onCheckedChange={(checked) => setShowExternal(checked === true)}
+          />
+          <Label
+            htmlFor="show-external-calendar"
+            className="text-xs text-muted-foreground font-normal"
+          >
+            {translate("crm.dashboard.calendar.external.toggle", {
+              _: "My external calendar",
+            })}
+          </Label>
+        </div>
       </div>
+
+      {failedFeedCount > 0 && (
+        <p role="alert" className="text-xs text-destructive px-1">
+          {translate("crm.dashboard.calendar.external.error", {
+            smart_count: failedFeedCount,
+            _: "An external calendar could not be read. Check its address in your profile.",
+          })}
+        </p>
+      )}
 
       <Card className="p-3 gap-3 meetings-calendar">
         <FullCalendar
@@ -196,7 +276,7 @@ export const MeetingsCalendar = () => {
             right: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
           height={GRID_HEIGHT}
-          allDaySlot={false}
+          allDaySlot={hasAllDayEvents}
           nowIndicator
           slotMinTime={FIRST_SLOT}
           slotMaxTime={LAST_SLOT}
@@ -213,7 +293,7 @@ export const MeetingsCalendar = () => {
           }}
           expandRows
           stickyHeaderDates
-          events={events}
+          events={allEvents}
           datesSet={handleDatesSet}
           editable
           eventDurationEditable
@@ -224,7 +304,10 @@ export const MeetingsCalendar = () => {
           eventClick={handleEventClick}
           select={handleSelect}
         />
-        <ConsultantLegend consultants={legend} />
+        <ConsultantLegend
+          consultants={legend}
+          showsExternal={showExternal && externalEvents.length > 0}
+        />
       </Card>
 
       {editedTaskId != null && (

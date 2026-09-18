@@ -261,6 +261,11 @@ export const createDataProvider = ({
       });
       return { ...sale, user_id: sale.id.toString() };
     },
+    /**
+     * The fake backend has no edge functions to proxy an external feed, so the
+     * demo simply has no external calendar.
+     */
+    getIcalFeeds: async (): Promise<{ feeds: never[] }> => ({ feeds: [] }),
     isInitialized: async (): Promise<boolean> => {
       const sales = await dataProvider.getList<Sale>("sales", {
         filter: {},

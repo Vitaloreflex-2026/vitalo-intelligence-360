@@ -4,6 +4,7 @@ import { corsHeaders, OptionsMiddleware } from "../_shared/cors.ts";
 import { createErrorResponse } from "../_shared/utils.ts";
 import { AuthMiddleware, UserMiddleware } from "../_shared/authentication.ts";
 import { getUserSale } from "../_shared/getUserSale.ts";
+import { normalizeIcalFeedUrls } from "../_shared/icalUrl.ts";
 
 async function updateSaleDisabled(user_id: string, disabled: boolean) {
   return await supabaseAdmin
@@ -50,6 +51,24 @@ async function createSale(
     throw salesError ?? new Error("Failed to create sale");
   }
   return sales.at(0);
+}
+
+/**
+ * Store a consultant's external calendar feeds. This goes through this function
+ * rather than PostgREST because a non-administrator cannot update their own
+ * `sales` row, and widening that policy would also let them grant themselves
+ * the administrator flag.
+ */
+async function updateSaleIcalUrls(sales_id: number, ical_urls: string[]) {
+  const { error } = await supabaseAdmin
+    .from("sales")
+    .update({ ical_urls })
+    .eq("id", sales_id);
+
+  if (error) {
+    console.error("Error updating sale ical_urls:", error);
+    throw error;
+  }
 }
 
 async function updateSaleAvatar(user_id: string, avatar: string) {
@@ -250,6 +269,7 @@ async function patchUser(req: Request, currentUserSale: any) {
     avatar,
     administrator,
     disabled,
+    ical_urls,
   } = await req.json();
   const { data: sale } = await supabaseAdmin
     .from("sales")
@@ -280,6 +300,19 @@ async function patchUser(req: Request, currentUserSale: any) {
 
   if (avatar) {
     await updateSaleAvatar(data.user.id, avatar);
+  }
+
+  // Absent means "not part of this form"; an empty list means "clear them".
+  if (ical_urls !== undefined) {
+    const normalized = normalizeIcalFeedUrls(ical_urls);
+    if ("error" in normalized) {
+      // Tagged so the client can show its own translated message: the reason
+      // here is English, and the app speaks the user's language.
+      return createErrorResponse(400, normalized.error, {
+        code: "invalid_ical_url",
+      });
+    }
+    await updateSaleIcalUrls(sale.id, normalized.urls);
   }
 
   // Only administrators can update the administrator and disabled status

@@ -30,19 +30,26 @@ import { getSupabaseClient } from "./supabase";
 const parseFunctionError = async (
   error: unknown,
   fallbackMessage: string,
-): Promise<{ status: number; message: string }> => {
+): Promise<{ status: number; message: string; code?: string }> => {
   const context = (error as { context?: Response })?.context;
   const status = context?.status ?? 500;
 
   try {
     const body = await context?.clone().json();
-    return { status, message: body?.message || fallbackMessage };
+    return {
+      status,
+      message: body?.message || fallbackMessage,
+      code: body?.code,
+    };
   } catch {
     return { status, message: fallbackMessage };
   }
 };
 
 export type SalesReinviteResult = { kind: "invite" | "recovery" };
+
+/** One configured calendar: either its document, or why it could not be read. */
+export type IcalFeedResult = { ics: string } | { error: string };
 
 const getBaseDataProvider = () =>
   supabaseDataProvider({
@@ -163,8 +170,15 @@ const getDataProviderWithCustomMethods = () => {
       id: Identifier,
       data: Partial<Omit<SalesFormData, "password">>,
     ) {
-      const { email, first_name, last_name, administrator, avatar, disabled } =
-        data;
+      const {
+        email,
+        first_name,
+        last_name,
+        administrator,
+        avatar,
+        disabled,
+        ical_urls,
+      } = data;
 
       const { data: updatedData, error } =
         await getSupabaseClient().functions.invoke<{
@@ -179,11 +193,19 @@ const getDataProviderWithCustomMethods = () => {
             administrator,
             disabled,
             avatar,
+            ical_urls,
           },
         });
 
-      if (!updatedData || error) {
-        console.error("salesCreate.error", error);
+      if (error) {
+        console.error("salesUpdate.error", error);
+        const { status, message, code } = await parseFunctionError(
+          error,
+          "Failed to update account manager",
+        );
+        throw new HttpError(message, status, { code });
+      }
+      if (!updatedData) {
         throw new Error("Failed to update account manager");
       }
 
@@ -278,6 +300,28 @@ const getDataProviderWithCustomMethods = () => {
       }
 
       return data;
+    },
+    /**
+     * The raw iCalendar documents of the caller's own external calendars, one
+     * entry per configured feed, each either read or failed. Fetched by an edge
+     * function: published `.ics` endpoints send no CORS header, so the browser
+     * cannot fetch them itself.
+     */
+    async getIcalFeeds(): Promise<{ feeds: IcalFeedResult[] }> {
+      const { data, error } = await getSupabaseClient().functions.invoke<{
+        data: { feeds: IcalFeedResult[] };
+      }>("ical_feed", { method: "GET" });
+
+      if (error) {
+        console.error("ical_feed.error", error);
+        const { status, message } = await parseFunctionError(
+          error,
+          "Failed to read the external calendars",
+        );
+        throw new HttpError(message, status);
+      }
+
+      return data?.data ?? { feeds: [] };
     },
     async getConfiguration(): Promise<ConfigurationContextValue> {
       const { data } = await baseDataProvider.getOne("configuration", {

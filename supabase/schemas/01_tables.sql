@@ -110,7 +110,10 @@ create table public.sales (
     avatar jsonb,
     disabled boolean not null default false,
     -- Hex fill identifying this consultant/trainer in the dashboard calendar.
-    color text
+    color text,
+    -- Published iCalendar (.ics) feeds of this consultant's external calendars.
+    -- The dashboard overlays them as read-only busy blocks; never written back.
+    ical_urls text[]
 );
 
 create unique index uq__sales__user_id on public.sales using btree (user_id);

@@ -24,6 +24,8 @@ export type SalesFormData = {
   last_name: string;
   administrator: boolean;
   disabled: boolean;
+  /** An empty list clears the stored feeds; `undefined` leaves them untouched. */
+  ical_urls?: string[] | null;
 };
 
 export type Sale = {
@@ -36,6 +38,13 @@ export type Sale = {
 
   /** Hex fill identifying this consultant/trainer in the dashboard calendar. */
   color?: string | null;
+
+  /**
+   * Published iCalendar (.ics) feeds of this consultant's external calendars.
+   * Read-only for the CRM: they are overlaid on the dashboard calendar as busy
+   * time, never written back to.
+   */
+  ical_urls?: string[] | null;
 
   /**
    * This is a copy of the user's email, to make it easier to handle by react admin
