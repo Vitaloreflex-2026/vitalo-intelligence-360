@@ -2,6 +2,8 @@ import { useCallback, useMemo } from "react";
 import { useDataProvider, type DataProvider, type Identifier } from "ra-core";
 
 import type { Contact, Sale } from "../types";
+import { toText } from "./parseCell";
+import type { ImportCell } from "./types";
 
 /** Most companies hold far fewer contacts than this; the cap only bounds the query. */
 const MAX_COMPANY_CONTACTS = 500;
@@ -81,6 +83,16 @@ export function useSaleEmailResolver() {
 }
 
 export const normalizeEmail = (email: string) => email.trim().toLowerCase();
+
+/**
+ * The team member a `sales_email` cell names, or undefined when the cell is
+ * empty or carries an address nobody on the team uses — the importers then fall
+ * back to the user running the import, as they did before the column existed.
+ */
+export const toSaleId = (cell: ImportCell, sales: Map<string, Identifier>) => {
+  const email = toText(cell);
+  return email ? sales.get(normalizeEmail(email)) : undefined;
+};
 
 const fetchCompanyContacts = async (
   companyId: Identifier,

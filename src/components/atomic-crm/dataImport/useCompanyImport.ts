@@ -5,18 +5,27 @@ import { mapSizeToCategory } from "../companies/sizes";
 import { createEachRow } from "./createEachRow";
 import { toNumber, toText } from "./parseCell";
 import type { ImportCell, ProcessImportBatch } from "./types";
+import { toSaleId, useSaleEmailResolver } from "./useEmailResolver";
 
 /**
  * Creates a company per CSV row. Unknown columns are ignored, missing ones are
- * left empty — except `name`, which the database requires.
+ * left empty — except `name`, which the database requires. `sales_email` names
+ * the consultant in charge among the team, and falls back to the user running
+ * the import.
  */
 export function useCompanyImport(): ProcessImportBatch {
   const { identity } = useGetIdentity();
   const dataProvider = useDataProvider();
+  const getSales = useSaleEmailResolver();
 
   return useCallback(
-    (batch) =>
-      createEachRow(
+    async (batch) => {
+      // One roundtrip per named consultant for the whole batch, not per row
+      const sales = await getSales(
+        batch.flatMap((row) => toText(row.sales_email) ?? []),
+      );
+
+      return createEachRow(
         batch.map((row) =>
           dataProvider.create("companies", {
             data: {
@@ -35,13 +44,14 @@ export function useCompanyImport(): ProcessImportBatch {
               revenue: toText(row.revenue),
               tax_identifier: toText(row.tax_identifier),
               nb_sites: toNumber(row.nb_sites),
-              sales_id: identity?.id,
+              sales_id: toSaleId(row.sales_email, sales) ?? identity?.id,
               created_at: new Date().toISOString(),
             },
           }),
         ),
-      ),
-    [dataProvider, identity?.id],
+      );
+    },
+    [dataProvider, getSales, identity?.id],
   );
 }
 

@@ -6,10 +6,13 @@ import { render } from "vitest-browser-react";
 import { createDataProvider } from "@/components/atomic-crm/providers/fakerest";
 import { DEFAULT_USER } from "@/components/atomic-crm/providers/fakerest/authProvider";
 import type { Deal } from "@/components/atomic-crm/types";
-import { createCrmDb, StoryWrapper } from "@/test/StoryWrapper";
-import { listAll, renderImport } from "@/test/importHarness";
+import { buildSale, createCrmDb, StoryWrapper } from "@/test/StoryWrapper";
+import { listAll, renderImport, runImport } from "@/test/importHarness";
+import { useContactImport } from "@/components/atomic-crm/contacts/useContactImport";
+import type { ContactImportSchema } from "@/components/atomic-crm/contacts/useContactImport";
 import { DataImportButton } from "./DataImportButton";
 import { AllResources, SingleResource } from "./DataImportButton.stories";
+import type { ProcessImportBatch } from "./types";
 import { useCompanyImport } from "./useCompanyImport";
 import { useDealImport } from "./useDealImport";
 
@@ -35,6 +38,21 @@ const WithoutDeals = ({ children }: { children: ReactNode }) => (
     </ResourceDefinitionContextProvider>
   </StoryWrapper>
 );
+
+/**
+ * The contact importer predates the shared `ImportRow` type and declares its
+ * own all-string schema, exactly as `useImportableResources` bridges it.
+ */
+const useContactRowImport = (): ProcessImportBatch => {
+  const processContacts = useContactImport();
+  return (batch) => processContacts(batch as ContactImportSchema[]);
+};
+
+/** The team the consultant column picks from, beside the importing user. */
+const salesTeam = [
+  buildSale(),
+  buildSale({ id: 7, email: "marie@vitalo.example", first_name: "Marie" }),
+];
 
 /** A CSV file as the file input would hand it to the dialog. */
 const csvFile = (name: string, lines: string[]) =>
@@ -124,6 +142,45 @@ describe("DataImportButton", () => {
     expect(companies[1].sector).toBe("Secteur inédit");
     expect(companies[1].size).toBeUndefined();
   });
+
+  it.each([
+    ["companies", useCompanyImport],
+    ["deals", useDealImport],
+    ["contacts", useContactRowImport],
+  ] as const)(
+    "assigns %s to the consultant their row names, falling back to the importing user",
+    async (resource, useImport) => {
+      const { dataProvider, screen } = await renderImport(
+        useImport,
+        [
+          // The address is matched whatever its case, as the citext column does
+          {
+            name: "First",
+            first_name: "First",
+            sales_email: "Marie@Vitalo.example",
+          },
+          { name: "Second", first_name: "Second", sales_email: null },
+          {
+            name: "Third",
+            first_name: "Third",
+            sales_email: "nobody@vitalo.example",
+          },
+        ],
+        { sales: salesTeam },
+      );
+
+      await runImport(screen);
+
+      const { data: records } = await listAll(dataProvider, resource);
+      // An empty column, and an address nobody on the team carries, both leave
+      // the record to the user running the import
+      expect(records.map(({ sales_id }) => sales_id)).toEqual([
+        7,
+        DEFAULT_USER.id,
+        DEFAULT_USER.id,
+      ]);
+    },
+  );
 
   it("coerces an arbitrary company size into a renderable bucket", async () => {
     const { dataProvider, screen } = await renderImport(useCompanyImport, [

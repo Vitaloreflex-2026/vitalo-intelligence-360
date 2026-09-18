@@ -12,6 +12,7 @@ import {
   toText,
 } from "./parseCell";
 import type { ImportRow, ProcessImportBatch } from "./types";
+import { toSaleId, useSaleEmailResolver } from "./useEmailResolver";
 
 /** One CSV row, with the values needed before its deal can be created. */
 type DealRow = {
@@ -24,12 +25,15 @@ type DealRow = {
  * Creates a deal per CSV row. Unknown columns are ignored, missing ones are
  * left empty — except `name`, which the database requires. The `company` column
  * holds a company name: matching companies are reused, unknown ones are created.
+ * `sales_email` names the consultant in charge among the team, and falls back to
+ * the user running the import.
  */
 export function useDealImport(): ProcessImportBatch {
   const { dealCategories, dealStages } = useConfigurationContext();
   const { identity } = useGetIdentity();
   const dataProvider = useDataProvider();
   const getCompanies = useCompanyResolver();
+  const getSales = useSaleEmailResolver();
 
   return useCallback(
     async (batch) => {
@@ -42,12 +46,13 @@ export function useDealImport(): ProcessImportBatch {
         stage: toConfiguredValue(row.stage, dealStages) ?? dealStages[0]?.value,
       }));
 
-      const [companies, indexes] = await Promise.all([
+      const [companies, sales, indexes] = await Promise.all([
         getCompanies(
           rows
             .map(({ companyName }) => companyName)
             .filter((name): name is string => name !== undefined),
         ),
+        getSales(batch.flatMap((row) => toText(row.sales_email) ?? [])),
         appendedIndexes(rows, dataProvider),
       ]);
 
@@ -73,7 +78,7 @@ export function useDealImport(): ProcessImportBatch {
               // amount lands in a bigint column, which rejects "4500.50"
               amount: toInteger(row.amount),
               expected_closing_date: toIsoDate(row.expected_closing_date),
-              sales_id: identity?.id,
+              sales_id: toSaleId(row.sales_email, sales) ?? identity?.id,
               index: indexes.get(row) ?? 0,
               created_at: now,
               updated_at: now,
@@ -82,7 +87,14 @@ export function useDealImport(): ProcessImportBatch {
         ),
       );
     },
-    [dataProvider, dealCategories, dealStages, getCompanies, identity?.id],
+    [
+      dataProvider,
+      dealCategories,
+      dealStages,
+      getCompanies,
+      getSales,
+      identity?.id,
+    ],
   );
 }
 

@@ -5,6 +5,7 @@ import type { Tag } from "../types";
 import { createEachRow } from "../dataImport/createEachRow";
 import { fetchRecordsWithCache } from "../dataImport/fetchRecordsWithCache";
 import { useCompanyResolver } from "../dataImport/useCompanyResolver";
+import { toSaleId, useSaleEmailResolver } from "../dataImport/useEmailResolver";
 
 export type ContactImportSchema = {
   first_name: string;
@@ -29,6 +30,7 @@ export type ContactImportSchema = {
   company_start_date: string;
   decision_role: string;
   relationship_status: string;
+  sales_email: string;
 };
 
 export function useContactImport() {
@@ -37,6 +39,7 @@ export function useContactImport() {
   const dataProvider = useDataProvider();
 
   const getCompanies = useCompanyResolver();
+  const getSales = useSaleEmailResolver();
 
   // Tags cache to avoid creating the same tag multiple times and costly roundtrips
   // Cache is dependent of dataProvider, so it's safe to use it as a dependency
@@ -59,13 +62,16 @@ export function useContactImport() {
 
   const processBatch = useCallback(
     async (batch: ContactImportSchema[]) => {
-      const [companies, tags] = await Promise.all([
+      const [companies, tags, sales] = await Promise.all([
         getCompanies(
           batch
             .map((contact) => contact.company?.trim())
             .filter((name) => name),
         ),
         getTags(batch.flatMap((batch) => parseTags(batch.tags))),
+        // `sales_email` names the consultant in charge among the team; an
+        // address nobody carries falls back to the user running the import
+        getSales(batch.map((contact) => contact.sales_email ?? "")),
       ]);
 
       return createEachRow(
@@ -92,6 +98,7 @@ export function useContactImport() {
             company_start_date,
             decision_role,
             relationship_status,
+            sales_email,
           }) => {
             const email_jsonb = [
               { email: email_work, type: "Work" },
@@ -129,7 +136,7 @@ export function useContactImport() {
                 status,
                 company_id: company?.id,
                 tags: tagList.map((tag) => tag.id),
-                sales_id: user?.identity?.id,
+                sales_id: toSaleId(sales_email, sales) ?? user?.identity?.id,
                 linkedin_url,
                 company_start_date: company_start_date || null,
                 decision_role,
@@ -140,7 +147,7 @@ export function useContactImport() {
         ),
       );
     },
-    [dataProvider, getCompanies, getTags, user?.identity?.id, today],
+    [dataProvider, getCompanies, getSales, getTags, user?.identity?.id, today],
   );
 
   return processBatch;
