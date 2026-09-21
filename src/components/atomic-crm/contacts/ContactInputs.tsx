@@ -31,6 +31,7 @@ import { AutocompleteCompanyInput } from "../companies/AutocompleteCompanyInput.
 import { CompanyContactsCount } from "./CompanyContactsCount";
 import { contactOptionText } from "../misc/ContactOption";
 import { relationshipStatuses } from "../misc/relationshipStatuses";
+import { sponsorRoles } from "../misc/sponsorRoles";
 import {
   contactGender,
   translateContactGenderLabel,
@@ -103,6 +104,11 @@ const ContactPositionInputs = () => {
       <SelectInput
         source="relationship_status"
         choices={relationshipStatuses}
+        helperText={false}
+      />
+      <SelectInput
+        source="sponsor_role"
+        choices={sponsorRoles}
         helperText={false}
       />
     </div>

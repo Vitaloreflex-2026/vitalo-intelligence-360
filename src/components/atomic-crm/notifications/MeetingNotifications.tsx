@@ -12,9 +12,11 @@ import {
 
 import { isOverdue } from "../tasks/tasksPredicate";
 import type { Task } from "../types";
+import { DealNotifications } from "./DealNotifications";
 import { DocumentNotifications } from "./DocumentNotifications";
 import { MeetingNotification } from "./MeetingNotification";
 import { NotificationSection } from "./NotificationSection";
+import { useDealAlerts } from "./useDealAlerts";
 import { useDocumentAlerts } from "./useDocumentAlerts";
 
 const MeetingSection = ({
@@ -44,7 +46,8 @@ const MeetingSection = ({
 /**
  * Floating bottom-right panel listing what the current user still has to
  * handle: meetings — overdue first, then today's, each with a "done" and a
- * "postpone" action — followed by the administrative papers to renew or file.
+ * "postpone" action — then the administrative papers to renew or file, and
+ * finally the contract paperwork whose deadline is running out.
  *
  * `bottomOffset` lifts the button above whatever the layout already fixes to
  * the bottom of the viewport — the mobile navigation bar, which would otherwise
@@ -86,7 +89,9 @@ export const MeetingNotifications = ({
   );
 
   const documents = useDocumentAlerts();
-  const pendingCount = pendingMeetings.length + documents.count;
+  const dealAlerts = useDealAlerts();
+  const pendingCount =
+    pendingMeetings.length + documents.count + dealAlerts.length;
 
   return (
     <div
@@ -145,6 +150,7 @@ export const MeetingNotifications = ({
                 missing={documents.missing}
                 renewals={documents.renewals}
               />
+              <DealNotifications alerts={dealAlerts} />
             </>
           )}
         </PopoverContent>

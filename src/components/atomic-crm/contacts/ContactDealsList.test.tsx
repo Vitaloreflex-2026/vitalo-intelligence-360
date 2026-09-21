@@ -30,7 +30,7 @@ describe("ContactDealsList", () => {
 
     const screen = await renderForContact(contact);
 
-    const link = screen.getByRole("link", { name: "Add deal" });
+    const link = screen.getByRole("link", { name: "Add contract" });
     await expect.element(link).toBeVisible();
     expect(await link.element().getAttribute("href")).toBe(
       `/deals/create?source=${encodeURIComponent(
@@ -42,7 +42,7 @@ describe("ContactDealsList", () => {
   it("links to the plain deal creation form when the contact has no company", async () => {
     const screen = await renderForContact(buildContact({ company_id: null }));
 
-    const link = screen.getByRole("link", { name: "Add deal" });
+    const link = screen.getByRole("link", { name: "Add contract" });
     await expect.element(link).toBeVisible();
     expect(await link.element().getAttribute("href")).toBe("/deals/create");
   });
@@ -55,7 +55,7 @@ describe("ContactDealsList", () => {
 
     await expect.element(screen.getByText("Dossier en cours")).toBeVisible();
     expect(
-      screen.getByRole("link", { name: "Add deal" }).elements(),
+      screen.getByRole("link", { name: "Add contract" }).elements(),
     ).toHaveLength(0);
   });
 });

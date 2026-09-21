@@ -27,6 +27,7 @@ import { NotesIterator } from "../notes/NotesIterator";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Deal } from "../types";
 import { ContactList } from "./ContactList";
+import { DealTrainingSummary } from "./DealTrainingSummary";
 import { findDealLabel, formatISODateString } from "./dealUtils";
 
 export const DealShow = ({ open, id }: { open: boolean; id?: string }) => {
@@ -231,6 +232,8 @@ const DealShowContent = () => {
               <p className="text-sm leading-6">{record.other_expectations}</p>
             </div>
           )}
+
+          <DealTrainingSummary record={record} />
 
           <div className="m-4">
             <Separator className="mb-4" />

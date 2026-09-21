@@ -1,9 +1,15 @@
 import { useCallback } from "react";
-import { useDataProvider, useGetIdentity, type DataProvider } from "ra-core";
+import {
+  useDataProvider,
+  useGetIdentity,
+  useTranslate,
+  type DataProvider,
+} from "ra-core";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import { useCompanyResolver } from "./useCompanyResolver";
 import { createEachRow } from "./createEachRow";
+import { toDealTrainingColumns, toTrainerEmails } from "./dealTrainingColumns";
 import {
   toConfiguredValue,
   toInteger,
@@ -31,6 +37,7 @@ type DealRow = {
 export function useDealImport(): ProcessImportBatch {
   const { dealCategories, dealStages } = useConfigurationContext();
   const { identity } = useGetIdentity();
+  const translate = useTranslate();
   const dataProvider = useDataProvider();
   const getCompanies = useCompanyResolver();
   const getSales = useSaleEmailResolver();
@@ -52,7 +59,14 @@ export function useDealImport(): ProcessImportBatch {
             .map(({ companyName }) => companyName)
             .filter((name): name is string => name !== undefined),
         ),
-        getSales(batch.flatMap((row) => toText(row.sales_email) ?? [])),
+        // The owner and the trainers are looked up in the same roundtrip.
+        // An empty address is dropped by the resolver, as in the other importers.
+        getSales(
+          batch.flatMap((row) => [
+            toText(row.sales_email) ?? "",
+            ...toTrainerEmails(row),
+          ]),
+        ),
         appendedIndexes(rows, dataProvider),
       ]);
 
@@ -82,6 +96,7 @@ export function useDealImport(): ProcessImportBatch {
               index: indexes.get(row) ?? 0,
               created_at: now,
               updated_at: now,
+              ...toDealTrainingColumns(row, translate, sales),
             },
           }),
         ),
@@ -94,6 +109,7 @@ export function useDealImport(): ProcessImportBatch {
       getCompanies,
       getSales,
       identity?.id,
+      translate,
     ],
   );
 }

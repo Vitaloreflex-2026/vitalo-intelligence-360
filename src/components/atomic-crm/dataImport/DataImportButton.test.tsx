@@ -77,14 +77,14 @@ describe("DataImportButton", () => {
 
     await expect.element(options.getByText("Contacts")).toBeVisible();
     await expect.element(options.getByText("Companies")).toBeVisible();
-    await expect.element(options.getByText("Deals")).toBeVisible();
+    await expect.element(options.getByText("Contracts")).toBeVisible();
     await expect.element(options.getByText("Assessments")).toBeVisible();
   });
 
   it.each([
     ["contacts", "Import contacts"],
     ["companies", "Import companies"],
-    ["deals", "Import deals"],
+    ["deals", "Import contracts"],
     ["assessments", "Import assessments"],
   ] as const)(
     "imports %s from a dialog with no resource to pick",
@@ -209,7 +209,9 @@ describe("DataImportButton", () => {
     const options = screen.getByRole("listbox");
 
     await expect.element(options.getByText("Contacts")).toBeVisible();
-    await expect.element(options.getByText("Deals")).not.toBeInTheDocument();
+    await expect
+      .element(options.getByText("Contracts"))
+      .not.toBeInTheDocument();
   });
 
   it("renders nothing for a resource the running app does not register", async () => {
@@ -235,7 +237,7 @@ describe("DataImportButton", () => {
     const options = screen.getByRole("listbox");
 
     await expect.element(options.getByText("Contacts")).toBeVisible();
-    await expect.element(options.getByText("Deals")).toBeVisible();
+    await expect.element(options.getByText("Contracts")).toBeVisible();
     await expect.element(options.getByText("Assessments")).toBeVisible();
   });
 
@@ -321,7 +323,7 @@ describe("DataImportButton", () => {
 
     await screen.getByRole("button", { name: "Import data" }).click();
     await screen.getByLabelText("Resource").click();
-    await screen.getByRole("listbox").getByText("Deals").click();
+    await screen.getByRole("listbox").getByText("Contracts").click();
 
     await screen
       .getByLabelText("CSV File")

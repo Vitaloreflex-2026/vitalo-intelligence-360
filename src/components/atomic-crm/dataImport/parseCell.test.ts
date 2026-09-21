@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  toBoolean,
   toConfiguredValue,
   toInteger,
   toIsoDate,
@@ -90,5 +91,24 @@ describe("toConfiguredValue", () => {
   it("returns undefined when no option matches", () => {
     expect(toConfiguredValue("Archived", stages)).toBeUndefined();
     expect(toConfiguredValue(null, stages)).toBeUndefined();
+  });
+});
+
+describe("toBoolean", () => {
+  it.each(["true", "TRUE", "1", "yes", "oui", "O"])(
+    "reads %s as yes",
+    (cell) => {
+      expect(toBoolean(cell)).toBe(true);
+    },
+  );
+
+  it.each(["false", "0", "no", "non", "N"])("reads %s as no", (cell) => {
+    expect(toBoolean(cell)).toBe(false);
+  });
+
+  it("leaves the column untouched when the answer is empty or unreadable", () => {
+    expect(toBoolean("")).toBeUndefined();
+    expect(toBoolean(null)).toBeUndefined();
+    expect(toBoolean("peut-être")).toBeUndefined();
   });
 });

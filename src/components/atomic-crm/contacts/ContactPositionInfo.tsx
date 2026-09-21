@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { formatLocalizedDate } from "../misc/RelativeDate";
 import { relationshipStatuses } from "../misc/relationshipStatuses";
+import { sponsorRoles } from "../misc/sponsorRoles";
 import type { Contact } from "../types";
 
 /**
@@ -23,6 +24,7 @@ export const ContactPositionInfo = () => {
     !record.company_start_date &&
     !record.decision_role &&
     !record.relationship_status &&
+    !record.sponsor_role &&
     !record.linked_contact_ids?.length
   ) {
     return null;
@@ -30,6 +32,9 @@ export const ContactPositionInfo = () => {
 
   const status = relationshipStatuses.find(
     (choice) => choice.id === record.relationship_status,
+  );
+  const sponsorRole = sponsorRoles.find(
+    (choice) => choice.id === record.sponsor_role,
   );
 
   return (
@@ -50,6 +55,12 @@ export const ContactPositionInfo = () => {
         <span>
           {translate("resources.contacts.fields.relationship_status")}:{" "}
           {translate(status.name)}
+        </span>
+      )}
+      {sponsorRole && (
+        <span>
+          {translate("resources.contacts.fields.sponsor_role")}:{" "}
+          {translate(sponsorRole.name)}
         </span>
       )}
       {!!record.linked_contact_ids?.length && (

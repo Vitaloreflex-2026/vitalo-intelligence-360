@@ -4,6 +4,8 @@ import { TextInput } from "@/components/admin/text-input";
 import { SelectInput } from "@/components/admin/select-input";
 import { NumberInput } from "@/components/admin/number-input";
 import { ArrayInput } from "@/components/admin/array-input";
+import { BooleanInput } from "@/components/admin/boolean-input";
+import { DateInput } from "@/components/admin/date-input";
 import { SimpleFormIterator } from "@/components/admin/simple-form-iterator";
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -42,6 +44,7 @@ export const CompanyInputs = () => {
         <Separator orientation={isMobile ? "horizontal" : "vertical"} />
         <div className="flex flex-col gap-8 flex-1">
           <CompanyAddressInputs />
+          <CompanyTrainingInputs />
           <CompanyAdditionalInformationInputs />
         </div>
       </div>
@@ -131,6 +134,28 @@ const CompanyAddressInputs = () => {
       <TextInput source="zipcode" helperText={false} />
       <TextInput source="state_abbr" helperText={false} />
       <TextInput source="country" helperText={false} />
+    </div>
+  );
+};
+
+/**
+ * Training activity recap: what was delivered for this company, and where the
+ * quote and the invoice stand. Read straight off the company page when filling
+ * the yearly BPF (bilan pedagogique et financier).
+ */
+const CompanyTrainingInputs = () => {
+  const translate = useTranslate();
+  return (
+    <div className="flex flex-col gap-4">
+      <h6 className="text-lg font-semibold">
+        {translate("resources.companies.field_categories.training", {
+          _: "Trainings",
+        })}
+      </h6>
+      <NumberInput source="nb_trainings_delivered" min={0} helperText={false} />
+      <DateInput source="training_date" helperText={false} />
+      <BooleanInput source="quote_approved" helperText={false} />
+      <BooleanInput source="service_invoiced" helperText={false} />
     </div>
   );
 };

@@ -17,7 +17,7 @@ describe("DealList", () => {
     await expect.element(screen.getByText("Jane deal")).toBeVisible();
     await expect.element(screen.getByText("Marie deal")).toBeVisible();
     await expect
-      .element(screen.getByText("Only deals I manage"))
+      .element(screen.getByText("Only contracts I manage"))
       .not.toBeInTheDocument();
 
     await screen.getByRole("combobox", { name: "Account manager" }).click();
@@ -36,7 +36,9 @@ describe("DealList", () => {
   it("keeps the only-mine switch for a user who is not an admin", async () => {
     const screen = await render(<NonAdminAccountManagerFilter />);
 
-    await expect.element(screen.getByText("Only deals I manage")).toBeVisible();
+    await expect
+      .element(screen.getByText("Only contracts I manage"))
+      .toBeVisible();
     await expect
       .element(screen.getByRole("combobox", { name: "Account manager" }))
       .not.toBeInTheDocument();

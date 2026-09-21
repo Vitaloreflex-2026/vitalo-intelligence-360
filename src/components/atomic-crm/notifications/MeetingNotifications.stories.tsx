@@ -1,6 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import { addDays } from "date-fns/addDays";
-import { StoryWrapper, buildContact } from "@/test/StoryWrapper";
+import { StoryWrapper, buildContact, buildDeal } from "@/test/StoryWrapper";
 import type { Db } from "../providers/fakerest/dataGenerator/types";
 import type { Choice, SaleDocument } from "../types";
 import { MeetingNotifications } from "./MeetingNotifications";
@@ -111,6 +111,44 @@ export const WithDocuments = () => (
           type: "Attestation URSSAF",
         },
       ] as SaleDocument[],
+    }}
+  />
+);
+
+const daysAgo = (days: number) =>
+  addDays(new Date(), -days).toISOString().split("T")[0];
+
+/**
+ * Three contracts, each owing a different piece of paperwork: an unsigned quote
+ * whose deadline is long gone, a portal filing still within its eight days, and
+ * an OPCO file never submitted.
+ */
+export const WithDealAlerts = () => (
+  <Default
+    data={{
+      ...defaultData,
+      deals: [
+        buildDeal({
+          expected_closing_date: daysAgo(-10),
+          id: 1,
+          name: "Prevention TMS",
+          portal_data_sent: true,
+        }),
+        buildDeal({
+          expected_closing_date: daysAgo(2),
+          id: 2,
+          name: "Atelier sommeil",
+          quote_signed: true,
+        }),
+        buildDeal({
+          expected_closing_date: daysAgo(30),
+          funding_type: "opco",
+          id: 3,
+          name: "Conference RPS",
+          portal_data_sent: true,
+          quote_signed: true,
+        }),
+      ],
     }}
   />
 );

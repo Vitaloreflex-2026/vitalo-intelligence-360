@@ -102,6 +102,7 @@ export const generateContacts = (db: Db, size = 500): Required<Contact>[] => {
         "partner",
       ] as const),
       linked_contact_ids: [],
+      sponsor_role: random.arrayElement(["cse", "hr", "hse"] as const),
       acquisition: random.arrayElement(["inbound", "outbound"]),
       avatar,
       first_seen: first_seen,

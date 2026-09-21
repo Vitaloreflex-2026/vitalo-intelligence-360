@@ -24,7 +24,7 @@ describe("HeaderMenuButton", () => {
       "Companies",
       "Contacts",
       "Assessments",
-      "Deals",
+      "Contracts",
     ]) {
       await expect
         .element(screen.getByRole("link", { name: section }))
@@ -43,7 +43,7 @@ describe("HeaderMenuButton", () => {
       .element(screen.getByRole("link", { name: "Assessments" }))
       .toHaveAttribute("aria-current", "page");
     await expect
-      .element(screen.getByRole("link", { name: "Deals" }))
+      .element(screen.getByRole("link", { name: "Contracts" }))
       .not.toHaveAttribute("aria-current");
   });
 
@@ -51,10 +51,10 @@ describe("HeaderMenuButton", () => {
     const screen = await render(<Fixture />);
 
     await screen.getByRole("button", { name: "CRM navigation" }).click();
-    await screen.getByRole("link", { name: "Deals" }).click();
+    await screen.getByRole("link", { name: "Contracts" }).click();
 
     await expect
-      .element(screen.getByRole("link", { name: "Deals" }))
+      .element(screen.getByRole("link", { name: "Contracts" }))
       .not.toBeInTheDocument();
   });
 });

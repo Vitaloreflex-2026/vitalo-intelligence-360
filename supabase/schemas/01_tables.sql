@@ -30,7 +30,13 @@ create table public.companies (
     revenue text,
     tax_identifier text,
     logo jsonb,
-    nb_sites integer
+    nb_sites integer,
+    -- "Formations" panel of the company page: the training activity recap the
+    -- yearly BPF (bilan pedagogique et financier) is built from.
+    nb_trainings_delivered integer,
+    training_date date,
+    quote_approved boolean,
+    service_invoiced boolean
 );
 
 create table public.contacts (
@@ -54,7 +60,9 @@ create table public.contacts (
     company_start_date date,
     decision_role text,
     relationship_status text,
-    linked_contact_ids bigint[]
+    linked_contact_ids bigint[],
+    -- Who commissions the training on the client side (works council, HR, HSE).
+    sponsor_role text
 );
 
 create table public.contact_notes (
@@ -87,7 +95,45 @@ create table public.deals (
     origin text,
     motivation text,
     objectives text[],
-    other_expectations text
+    other_expectations text,
+    -- Training delivery. Feeds the yearly BPF (bilan pedagogique et financier)
+    -- and the activity dashboard, so every column here is reported on.
+    -- `trainer_ids` holds public.sales ids (arrays cannot carry a foreign key).
+    trainer_ids bigint[],
+    training_type text,
+    nb_trained_managers integer,
+    nb_trained_non_managers integer,
+    hours_delivered numeric,
+    qvct_workshop_type text,
+    passport_eligible boolean,
+    -- Data collected and filed on the public portal. When false past the
+    -- expected closing date, the dashboard raises an alert.
+    portal_data_sent boolean,
+    portal_data_sent_at date,
+    qualiopi boolean,
+    -- Funding and paperwork.
+    funding_type text,
+    quote_signed boolean,
+    quote_signed_at date,
+    agreement_signed boolean,
+    agreement_signed_at date,
+    -- Invoicing: the global amount, then its breakdown.
+    amount_invoiced_incl_tax numeric,
+    cost_training numeric,
+    cost_teaching numeric,
+    cost_subcontracting numeric,
+    cost_travel numeric,
+    cost_materials numeric,
+    -- OPCO funding details, only filled when `funding_type` is 'opco'.
+    opco_name text,
+    opco_contact_name text,
+    opco_contact_phone text,
+    opco_contact_email text,
+    opco_file_submitted boolean,
+    opco_file_submitted_at date,
+    -- Qualiopi indicators, in percent.
+    appropriation_rate numeric,
+    satisfaction_rate numeric
 );
 
 create table public.deal_notes (

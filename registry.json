@@ -386,6 +386,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/notifications/useDealAlerts.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/notifications/NotificationSection.tsx",
           "type": "registry:component"
         },
@@ -403,6 +407,14 @@
         },
         {
           "path": "src/components/atomic-crm/notifications/DocumentNotification.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/notifications/DealNotifications.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/notifications/DealNotification.tsx",
           "type": "registry:component"
         },
         {
@@ -479,6 +491,10 @@
         },
         {
           "path": "src/components/atomic-crm/misc/unsupportedDomains.const.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/misc/sponsorRoles.ts",
           "type": "registry:component"
         },
         {
@@ -694,6 +710,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/deals/trainingOptions.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/deals/stages.ts",
           "type": "registry:component"
         },
@@ -706,11 +726,23 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/deals/dealAlerts.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/deals/OnlyMineInput.tsx",
           "type": "registry:component"
         },
         {
           "path": "src/components/atomic-crm/deals/DealsIterator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/deals/DealTrainingSummary.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/deals/DealTrainingInputs.tsx",
           "type": "registry:component"
         },
         {
@@ -734,7 +766,15 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/deals/DealInvoicingInputs.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/deals/DealInputs.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/deals/DealFundingInputs.tsx",
           "type": "registry:component"
         },
         {
@@ -799,6 +839,10 @@
         },
         {
           "path": "src/components/atomic-crm/dataImport/fetchRecordsWithCache.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/dataImport/dealTrainingColumns.ts",
           "type": "registry:component"
         },
         {
@@ -1003,6 +1047,10 @@
         },
         {
           "path": "src/components/atomic-crm/companies/GridList.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/companies/CompanyTrainingInfo.tsx",
           "type": "registry:component"
         },
         {

@@ -55,6 +55,37 @@ export const generateDeals = (db: Db): Deal[] => {
       expected_closing_date,
       sales_id: company.sales_id!,
       index: 0,
+      // Training delivery, so the demo shows the BPF half of a contract
+      trainer_ids: random
+        .arrayElements(db.sales, datatype.number({ min: 1, max: 2 }))
+        .map((sale) => sale.id),
+      training_type: random.arrayElement([
+        "collective",
+        "individual_workshop",
+        "conference",
+      ] as const),
+      nb_trained_managers: datatype.number({ min: 0, max: 12 }),
+      nb_trained_non_managers: datatype.number({ min: 0, max: 40 }),
+      hours_delivered: datatype.number({ min: 2, max: 40 }),
+      qvct_workshop_type: random.arrayElement([
+        "webinar",
+        "collective_onsite",
+        "individual",
+      ] as const),
+      passport_eligible: datatype.boolean(),
+      portal_data_sent: datatype.boolean(),
+      qualiopi: datatype.boolean(),
+      funding_type: random.arrayElement([
+        "opco",
+        "hr_hse",
+        "cse",
+        "other",
+      ] as const),
+      quote_signed: datatype.boolean(),
+      agreement_signed: datatype.boolean(),
+      amount_invoiced_incl_tax: datatype.number(1000) * 100,
+      appropriation_rate: datatype.number({ min: 50, max: 100 }),
+      satisfaction_rate: datatype.number({ min: 50, max: 100 }),
     };
   });
   // compute index based on stage

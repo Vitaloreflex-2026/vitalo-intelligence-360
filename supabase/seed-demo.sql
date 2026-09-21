@@ -102,6 +102,16 @@ insert into public.companies (id, name, sector, size, nb_sites, website, linkedi
     (8, 'Transports Rouvier', 'Industrie', 250, 9, 'transports-rouvier.fr', null, '+33 3 20 47 66 12', 'ZI de la Pilaterie, lot 4', '59700', 'Marcq-en-Barœul', 'France', '58M', 'FR26390115447', 'Transport routier de marchandises. Conducteurs isolés, forte rotation.', now() - interval '2 months');
 
 --
+-- 4b. Training recap shown in the "Formations" panel of each company.
+--
+update public.companies set nb_trainings_delivered = 6,  training_date = current_date - 110, quote_approved = true,  service_invoiced = true  where id = 1;
+update public.companies set nb_trainings_delivered = 0,                                      quote_approved = false, service_invoiced = false where id = 2;
+update public.companies set nb_trainings_delivered = 12, training_date = current_date - 45,  quote_approved = true,  service_invoiced = true  where id = 3;
+update public.companies set nb_trainings_delivered = 0,                                      quote_approved = false, service_invoiced = false where id = 4;
+update public.companies set nb_trainings_delivered = 2,  training_date = current_date - 200, quote_approved = true,  service_invoiced = true  where id = 5;
+update public.companies set nb_trainings_delivered = 1,  training_date = current_date - 300, quote_approved = true,  service_invoiced = false where id = 7;
+
+--
 -- 5. Contacts. The gravatar lookup trigger fires one HTTP call per row, which
 --    makes a bulk seed slow (and fails offline) — switch it off for the insert.
 --
@@ -139,6 +149,12 @@ update public.contacts set linked_contact_ids = '{11}'    where id = 12;
 update public.contacts set linked_contact_ids = '{16}'    where id = 17;
 update public.contacts set linked_contact_ids = '{18,19}' where id = 20;
 
+-- Who commissions the training on the client side. Left empty for the contacts
+-- who are neither works council, HR nor HSE.
+update public.contacts set sponsor_role = 'hr'  where id in (1, 11, 12, 14);
+update public.contacts set sponsor_role = 'hse' where id in (2, 6, 7, 17);
+update public.contacts set sponsor_role = 'cse' where id in (3, 13);
+
 alter table public.contacts enable trigger "20_contact_saved";
 
 --
@@ -157,6 +173,107 @@ insert into public.deals (id, name, company_id, contact_ids, stage, category, in
     (9,  'Prévention conducteurs longue distance', 8, '{18,19}', 'delayed', 'other', 0, 31000, current_date + 150, 'prospect', null, 'Préventica', 'Turnover élevé chez les conducteurs, isolement et fatigue signalés en entretien.', '{"Sensibiliser","Réduire les RPS"}', 'Budget à arbitrer au prochain exercice.', 'Dispositif itinérant sur les 9 agences, reporté à l''exercice suivant.', now() - interval '2 months', now() - interval '18 days', null),
     (10, 'Audit ergonomique sièges de bureau', 5, '{11}', 'lost', 'other', 0, 6200, current_date - 40, 'prospect', null, 'Site internet', 'Demande ponctuelle sur le mobilier, hors de notre cœur de métier.', '{"Sensibiliser"}', null, 'Perdu au profit d''un fournisseur de mobilier proposant l''audit gratuitement.', now() - interval '5 months', now() - interval '40 days', null),
     (11, 'Bilan annuel démarche TMS', 1, '{1,3}', 'won', 'other', 1, 9800, current_date - 25, 'client', 'BAT-2025-022', 'Recommandation', 'Point annuel contractuel sur les indicateurs du plan d''action.', '{"Structurer une démarche"}', null, 'Bilan chiffré, restitution en CSE et cadrage des priorités de l''année suivante.', now() - interval '13 months', now() - interval '25 days', now() - interval '20 days');
+
+--
+-- 6b. Delivery, funding and invoicing of the contracts — the columns the yearly
+--     BPF is filled from. Only the contracts that went past the proposal carry
+--     them; the early-stage and lost ones are deliberately left empty.
+--
+--     Two of them owe paperwork on purpose, so the dashboard alerts have
+--     something to report: contract 1 never filed on the portal nor submitted
+--     its OPCO file, and contract 3 has an unsigned quote past its deadline.
+--
+update public.deals set
+    training_type = 'collective',
+    nb_trained_managers = 4,
+    nb_trained_non_managers = 18,
+    hours_delivered = 35,
+    qvct_workshop_type = 'collective_onsite',
+    passport_eligible = false,
+    portal_data_sent = false,
+    qualiopi = true,
+    funding_type = 'opco',
+    quote_signed = true,
+    quote_signed_at = current_date - 200,
+    agreement_signed = true,
+    agreement_signed_at = current_date - 195,
+    amount_invoiced_incl_tax = 33600,
+    cost_training = 18000,
+    cost_teaching = 6000,
+    cost_subcontracting = 2400,
+    cost_travel = 1300,
+    cost_materials = 300,
+    opco_name = 'Constructys',
+    opco_contact_name = 'Claire Fontaine',
+    opco_contact_phone = '+33 1 44 60 12 34',
+    opco_contact_email = 'c.fontaine@constructys.test',
+    opco_file_submitted = false,
+    appropriation_rate = 82,
+    satisfaction_rate = 91
+where id = 1;
+
+update public.deals set
+    training_type = 'collective',
+    qualiopi = true,
+    funding_type = 'hr_hse',
+    quote_signed = true,
+    quote_signed_at = current_date - 6,
+    agreement_signed = false
+where id = 2;
+
+update public.deals set
+    qualiopi = false,
+    funding_type = 'cse',
+    quote_signed = false,
+    agreement_signed = false
+where id = 3;
+
+update public.deals set
+    training_type = 'collective',
+    qualiopi = true,
+    funding_type = 'opco',
+    quote_signed = false,
+    agreement_signed = false,
+    opco_name = 'OPCO 2i',
+    opco_contact_name = 'Karim Belkacem',
+    opco_contact_phone = '+33 2 40 12 88 42',
+    opco_contact_email = 'k.belkacem@opco2i.test',
+    opco_file_submitted = false
+where id = 4;
+
+update public.deals set
+    qualiopi = true,
+    funding_type = 'other',
+    quote_signed = true,
+    quote_signed_at = current_date - 10,
+    agreement_signed = true,
+    agreement_signed_at = current_date - 8
+where id = 8;
+
+update public.deals set
+    training_type = 'conference',
+    nb_trained_managers = 6,
+    nb_trained_non_managers = 0,
+    hours_delivered = 7,
+    qvct_workshop_type = 'webinar',
+    passport_eligible = true,
+    portal_data_sent = true,
+    portal_data_sent_at = current_date - 18,
+    qualiopi = true,
+    funding_type = 'cse',
+    quote_signed = true,
+    quote_signed_at = current_date - 60,
+    agreement_signed = true,
+    agreement_signed_at = current_date - 55,
+    amount_invoiced_incl_tax = 11760,
+    cost_training = 7000,
+    cost_teaching = 2200,
+    cost_subcontracting = 0,
+    cost_travel = 560,
+    cost_materials = 0,
+    appropriation_rate = 90,
+    satisfaction_rate = 96
+where id = 11;
 
 --
 -- 7. Notes.
@@ -526,6 +643,9 @@ begin
     update public.contacts      set sales_id = owner_id where sales_id is null;
     update public.contact_notes set sales_id = owner_id where sales_id is null;
     update public.deals         set sales_id = owner_id where sales_id is null;
+    -- The contracts that were actually delivered name who taught them.
+    update public.deals set trainer_ids = array[owner_id]
+    where hours_delivered is not null and trainer_ids is null;
     update public.deal_notes    set sales_id = owner_id where sales_id is null;
     update public.tasks         set sales_id = owner_id where sales_id is null;
 

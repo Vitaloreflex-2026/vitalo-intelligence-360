@@ -30,7 +30,7 @@ describe("CompanyListMobile", () => {
     const screen = await render(<MobileSuccess />);
 
     await expect.element(screen.getByText(/3 contacts/)).toBeVisible();
-    await expect.element(screen.getByText(/2 deals/)).toBeVisible();
+    await expect.element(screen.getByText(/2 contracts/)).toBeVisible();
     await expect.element(screen.getByText(/No contact/)).toBeVisible();
   });
 

@@ -26,6 +26,22 @@ export const toInteger = (cell: ImportCell): number | undefined => {
   return value === undefined ? undefined : Math.round(value);
 };
 
+const TRUE_VALUES = ["true", "1", "yes", "y", "oui", "o"];
+const FALSE_VALUES = ["false", "0", "no", "n", "non"];
+
+/**
+ * Cell content as a yes/no answer. Both the English and the French spellings
+ * are accepted, because the sample CSVs users edit are French. Anything else —
+ * including an empty cell — leaves the column untouched rather than guessing.
+ */
+export const toBoolean = (cell: ImportCell): boolean | undefined => {
+  const text = toText(cell)?.toLowerCase();
+  if (text === undefined) return undefined;
+  if (TRUE_VALUES.includes(text)) return true;
+  if (FALSE_VALUES.includes(text)) return false;
+  return undefined;
+};
+
 const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
 /**

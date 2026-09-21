@@ -3,7 +3,7 @@ import { useDataProvider, useGetIdentity } from "ra-core";
 
 import { mapSizeToCategory } from "../companies/sizes";
 import { createEachRow } from "./createEachRow";
-import { toNumber, toText } from "./parseCell";
+import { toBoolean, toIsoDate, toNumber, toText } from "./parseCell";
 import type { ImportCell, ProcessImportBatch } from "./types";
 import { toSaleId, useSaleEmailResolver } from "./useEmailResolver";
 
@@ -44,6 +44,10 @@ export function useCompanyImport(): ProcessImportBatch {
               revenue: toText(row.revenue),
               tax_identifier: toText(row.tax_identifier),
               nb_sites: toNumber(row.nb_sites),
+              nb_trainings_delivered: toNumber(row.nb_trainings_delivered),
+              training_date: toIsoDate(row.training_date),
+              quote_approved: toBoolean(row.quote_approved),
+              service_invoiced: toBoolean(row.service_invoiced),
               sales_id: toSaleId(row.sales_email, sales) ?? identity?.id,
               created_at: new Date().toISOString(),
             },

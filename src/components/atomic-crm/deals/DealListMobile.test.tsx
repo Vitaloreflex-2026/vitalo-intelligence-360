@@ -40,14 +40,16 @@ describe("DealListMobile", () => {
   it("tells the user the list is empty when there is no deal", async () => {
     const screen = await render(<MobileEmpty />);
 
-    await expect.element(screen.getByText("No deals found")).toBeVisible();
+    await expect.element(screen.getByText("No contracts found")).toBeVisible();
   });
 
   it("offers a retry when loading the deals fails", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     const screen = await render(<MobileError />);
 
-    await expect.element(screen.getByText("Error loading deals")).toBeVisible();
+    await expect
+      .element(screen.getByText("Error loading contracts"))
+      .toBeVisible();
     await expect
       .element(screen.getByRole("button", { name: /retry/i }))
       .toBeVisible();

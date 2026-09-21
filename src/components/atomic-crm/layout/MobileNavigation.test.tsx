@@ -22,7 +22,7 @@ describe("MobileNavigation", () => {
       "Companies",
       "Contacts",
       "Assessments",
-      "Deals",
+      "Contracts",
     ]) {
       await expect
         .element(screen.getByRole("link", { name: section }))
@@ -37,7 +37,7 @@ describe("MobileNavigation", () => {
       .element(screen.getByRole("link", { name: "Companies" }))
       .toHaveAttribute("aria-current", "page");
     await expect
-      .element(screen.getByRole("link", { name: "Deals" }))
+      .element(screen.getByRole("link", { name: "Contracts" }))
       .not.toHaveAttribute("aria-current");
   });
 

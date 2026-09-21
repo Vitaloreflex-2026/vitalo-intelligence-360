@@ -49,6 +49,10 @@ export const generateCompanies = (db: Db, size = 55): Required<Company>[] => {
       tax_identifier: random.alphaNumeric(10),
       country: random.arrayElement(["USA", "France", "UK"]),
       context_links: [],
+      nb_trainings_delivered: datatype.number({ min: 0, max: 8 }),
+      training_date: randomDate().toISOString().split("T")[0],
+      quote_approved: datatype.boolean(),
+      service_invoiced: datatype.boolean(),
     };
   });
 };

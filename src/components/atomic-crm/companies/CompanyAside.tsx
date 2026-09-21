@@ -18,6 +18,7 @@ import type { Company } from "../types";
 import { getTranslatedCompanySizeLabel } from "./getTranslatedCompanySizeLabel";
 import { sizes } from "./sizes";
 import { useGetSalesName } from "../sales/useGetSalesName";
+import { CompanyTrainingInfo } from "./CompanyTrainingInfo";
 
 interface CompanyAsideProps {
   link?: string;
@@ -43,6 +44,8 @@ export const CompanyAside = ({ link = "edit" }: CompanyAsideProps) => {
       <AddressInfo record={record} />
 
       <ContextInfo record={record} />
+
+      <CompanyTrainingInfo record={record} />
 
       <AdditionalInfo record={record} />
 

@@ -42,6 +42,7 @@ import {
   ContextInfo,
 } from "./CompanyAside";
 import { CompanyAvatar } from "./CompanyAvatar";
+import { CompanyTrainingInfo } from "./CompanyTrainingInfo";
 
 export const CompanyShow = () => {
   const isMobile = useIsMobile();
@@ -83,6 +84,7 @@ const CompanyShowContentMobile = () => {
         <CompanyInfo record={record} />
         <AddressInfo record={record} />
         <ContextInfo record={record} />
+        <CompanyTrainingInfo record={record} />
         <AdditionalInfo record={record} />
       </MobileContent>
     </>

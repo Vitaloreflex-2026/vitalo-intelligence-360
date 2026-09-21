@@ -66,6 +66,18 @@ export type CompanySize = 50 | 100 | 250 | 500 | 1000;
 /** Fixed relationship statuses shared by contacts and deals. */
 export type RelationshipStatus = "prospect" | "client" | "partner";
 
+/** Who commissions a training on the client side. */
+export type SponsorRole = "cse" | "hr" | "hse";
+
+/** Shape of a delivered training. */
+export type TrainingType = "collective" | "individual_workshop" | "conference";
+
+/** Format of a QVCT workshop. */
+export type QvctWorkshopType = "webinar" | "collective_onsite" | "individual";
+
+/** Who pays for a training. */
+export type FundingType = "opco" | "hr_hse" | "cse" | "other";
+
 /** A user-extensible option list entry (deal origins, objectives, meeting modes/types). */
 export type Choice = {
   category: string;
@@ -108,6 +120,11 @@ export type Company = {
   nb_contacts?: number;
   nb_deals?: number;
   nb_sites?: number | null;
+  /** "Formations" panel: the training activity recap fed into the yearly BPF. */
+  nb_trainings_delivered?: number | null;
+  training_date?: string | null;
+  quote_approved?: boolean | null;
+  service_invoiced?: boolean | null;
 } & Pick<RaRecord, "id">;
 
 export type EmailAndType = {
@@ -143,6 +160,8 @@ export type Contact = {
   decision_role?: string | null;
   relationship_status?: RelationshipStatus | null;
   linked_contact_ids?: Identifier[] | null;
+  /** Who commissions the training on the client side (works council, HR, HSE). */
+  sponsor_role?: SponsorRole | null;
 } & Pick<RaRecord, "id">;
 
 export type ContactNote = {
@@ -272,6 +291,41 @@ export type Deal = {
   motivation?: string | null;
   objectives?: string[] | null;
   other_expectations?: string | null;
+  // Training delivery, reported in the yearly BPF.
+  /** `sales` ids of the consultants who delivered the training. */
+  trainer_ids?: Identifier[] | null;
+  training_type?: TrainingType | null;
+  nb_trained_managers?: number | null;
+  nb_trained_non_managers?: number | null;
+  hours_delivered?: number | null;
+  qvct_workshop_type?: QvctWorkshopType | null;
+  passport_eligible?: boolean | null;
+  portal_data_sent?: boolean | null;
+  portal_data_sent_at?: string | null;
+  qualiopi?: boolean | null;
+  // Funding and paperwork.
+  funding_type?: FundingType | null;
+  quote_signed?: boolean | null;
+  quote_signed_at?: string | null;
+  agreement_signed?: boolean | null;
+  agreement_signed_at?: string | null;
+  // Invoicing: the global amount, then its breakdown.
+  amount_invoiced_incl_tax?: number | null;
+  cost_training?: number | null;
+  cost_teaching?: number | null;
+  cost_subcontracting?: number | null;
+  cost_travel?: number | null;
+  cost_materials?: number | null;
+  // OPCO funding details, only filled when `funding_type` is "opco".
+  opco_name?: string | null;
+  opco_contact_name?: string | null;
+  opco_contact_phone?: string | null;
+  opco_contact_email?: string | null;
+  opco_file_submitted?: boolean | null;
+  opco_file_submitted_at?: string | null;
+  // Qualiopi indicators, in percent.
+  appropriation_rate?: number | null;
+  satisfaction_rate?: number | null;
 } & Pick<RaRecord, "id">;
 
 export type DealNote = {

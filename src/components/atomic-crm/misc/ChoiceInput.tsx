@@ -11,7 +11,8 @@ export type ChoiceCategory =
   | "deal_origin"
   | "deal_objective"
   | "rdv_mode"
-  | "rdv_type";
+  | "rdv_type"
+  | "opco";
 
 const MAX_CHOICES = 200;
 

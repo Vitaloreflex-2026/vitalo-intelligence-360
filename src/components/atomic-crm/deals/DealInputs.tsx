@@ -15,6 +15,9 @@ import { useConfigurationContext } from "../root/ConfigurationContext";
 import { AutocompleteCompanyInput } from "../companies/AutocompleteCompanyInput.tsx";
 import { ChoiceInput } from "../misc/ChoiceInput";
 import { relationshipStatuses } from "../misc/relationshipStatuses";
+import { DealFundingInputs } from "./DealFundingInputs";
+import { DealInvoicingInputs } from "./DealInvoicingInputs";
+import { DealTrainingInputs } from "./DealTrainingInputs";
 
 export const DealInputs = () => {
   const isMobile = useIsMobile();
@@ -26,6 +29,17 @@ export const DealInputs = () => {
         <DealLinkedToInputs />
         <Separator orientation={isMobile ? "horizontal" : "vertical"} />
         <DealMiscInputs />
+      </div>
+
+      <Separator />
+
+      <div className={`flex gap-6 ${isMobile ? "flex-col" : "flex-row"}`}>
+        <DealTrainingInputs />
+        <Separator orientation={isMobile ? "horizontal" : "vertical"} />
+        <div className="flex flex-col gap-8 flex-1">
+          <DealFundingInputs />
+          <DealInvoicingInputs />
+        </div>
       </div>
     </div>
   );

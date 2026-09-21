@@ -30,6 +30,7 @@ export type ContactImportSchema = {
   company_start_date: string;
   decision_role: string;
   relationship_status: string;
+  sponsor_role: string;
   sales_email: string;
 };
 
@@ -98,6 +99,7 @@ export function useContactImport() {
             company_start_date,
             decision_role,
             relationship_status,
+            sponsor_role,
             sales_email,
           }) => {
             const email_jsonb = [
@@ -141,6 +143,7 @@ export function useContactImport() {
                 company_start_date: company_start_date || null,
                 decision_role,
                 relationship_status,
+                sponsor_role,
               },
             });
           },
