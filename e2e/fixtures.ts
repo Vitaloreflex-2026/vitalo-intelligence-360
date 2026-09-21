@@ -18,7 +18,6 @@ const TABLES = [
   "companies",
   "tags",
   "favicons_excluded_domains",
-  "configuration",
   "sales",
 ];
 
@@ -27,6 +26,11 @@ async function resetDb() {
     // Supabase client delete need a where clause to get executed, so we use one that will match on all rows (id is not null)
     await adminSupabase.from(table).delete().not("id", "is", null);
   }
+
+  // `configuration` is a singleton row (id = 1) created by a migration and read
+  // by the settings page: deleting it makes ra-core report "Element does not
+  // exist" and redirect to a non-existent list. Reset its content instead.
+  await adminSupabase.from("configuration").upsert({ id: 1, config: {} });
 
   // Seeded document types would make every user owe paperwork, which shows up
   // in the notification panel of every spec. Tests that need one create it.
