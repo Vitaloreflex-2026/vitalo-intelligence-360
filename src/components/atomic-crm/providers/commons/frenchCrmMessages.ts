@@ -451,7 +451,7 @@ export const frenchCrmMessages = {
         sector: "Secteur d'activité",
         size: "Effectif",
         nb_sites: "Nombre de sites",
-        tax_identifier: "Identifiant fiscal",
+        tax_identifier: "SIREN",
         address: "Adresse",
         city: "Ville",
         zipcode: "Code postal",
