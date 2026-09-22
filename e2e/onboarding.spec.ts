@@ -84,7 +84,10 @@ test("user onboarding", async ({ page, isMobile, menu, dismissToast }) => {
 
   await page.waitForLoadState("networkidle");
 
-  await page.getByRole("tab", { name: "Notes" }).click();
+  // on mobile the stepper opens the note form in a sheet, no contact page in between
+  if (!isMobile) {
+    await page.getByRole("tab", { name: "Notes" }).click();
+  }
 
   await page.getByPlaceholder("Add a note").fill("This is a note about Jane.");
   await page
@@ -93,11 +96,21 @@ test("user onboarding", async ({ page, isMobile, menu, dismissToast }) => {
 
   await dismissToast("Note added");
 
+  if (isMobile) {
+    // saving the sheet redirects to the contact page, where the note lives
+    await page.getByRole("tab", { name: "Notes" }).click();
+  }
+
   await expect(
     // exact on mobile: the "0 meetings" tab label also contains "Me"
     page.getByText(isMobile ? "Me" : "You added a note", { exact: isMobile }),
   ).toBeVisible();
   await expect(page.getByText("This is a note about Jane.")).toBeVisible();
+
+  // the mobile dashboard shows the calendar only, no activity log
+  if (isMobile) {
+    return;
+  }
 
   await menu.goToDashboard();
 

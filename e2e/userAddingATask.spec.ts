@@ -48,7 +48,10 @@ test.describe("user adding a task", () => {
     await page.getByRole("button", { name: "Sign in" }).click();
 
     await expect(page).toHaveTitle(/VitalÔréflex 360°/);
-    await expect(page.getByText("Latest Activity")).toBeVisible();
+    // the calendar is the one dashboard block both viewports render
+    await expect(
+      page.getByRole("heading", { name: "Team meetings" }),
+    ).toBeVisible();
 
     await menu.goToContacts();
     await page.waitForLoadState("networkidle");
