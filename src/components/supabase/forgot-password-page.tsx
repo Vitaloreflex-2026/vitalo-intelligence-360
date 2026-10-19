@@ -28,6 +28,10 @@ export const ForgotPasswordPage = () => {
       setLoading(true);
       await resetPassword({
         email: values.email,
+        // Without it, Supabase falls back to the browser's Referer header, which
+        // only carries the origin and drops the GitHub Pages sub-path.
+        redirectTo:
+          window.location.origin + window.location.pathname.replace(/\/$/, ""),
       });
     } catch (error: any) {
       notify(
