@@ -29,22 +29,22 @@ export const mergeContacts = async (
   }
 
   // 1. Reassign all tasks from loser to winner
-  const { data: loserTasks } = await dataProvider.getManyReference<Task>(
-    "tasks",
-    {
-      target: "contact_id",
-      id: loserId,
-      pagination: { page: 1, perPage: 1000 },
-      sort: { field: "id", order: "ASC" },
-      filter: {},
-    },
-  );
+  const { data: loserTasks } = await dataProvider.getList<Task>("tasks", {
+    filter: { "contact_ids@cs": `{${loserId}}` },
+    pagination: { page: 1, perPage: 1000 },
+    sort: { field: "id", order: "ASC" },
+  });
 
   const taskUpdates =
     loserTasks?.map((task) =>
       dataProvider.update("tasks", {
         id: task.id,
-        data: { contact_id: winnerId },
+        data: {
+          contact_ids: mergeArraysUnique(
+            task.contact_ids.filter((id) => id !== loserId),
+            [winnerId],
+          ),
+        },
         previousData: task,
       }),
     ) || [];

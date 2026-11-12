@@ -311,7 +311,12 @@ BEGIN
   END IF;
 
   -- 1. Reassign tasks from loser to winner
-  UPDATE tasks SET contact_id = winner_id WHERE contact_id = loser_id;
+  UPDATE tasks
+  SET contact_ids = CASE
+    WHEN winner_id = ANY(contact_ids) THEN array_remove(contact_ids, loser_id)
+    ELSE array_replace(contact_ids, loser_id, winner_id)
+  END
+  WHERE contact_ids @> ARRAY[loser_id];
 
   -- 2. Reassign contact notes from loser to winner
   UPDATE contact_notes SET contact_id = winner_id WHERE contact_id = loser_id;
@@ -462,5 +467,29 @@ BEGIN
     SELECT id INTO NEW.sales_id FROM sales WHERE user_id = auth.uid();
   END IF;
   RETURN NEW;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION "public"."set_task_sales_ids_default"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  IF NEW.sales_ids IS NULL THEN
+    NEW.sales_ids := ARRAY(SELECT id FROM sales WHERE user_id = auth.uid());
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION "public"."remove_deleted_contact_from_tasks"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  DELETE FROM tasks WHERE contact_ids = ARRAY[OLD.id];
+  UPDATE tasks SET contact_ids = array_remove(contact_ids, OLD.id)
+  WHERE contact_ids @> ARRAY[OLD.id];
+  RETURN OLD;
 END;
 $$;

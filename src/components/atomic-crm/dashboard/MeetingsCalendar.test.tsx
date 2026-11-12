@@ -42,8 +42,8 @@ const buildTeam = (): Sale[] => [
 const buildMeetings = (): Task[] => [
   {
     id: 1,
-    contact_id: 1,
-    sales_id: 1,
+    contact_ids: [1],
+    sales_ids: [1],
     type: "Premier contact",
     text: "Cadrage Acme",
     due_date: todayAt(10),
@@ -51,8 +51,8 @@ const buildMeetings = (): Task[] => [
   },
   {
     id: 2,
-    contact_id: 1,
-    sales_id: 2,
+    contact_ids: [1],
+    sales_ids: [2],
     type: "Restitution",
     text: "Restitution Globex",
     due_date: todayAt(14),
@@ -185,6 +185,31 @@ describe("MeetingsCalendar", () => {
     );
     expect(fills).toContain("rgb(207, 227, 247)"); // Alice — #cfe3f7
     expect(fills).toContain("rgb(226, 217, 243)"); // Bruno — #e2d9f3
+  });
+
+  it("stripes a meeting shared by several consultants and legends each of them", async () => {
+    // Arrange & Act — Alice and Chloé hold the same meeting.
+    const screen = await render(
+      <StoryWrapper
+        data={{
+          companies: [buildCompany()],
+          contacts: [buildContact({ company_id: 1 })],
+          sales: buildTeam(),
+          tasks: [{ ...buildMeetings()[0], sales_ids: [1, 3] }],
+        }}
+      >
+        <MeetingsCalendar />
+      </StoryWrapper>,
+    );
+    await expect.element(screen.getByText("Cadrage Acme")).toBeVisible();
+
+    // Assert
+    await expect.element(screen.getByText("Alice Martin")).toBeVisible();
+    await expect.element(screen.getByText("Chloé Roux")).toBeVisible();
+    const block = [...document.querySelectorAll<HTMLElement>(".fc-event")].find(
+      (event) => event.textContent?.includes("Cadrage Acme"),
+    );
+    expect(block?.style.backgroundImage).toContain("rgb(207, 227, 247)");
   });
 
   it("links the meeting a click opens to its contact and company pages", async () => {

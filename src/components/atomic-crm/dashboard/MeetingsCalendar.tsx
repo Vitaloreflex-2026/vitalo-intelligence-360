@@ -2,6 +2,7 @@ import type {
   DateSelectArg,
   EventClickArg,
   EventDropArg,
+  EventMountArg,
   DatesSetArg,
 } from "@fullcalendar/core";
 import enLocale from "@fullcalendar/core/locales/en-gb";
@@ -37,6 +38,7 @@ import { useExternalCalendarEvents } from "./useExternalCalendarEvents";
 import "./MeetingsCalendar.css";
 import {
   DEFAULT_MEETING_MINUTES,
+  stripedFill,
   useMeetingEvents,
   type CalendarRange,
   type MeetingConsultant,
@@ -54,6 +56,12 @@ const MINUTE_MS = 60 * 1000;
 
 /** Remembered per browser, so the overlay stays how the user left it. */
 const SHOW_EXTERNAL_STORE_KEY = "dashboard.calendar.showExternalEvents";
+
+/** FullCalendar takes a single fill per event; a shared meeting gets stripes. */
+const stripeSharedMeeting = (arg: EventMountArg) => {
+  const stripes = stripedFill(arg.event.extendedProps.fills ?? []);
+  if (stripes) arg.el.style.backgroundImage = stripes;
+};
 
 const minutesBetween = (start: Date, end: Date): number =>
   Math.max(1, Math.round((end.getTime() - start.getTime()) / MINUTE_MS));
@@ -321,6 +329,7 @@ export const MeetingsCalendar = () => {
           eventDrop={handleEventDrop}
           eventResize={handleEventResize}
           eventClick={handleEventClick}
+          eventDidMount={stripeSharedMeeting}
           select={handleSelect}
         />
         <ConsultantLegend

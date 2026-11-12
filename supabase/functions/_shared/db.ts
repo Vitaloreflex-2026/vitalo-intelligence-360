@@ -39,12 +39,12 @@ export interface ContactsTable {
 
 interface TasksTable {
   id: Generated<number>;
-  contact_id: number;
+  contact_ids: number[];
   type: string | null;
   text: string | null;
   due_date: Date;
   done_date: Date | null;
-  sales_id: number | null;
+  sales_ids: number[] | null;
 }
 
 interface ContactNotesTable {

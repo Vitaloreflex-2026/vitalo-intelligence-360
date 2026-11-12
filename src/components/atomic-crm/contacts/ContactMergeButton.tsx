@@ -91,11 +91,10 @@ const ContactMergeDialog = ({ open, onClose }: ContactMergeDialogProps) => {
 
   // Get counts of items to be merged
   const canFetchCounts = open && !!loserContact && !!winnerId;
-  const { total: tasksCount } = useGetManyReference(
+  const { total: tasksCount } = useGetList(
     "tasks",
     {
-      target: "contact_id",
-      id: loserContact?.id,
+      filter: { "contact_ids@cs": `{${loserContact?.id}}` },
       pagination: { page: 1, perPage: 1 },
     },
     { enabled: canFetchCounts },

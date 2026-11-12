@@ -1,9 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Check, Clock } from "lucide-react";
-import { useGetRecordRepresentation, useTranslate, useUpdate } from "ra-core";
+import { useTranslate, useUpdate } from "ra-core";
 import { useState } from "react";
 import { DateField } from "@/components/admin/date-field";
-import { ReferenceField } from "@/components/admin/reference-field";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,7 +21,8 @@ import {
   DAYS_UNTIL_TOMORROW,
   postponeDueDate,
 } from "../tasks/postponeDueDate";
-import type { Contact, Task } from "../types";
+import { TaskContacts } from "../tasks/TaskContacts";
+import type { Task } from "../types";
 
 /**
  * One of today's meetings in the notification panel: the meeting itself plus
@@ -39,7 +39,6 @@ export const MeetingNotification = ({
   const translate = useTranslate();
   const queryClient = useQueryClient();
   const { taskTypes } = useConfigurationContext();
-  const getContactRepresentation = useGetRecordRepresentation("contacts");
 
   const [openEdit, setOpenEdit] = useState(false);
   const [update, { isPending }] = useUpdate();
@@ -102,17 +101,7 @@ export const MeetingNotification = ({
               <span>{meeting.text}</span>
             </div>
             <div className="flex items-baseline gap-2 text-xs text-muted-foreground">
-              <ReferenceField<Task, Contact>
-                source="contact_id"
-                reference="contacts"
-                record={meeting}
-                link="show"
-                render={({ referenceRecord }) =>
-                  referenceRecord ? (
-                    <>{getContactRepresentation(referenceRecord)}</>
-                  ) : null
-                }
-              />
+              <TaskContacts task={meeting} />
               <span className="truncate">
                 {[
                   meetingType && meeting.type !== "none"

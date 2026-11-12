@@ -1,7 +1,9 @@
 import {
   EditBase,
   Form,
+  RecordContextProvider,
   RecordRepresentation,
+  ResourceContextProvider,
   useGetPathForRecord,
   useNotify,
   useTranslate,
@@ -10,6 +12,7 @@ import {
 import { Link } from "react-router";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { SaveButton } from "@/components/admin/form";
+import { ReferenceArrayField } from "@/components/admin/reference-array-field";
 import { ReferenceField } from "@/components/admin/reference-field";
 import {
   Dialog,
@@ -47,9 +50,9 @@ const RelatedRecord = ({
 };
 
 /**
- * Who the meeting is with. The form cannot change the contact, so this line is
- * the only place the dialog says whose meeting it is, which matters when it is
- * opened from the calendar, away from any contact page.
+ * Who the meeting is with: each contact and its company, linked to their
+ * pages, which matters when the dialog is opened from the calendar, away from
+ * any contact page.
  *
  * Following a link closes the dialog: its host can outlive the navigation (the
  * notifications panel, the contact's own page), and the dialog would otherwise
@@ -59,19 +62,41 @@ const TaskContactSummary = ({ close }: { close: () => void }) => {
   const translate = useTranslate();
   return (
     // min-h keeps the form from jumping once the names have loaded.
-    <DialogDescription className="flex min-h-5 flex-wrap justify-center gap-x-4 gap-y-1 sm:justify-start">
-      <ReferenceField source="contact_id" reference="contacts" link={false}>
-        <RelatedRecord
-          label={translate("resources.tasks.fields.contact_id")}
-          onFollow={close}
-        />
-        <ReferenceField source="company_id" reference="companies" link={false}>
-          <RelatedRecord
-            label={translate("resources.contacts.fields.company_id")}
-            onFollow={close}
-          />
-        </ReferenceField>
-      </ReferenceField>
+    <DialogDescription className="flex min-h-5 flex-col items-center gap-y-1 sm:items-start">
+      <ReferenceArrayField
+        source="contact_ids"
+        reference="contacts"
+        render={({ data }) => (
+          <>
+            {data?.map((contact) => (
+              <ResourceContextProvider key={contact.id} value="contacts">
+                <RecordContextProvider value={contact}>
+                  <span className="flex flex-wrap justify-center gap-x-4 sm:justify-start">
+                    <RelatedRecord
+                      label={translate("resources.contacts.name", {
+                        smart_count: 1,
+                      })}
+                      onFollow={close}
+                    />
+                    <ReferenceField
+                      source="company_id"
+                      reference="companies"
+                      link={false}
+                    >
+                      <RelatedRecord
+                        label={translate(
+                          "resources.contacts.fields.company_id",
+                        )}
+                        onFollow={close}
+                      />
+                    </ReferenceField>
+                  </span>
+                </RecordContextProvider>
+              </ResourceContextProvider>
+            ))}
+          </>
+        )}
+      />
     </DialogDescription>
   );
 };

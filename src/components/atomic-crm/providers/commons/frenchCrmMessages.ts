@@ -835,8 +835,8 @@ export const frenchCrmMessages = {
         type: "Type de rendez-vous",
         mode: "Mode de rendez-vous",
         location: "Lieu",
-        sales_id: "Consultant / Formateur",
-        contact_id: "Contact",
+        sales_ids: "Consultants / Formateurs",
+        contact_ids: "Contacts",
         due_short: "le",
       },
       action: {
@@ -857,7 +857,6 @@ export const frenchCrmMessages = {
       },
       sheet: {
         edit: "Modifier le rendez-vous",
-        edit_for: "Modifier le rendez-vous pour %{name}",
       },
       empty: "Aucun rendez-vous pour l'instant",
       empty_list_hint:
@@ -870,7 +869,7 @@ export const frenchCrmMessages = {
         tomorrow: "Demain",
         with_pending: "Avec des rendez-vous en attente",
       },
-      regarding_contact: "(Concernant : %{name})",
+      regarding: "Concernant :",
       updated: "Rendez-vous mis à jour",
       validation: {
         end_another_day:

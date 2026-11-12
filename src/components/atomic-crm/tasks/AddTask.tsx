@@ -27,7 +27,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import type { Task } from "../types";
 import { TaskFormContent } from "./TaskFormContent";
+import { touchTaskContacts } from "./touchTaskContacts";
 
 export const AddTask = ({
   selectContact,
@@ -48,19 +50,9 @@ export const AddTask = ({
   };
   const getContactRepresentation = useGetRecordRepresentation("contacts");
 
-  const handleSuccess = async (data: any) => {
+  const handleSuccess = async (data: Task) => {
     setOpen(false);
-    const contact = await dataProvider.getOne("contacts", {
-      id: data.contact_id,
-    });
-    if (!contact.data) return;
-
-    await update("contacts", {
-      id: contact.data.id,
-      data: { last_seen: new Date().toISOString() },
-      previousData: contact.data,
-    });
-
+    await touchTaskContacts(data, dataProvider, update);
     notify("resources.tasks.added");
   };
 
@@ -104,9 +96,9 @@ export const AddTask = ({
         resource="tasks"
         record={{
           type: "none",
-          contact_id: contact?.id,
+          contact_ids: contact?.id == null ? [] : [contact.id],
           due_date: new Date().toISOString(),
-          sales_id: identity.id,
+          sales_ids: [identity.id],
         }}
         mutationOptions={{ onSuccess: handleSuccess }}
       >
@@ -122,7 +114,7 @@ export const AddTask = ({
                     : translate("resources.tasks.dialog.create")}
                 </DialogTitle>
               </DialogHeader>
-              <TaskFormContent selectContact={selectContact} />
+              <TaskFormContent />
               <DialogFooter className="w-full justify-end">
                 <SaveButton />
               </DialogFooter>

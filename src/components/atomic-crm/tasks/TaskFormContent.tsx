@@ -1,6 +1,5 @@
-import { AutocompleteInput } from "@/components/admin/autocomplete-input";
-import { ReferenceInput } from "@/components/admin/reference-input";
-import { SelectInput } from "@/components/admin/select-input";
+import { AutocompleteArrayInput } from "@/components/admin/autocomplete-array-input";
+import { ReferenceArrayInput } from "@/components/admin/reference-array-input";
 import { TextInput } from "@/components/admin/text-input";
 import { required } from "ra-core";
 import { useEffect, useRef } from "react";
@@ -31,11 +30,7 @@ const validateEnd = (
 const saleOptionRenderer = (choice: Sale) =>
   `${choice.first_name} ${choice.last_name}`;
 
-export const TaskFormContent = ({
-  selectContact,
-}: {
-  selectContact?: boolean;
-}) => {
+export const TaskFormContent = () => {
   const { getValues, setValue } = useFormContext();
   const dueDate = useWatch({ name: "due_date" });
   const mode = useWatch({ name: "mode" });
@@ -65,17 +60,14 @@ export const TaskFormContent = ({
         className="m-0"
         helperText={false}
       />
-      {selectContact && (
-        <ReferenceInput source="contact_id" reference="contacts_summary">
-          <AutocompleteInput
-            label="resources.tasks.fields.contact_id"
-            optionText={contactOptionText}
-            helperText={false}
-            validate={required()}
-            modal
-          />
-        </ReferenceInput>
-      )}
+      <ReferenceArrayInput source="contact_ids" reference="contacts_summary">
+        <AutocompleteArrayInput
+          label="resources.tasks.fields.contact_ids"
+          optionText={contactOptionText}
+          helperText={false}
+          validate={required()}
+        />
+      </ReferenceArrayInput>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <DateTimeInput
@@ -107,18 +99,18 @@ export const TaskFormContent = ({
         <TextInput source="location" helperText={false} disabled={isRemote} />
       </div>
 
-      <ReferenceInput
+      <ReferenceArrayInput
         reference="sales"
-        source="sales_id"
+        source="sales_ids"
         sort={{ field: "last_name", order: "ASC" }}
         filter={{ "disabled@neq": true }}
       >
-        <SelectInput
-          label="resources.tasks.fields.sales_id"
+        <AutocompleteArrayInput
+          label="resources.tasks.fields.sales_ids"
           helperText={false}
           optionText={saleOptionRenderer}
         />
-      </ReferenceInput>
+      </ReferenceArrayInput>
     </div>
   );
 };

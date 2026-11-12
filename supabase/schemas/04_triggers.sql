@@ -24,9 +24,15 @@ create or replace trigger set_deal_notes_sales_id_trigger
     before insert on public.deal_notes
     for each row execute function public.set_sales_id_default();
 
-create or replace trigger set_task_sales_id_trigger
+create or replace trigger set_task_sales_ids_trigger
     before insert on public.tasks
-    for each row execute function public.set_sales_id_default();
+    for each row execute function public.set_task_sales_ids_default();
+
+-- A meeting stores its contacts in an array, which cannot cascade a delete:
+-- drop the contact from its meetings, and the meetings it was alone in.
+create or replace trigger remove_deleted_contact_from_tasks
+    after delete on public.contacts
+    for each row execute function public.remove_deleted_contact_from_tasks();
 
 -- Auto-fetch company logo from website favicon on save
 create or replace trigger company_saved
