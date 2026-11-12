@@ -25,6 +25,7 @@ import ImageEditorField from "../misc/ImageEditorField";
 import { ConsultantColorsCard } from "./ConsultantColorsCard";
 import { DocumentTypesCard } from "./DocumentTypesCard";
 import { ExternalTrainersCard } from "./ExternalTrainersCard";
+import { TagsCard } from "./TagsCard";
 import {
   useConfigurationContext,
   useConfigurationUpdater,
@@ -46,6 +47,7 @@ const SECTIONS = [
   { id: "deals", label: "resources.deals.name", fallback: "Deals" },
   { id: "notes", label: "resources.notes.name", fallback: "Notes" },
   { id: "tasks", label: "resources.tasks.name", fallback: "Tasks" },
+  { id: "tags", label: "resources.tags.name", fallback: "Tags" },
   {
     id: "consultant-colors",
     label: "crm.settings.consultant_colors.title",
@@ -470,6 +472,9 @@ const SettingsFormFields = () => {
             </ArrayInput>
           </CardContent>
         </Card>
+
+        {/* Tags are their own table: deleting one saves immediately. */}
+        <TagsCard />
 
         {/* Consultant colours live on the `sales` rows, not in the
             configuration record, so this card saves on its own. */}

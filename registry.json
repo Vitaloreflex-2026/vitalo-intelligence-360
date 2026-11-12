@@ -166,6 +166,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/settings/TagsCard.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/settings/SettingsPageMobile.tsx",
           "type": "registry:component"
         },
@@ -1275,6 +1279,10 @@
         },
         {
           "path": "src/components/supabase/forgot-password-page.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/supabase/confirm-email-page.tsx",
           "type": "registry:component"
         },
         {

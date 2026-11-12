@@ -204,12 +204,33 @@ async function createCompany({
   return data;
 }
 
+async function createTag({
+  name,
+  color = "#eddcd2",
+}: {
+  name: string;
+  color?: string;
+}) {
+  const { data, error } = await adminSupabase
+    .from("tags")
+    .insert({ name, color })
+    .select("id")
+    .single();
+
+  if (error) {
+    throw new Error(`Failed to create tag: ${error.message}`);
+  }
+
+  return data;
+}
+
 async function createContact({
   first_name,
   last_name,
   title = "",
   company_id = null,
   sales_id,
+  tags = [],
   notes = [],
 }: {
   first_name: string;
@@ -217,6 +238,7 @@ async function createContact({
   title?: string;
   company_id?: string | number | null;
   sales_id: string | number;
+  tags?: number[];
   notes?: {
     text: string;
     date?: string;
@@ -234,7 +256,7 @@ async function createContact({
       first_seen: new Date().toISOString(),
       last_seen: new Date().toISOString(),
       has_newsletter: false,
-      tags: [],
+      tags,
       gender: "unknown",
       status: "cold",
       background: "",
@@ -308,6 +330,7 @@ export const test = base.extend<{
   inviteUser: typeof inviteUser;
   createCompany: typeof createCompany;
   createContact: typeof createContact;
+  createTag: typeof createTag;
   createNotes: typeof createNotes;
   createTask: typeof createTask;
   createDocumentType: typeof createDocumentType;
@@ -343,6 +366,10 @@ export const test = base.extend<{
   // eslint-disable-next-line no-empty-pattern
   createContact: async ({}, cb) => {
     await cb(createContact);
+  },
+  // eslint-disable-next-line no-empty-pattern
+  createTag: async ({}, cb) => {
+    await cb(createTag);
   },
   // eslint-disable-next-line no-empty-pattern
   createNotes: async ({}, cb) => {

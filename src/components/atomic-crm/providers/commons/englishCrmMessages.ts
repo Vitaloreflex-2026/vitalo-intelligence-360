@@ -1124,6 +1124,14 @@ export const englishCrmMessages = {
         requires_renewal: "Renew every year",
         save_error: "This document type could not be saved",
       },
+      tags: {
+        hint: "A tag can only be deleted once no contact uses it. Deletion is immediate.",
+        empty: "No tag yet.",
+        unused: "Unused",
+        usage:
+          "Used by %{smart_count} contact |||| Used by %{smart_count} contacts",
+        delete_error: "This tag could not be deleted",
+      },
       external_trainers: {
         hint: "Trainers listed on contracts by name only. Once one of them gets an account, create it from here: their contracts move onto it.",
         empty: "No trainer without an account yet.",
