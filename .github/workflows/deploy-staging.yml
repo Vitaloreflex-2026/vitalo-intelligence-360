@@ -1,0 +1,123 @@
+# Deploys the `staging` branch to a staging environment that is fully separate
+# from production. deploy.yml (production) is deliberately left untouched.
+#   - backend:  a dedicated Supabase project
+#   - frontend: the GitHub Pages site of a dedicated repository
+#
+# Configuration (Settings > Secrets and variables > Actions):
+#   Secrets
+#     SUPABASE_ACCESS_TOKEN         already set for production (account-wide)
+#     STAGING_SUPABASE_PROJECT_ID   staging project ref
+#     STAGING_SUPABASE_DB_PASSWORD  staging database password
+#     STAGING_SUPABASE_URL          https://<staging-project-ref>.supabase.co
+#     STAGING_SB_PUBLISHABLE_KEY    staging publishable key
+#     STAGING_DEPLOY_TOKEN          token with write access to the staging repository
+#   Variables
+#     STAGING_DEPLOY_REPOSITORY     <owner>/<name> of the staging repository
+#
+# ponytail: the deploy steps are copied from deploy.yml. Merge both workflows
+# through GitHub Environments once staging has proven itself.
+name: 🚀 Deploy staging
+on:
+    push:
+        branches:
+            - staging
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+permissions:
+    contents: read
+
+jobs:
+    deploy-staging:
+        name: 🚀 Deploy (staging)
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        env:
+            SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+            SUPABASE_DB_PASSWORD: ${{ secrets.STAGING_SUPABASE_DB_PASSWORD }}
+            SUPABASE_PROJECT_ID: ${{ secrets.STAGING_SUPABASE_PROJECT_ID }}
+            VITE_SUPABASE_URL: ${{ secrets.STAGING_SUPABASE_URL }}
+            VITE_SB_PUBLISHABLE_KEY: ${{ secrets.STAGING_SB_PUBLISHABLE_KEY }}
+            VITE_IS_DEMO: ${{ vars.VITE_IS_DEMO }}
+            # Empty on purpose: staging must not advertise the production inbound mailbox.
+            VITE_INBOUND_EMAIL: ''
+            VITE_ATTACHMENTS_BUCKET: ${{ vars.VITE_ATTACHMENTS_BUCKET || 'attachments' }}
+            STAGING_DEPLOY_TOKEN: ${{ secrets.STAGING_DEPLOY_TOKEN }}
+            STAGING_DEPLOY_REPOSITORY: ${{ vars.STAGING_DEPLOY_REPOSITORY }}
+
+        steps:
+            # Fails before anything is deployed if staging is not fully configured,
+            # or if its configuration would make this job write to production.
+            - name: 🛡️ Check staging configuration
+              env:
+                  PRODUCTION_SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+                  PRODUCTION_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+              run: |
+                  missing=""
+                  require() { [ -n "$2" ] || missing="$missing $1"; }
+                  require SUPABASE_ACCESS_TOKEN "$SUPABASE_ACCESS_TOKEN"
+                  require STAGING_SUPABASE_PROJECT_ID "$SUPABASE_PROJECT_ID"
+                  require STAGING_SUPABASE_DB_PASSWORD "$SUPABASE_DB_PASSWORD"
+                  require STAGING_SUPABASE_URL "$VITE_SUPABASE_URL"
+                  require STAGING_SB_PUBLISHABLE_KEY "$VITE_SB_PUBLISHABLE_KEY"
+                  require STAGING_DEPLOY_TOKEN "$STAGING_DEPLOY_TOKEN"
+                  require STAGING_DEPLOY_REPOSITORY "$STAGING_DEPLOY_REPOSITORY"
+                  if [ -n "$missing" ]; then
+                      echo "::error::Staging is not configured. Missing secrets/variables:$missing"
+                      exit 1
+                  fi
+
+                  normalize() { local value="${1,,}"; value="${value%/}"; echo "${value%.git}"; }
+                  if [ "$SUPABASE_PROJECT_ID" = "$PRODUCTION_SUPABASE_PROJECT_ID" ] ||
+                      [ "$(normalize "$VITE_SUPABASE_URL")" = "$(normalize "$PRODUCTION_SUPABASE_URL")" ] ||
+                      [ "$(normalize "$STAGING_DEPLOY_REPOSITORY")" = "$(normalize "$GITHUB_REPOSITORY")" ]; then
+                      echo "::error::Staging configuration points to production. Refusing to deploy."
+                      exit 1
+                  fi
+
+            - name: 📥 Checkout repo
+              uses: actions/checkout@v4
+              with:
+                  # Keep the workflow token out of git: the push to the staging
+                  # repository must authenticate with STAGING_DEPLOY_TOKEN only.
+                  persist-credentials: false
+
+            - name: ⚙️ Setup node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+
+            - name: ⚙️ Setup git
+              run: |
+                  git remote add staging "https://git:${STAGING_DEPLOY_TOKEN}@github.com/${STAGING_DEPLOY_REPOSITORY}"
+                  git config --global user.email support+actions@github.com
+                  git config --global user.name github-actions-bot
+
+            - name: ⚙️ Setup supabase
+              uses: supabase/setup-cli@v1
+              with:
+                  # Pinned: CLI v3 rejects the [inbucket] section of supabase/config.toml.
+                  # 2.121.0 is the version used by the last successful production deploy.
+                  version: 2.121.0
+
+            - name: 📥 Download deps
+              run: npm ci
+
+            - name: 🔨 Build
+              run: npm run build
+
+            - name: 🔗 Supabase Link
+              run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
+
+            - name: 📡 Push supabase migrations
+              run: supabase db push
+
+            - name: 📡 Deploy supabase functions
+              run: supabase functions deploy
+
+            - name: 📡 Deploy GitHub pages (staging repository)
+              run: npx gh-pages --remote staging -d dist -b gh-pages

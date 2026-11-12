@@ -177,6 +177,15 @@ When modifying contact or company data structures:
 
 Import `test-data/contacts.csv` via the Contacts page → Import button.
 
+### Branches and Pull Requests
+
+The app is live in production. Every push to `main` deploys production (`.github/workflows/deploy.yml`); every push to `staging` deploys the staging environment (`.github/workflows/deploy-staging.yml`).
+
+- Create work branches from `staging` and open pull requests against `staging`, never against `main`. GitHub proposes `main` as the default base: change it.
+- `main` only receives `staging` → `main` pull requests, merged with a merge commit (no squash) once the change is validated on staging.
+- A hotfix made directly on `main` must be merged back into `staging`.
+- Once a migration has been applied to staging, do not edit it: add a new one.
+
 ### Git Hooks
 
 - Pre-commit: Automatically runs `make registry-gen` to update `registry.json`
