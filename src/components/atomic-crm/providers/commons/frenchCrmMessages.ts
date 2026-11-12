@@ -1122,6 +1122,14 @@ export const frenchCrmMessages = {
         requires_renewal: "À renouveler chaque année",
         save_error: "Impossible d'enregistrer cette pièce",
       },
+      tags: {
+        hint: "Une étiquette ne peut être supprimée que lorsqu'aucun contact ne l'utilise. La suppression est immédiate.",
+        empty: "Aucune étiquette pour le moment.",
+        unused: "Inutilisée",
+        usage:
+          "Utilisée par %{smart_count} contact |||| Utilisée par %{smart_count} contacts",
+        delete_error: "Impossible de supprimer cette étiquette",
+      },
       preferences: "Préférences",
       title: "Paramètres",
       app_title: "Titre de l'application",

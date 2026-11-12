@@ -1107,6 +1107,14 @@ export const englishCrmMessages = {
         requires_renewal: "Renew every year",
         save_error: "This document type could not be saved",
       },
+      tags: {
+        hint: "A tag can only be deleted once no contact uses it. Deletion is immediate.",
+        empty: "No tag yet.",
+        unused: "Unused",
+        usage:
+          "Used by %{smart_count} contact |||| Used by %{smart_count} contacts",
+        delete_error: "This tag could not be deleted",
+      },
       preferences: "Preferences",
       title: "Settings",
       app_title: "App Title",
