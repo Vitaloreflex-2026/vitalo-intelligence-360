@@ -178,6 +178,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/settings/ExternalTrainersCard.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/settings/DocumentTypesCard.tsx",
           "type": "registry:component"
         },
@@ -727,6 +731,10 @@
         },
         {
           "path": "src/components/atomic-crm/deals/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/deals/externalTrainers.ts",
           "type": "registry:component"
         },
         {

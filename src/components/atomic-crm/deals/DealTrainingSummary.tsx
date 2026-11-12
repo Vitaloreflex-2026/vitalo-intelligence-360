@@ -17,6 +17,7 @@ import {
 /** Every column the three blocks below can render. */
 const DELIVERY_SOURCES = [
   "trainer_ids",
+  "external_trainers",
   "training_type",
   "nb_trained_managers",
   "nb_trained_non_managers",
@@ -114,7 +115,10 @@ const TrainingBlock = ({ record }: { record: Deal }) => {
     percentEntry("satisfaction_rate", record.satisfaction_rate),
   ].filter(isEntry);
 
-  const hasTrainers = !!record.trainer_ids?.length;
+  // Trainers with and without a CRM account read as one list.
+  const hasAccountTrainers = !!record.trainer_ids?.length;
+  const externalTrainers = record.external_trainers ?? [];
+  const hasTrainers = hasAccountTrainers || externalTrainers.length > 0;
   if (!entries.length && !hasTrainers) return null;
 
   return (
@@ -122,16 +126,25 @@ const TrainingBlock = ({ record }: { record: Deal }) => {
       {hasTrainers ? (
         <div className="flex flex-col">
           <FieldLabel source="trainer_ids" />
-          <ReferenceArrayField source="trainer_ids" reference="sales">
-            <SingleFieldList
-              className="flex-wrap"
-              render={(sale: Sale) => (
-                <Badge variant="outline">
-                  {sale.first_name} {sale.last_name}
-                </Badge>
-              )}
-            />
-          </ReferenceArrayField>
+          <div className="flex flex-wrap gap-2">
+            {hasAccountTrainers ? (
+              <ReferenceArrayField source="trainer_ids" reference="sales">
+                <SingleFieldList
+                  className="flex-wrap"
+                  render={(sale: Sale) => (
+                    <Badge variant="outline">
+                      {sale.first_name} {sale.last_name}
+                    </Badge>
+                  )}
+                />
+              </ReferenceArrayField>
+            ) : null}
+            {externalTrainers.map((name) => (
+              <Badge key={name} variant="outline">
+                {name}
+              </Badge>
+            ))}
+          </div>
         </div>
       ) : null}
       <EntryList entries={entries} />

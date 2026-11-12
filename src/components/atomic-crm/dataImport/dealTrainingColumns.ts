@@ -32,6 +32,7 @@ export const toDealTrainingColumns = (
   sales: Map<string, Identifier>,
 ) => ({
   trainer_ids: toTrainerIds(row.trainer_emails, sales),
+  external_trainers: toList(row.external_trainers),
   training_type: toChoiceId(row.training_type, trainingTypes, translate),
   nb_trained_managers: toInteger(row.nb_trained_managers),
   nb_trained_non_managers: toInteger(row.nb_trained_non_managers),
