@@ -788,6 +788,10 @@ export const englishCrmMessages = {
         success:
           "User created. They will soon receive an email to set their password.",
         title: "Create a new user",
+        external_trainer_hint:
+          "This account replaces %{name}: every contract naming them will point to it.",
+        external_trainer_error:
+          "The user was created, but the contracts naming %{name} could not be moved onto the account.",
       },
       edit: {
         error: "An error occurred. Please try again.",
@@ -1108,12 +1112,21 @@ export const englishCrmMessages = {
         requires_renewal: "Renew every year",
         save_error: "This document type could not be saved",
       },
+      external_trainers: {
+        hint: "Trainers listed on contracts by name only. Once one of them gets an account, create it from here: their contracts move onto it.",
+        empty: "No trainer without an account yet.",
+        add: "Add",
+        new_placeholder: "First and last name",
+        create_account: "Create their account",
+        save_error: "This trainer could not be saved",
+      },
       preferences: "Preferences",
       title: "Settings",
       app_title: "App Title",
       sections: {
         branding: "Branding",
         documents: "User documents",
+        external_trainers: "Trainers without an account",
       },
       validation: {
         duplicate: "Duplicate %{display_name}: %{items}",

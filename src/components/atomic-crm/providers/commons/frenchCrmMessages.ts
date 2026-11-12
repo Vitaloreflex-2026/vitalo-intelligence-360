@@ -798,6 +798,10 @@ export const frenchCrmMessages = {
         success:
           "Utilisateur créé. Ils recevront prochainement un email pour définir leur mot de passe.",
         title: "Créer un nouvel utilisateur",
+        external_trainer_hint:
+          "Ce compte remplace %{name} : tous les contrats où elle est citée y seront rattachés.",
+        external_trainer_error:
+          "L'utilisateur a été créé, mais les contrats citant %{name} n'ont pas pu être rattachés à son compte.",
       },
       edit: {
         error: "Une erreur s'est produite. Veuillez réessayer.",
@@ -1123,12 +1127,21 @@ export const frenchCrmMessages = {
         requires_renewal: "À renouveler chaque année",
         save_error: "Impossible d'enregistrer cette pièce",
       },
+      external_trainers: {
+        hint: "Intervenant(e)s cité(e)s dans les contrats par leur nom uniquement. Quand l'une d'elles obtient un compte, créez-le d'ici : ses contrats y sont rattachés automatiquement.",
+        empty: "Aucun(e) intervenant(e) sans compte pour le moment.",
+        add: "Ajouter",
+        new_placeholder: "Prénom et nom",
+        create_account: "Créer son compte",
+        save_error: "Impossible d'enregistrer cet(te) intervenant(e)",
+      },
       preferences: "Préférences",
       title: "Paramètres",
       app_title: "Titre de l'application",
       sections: {
         branding: "Image de marque",
         documents: "Documents des utilisateurs",
+        external_trainers: "Intervenant(e)s sans compte",
       },
       validation: {
         duplicate: "%{display_name} en double : %{items}",
