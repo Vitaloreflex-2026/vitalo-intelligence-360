@@ -654,6 +654,7 @@ export const frenchCrmMessages = {
         stage: "Étape",
         sales_id: "Consultant / Formateur",
         trainer_ids: "Intervenant(e)s",
+        external_trainers: "Intervenant(e)s sans compte",
         training_type: "Type de formation",
         nb_trained_managers: "Personnes formées — directeurs / cadres",
         nb_trained_non_managers: "Personnes formées — non cadres",

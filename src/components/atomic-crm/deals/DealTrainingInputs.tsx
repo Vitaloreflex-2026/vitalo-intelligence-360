@@ -7,6 +7,7 @@ import { NumberInput } from "@/components/admin/number-input";
 import { ReferenceArrayInput } from "@/components/admin/reference-array-input";
 import { SelectInput } from "@/components/admin/select-input";
 
+import { ChoiceInput } from "../misc/ChoiceInput";
 import type { Sale } from "../types";
 import { qvctWorkshopTypes, trainingTypes } from "./trainingOptions";
 
@@ -39,6 +40,13 @@ export const DealTrainingInputs = () => {
           helperText={false}
         />
       </ReferenceArrayInput>
+
+      {/* Trainers without a CRM account: typing a new name adds it to the list. */}
+      <ChoiceInput
+        source="external_trainers"
+        category="external_trainer"
+        multiple
+      />
 
       <SelectInput
         source="training_type"

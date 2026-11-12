@@ -10,6 +10,7 @@ export type ChoiceCategory =
   | "company_sector"
   | "deal_origin"
   | "deal_objective"
+  | "external_trainer"
   | "rdv_mode"
   | "rdv_type"
   | "opco";

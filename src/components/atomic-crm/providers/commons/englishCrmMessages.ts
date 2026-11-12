@@ -645,6 +645,7 @@ export const englishCrmMessages = {
         stage: "Stage",
         sales_id: "Account manager",
         trainer_ids: "Trainers",
+        external_trainers: "Trainers without an account",
         training_type: "Training type",
         nb_trained_managers: "People trained — directors / managers",
         nb_trained_non_managers: "People trained — non-managers",
