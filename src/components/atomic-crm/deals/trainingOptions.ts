@@ -4,10 +4,13 @@
  * The OPCO list is user-extensible instead and lives in the `choices` table.
  */
 
-/** Shape of the delivered training. */
+/**
+ * What the contract sells, picked when it is created. Only a training opens the
+ * delivery section and the post-session deadline alerts.
+ */
 export const trainingTypes = [
-  { id: "collective", name: "crm.training_type.collective" },
-  { id: "individual_workshop", name: "crm.training_type.individual_workshop" },
+  { id: "workshop", name: "crm.training_type.workshop" },
+  { id: "training", name: "crm.training_type.training" },
   { id: "conference", name: "crm.training_type.conference" },
 ];
 

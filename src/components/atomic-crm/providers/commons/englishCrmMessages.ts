@@ -646,7 +646,7 @@ export const englishCrmMessages = {
         sales_id: "Account manager",
         trainer_ids: "Trainers",
         external_trainers: "Trainers without an account",
-        training_type: "Training type",
+        training_type: "Service type",
         nb_trained_managers: "People trained — directors / managers",
         nb_trained_non_managers: "People trained — non-managers",
         nb_trained_total: "Total people trained",
@@ -688,7 +688,7 @@ export const englishCrmMessages = {
       field_categories: {
         misc: "Misc",
         delivery: "Delivery and invoicing",
-        training: "Training",
+        training: "Session",
         funding: "Funding",
         opco: "OPCO details",
         invoicing: "Invoicing",
@@ -940,8 +940,8 @@ export const englishCrmMessages = {
       hse: "HSE department",
     },
     training_type: {
-      collective: "Collective",
-      individual_workshop: "Individual workshop",
+      workshop: "Workshop",
+      training: "Training",
       conference: "Conference",
     },
     qvct_workshop_type: {

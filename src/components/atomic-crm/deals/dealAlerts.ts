@@ -41,6 +41,14 @@ interface AlertRule {
   startOffsetDays: number;
 }
 
+/**
+ * Only a training owes paperwork once the session is over: a workshop or a
+ * conference has nothing left to file. A contract recorded before the service
+ * type existed has none, and keeps being watched like a training.
+ */
+const owesPostSessionPaperwork = (deal: Deal) =>
+  deal.training_type == null || deal.training_type === "training";
+
 const RULES: AlertRule[] = [
   {
     kind: "quote_signed",
@@ -51,7 +59,7 @@ const RULES: AlertRule[] = [
   },
   {
     kind: "portal_data_sent",
-    applies: () => true,
+    applies: owesPostSessionPaperwork,
     isPending: (deal) => deal.portal_data_sent !== true,
     dueOffsetDays: PORTAL_FILING_GRACE_DAYS,
     // Raised the day the contract ends, so the eight-day window is usable.
@@ -59,7 +67,8 @@ const RULES: AlertRule[] = [
   },
   {
     kind: "opco_file",
-    applies: (deal) => deal.funding_type === "opco",
+    applies: (deal) =>
+      owesPostSessionPaperwork(deal) && deal.funding_type === "opco",
     isPending: (deal) => deal.opco_file_submitted !== true,
     dueOffsetDays: OPCO_SUBMISSION_GRACE_DAYS,
     startOffsetDays: OPCO_SUBMISSION_GRACE_DAYS,

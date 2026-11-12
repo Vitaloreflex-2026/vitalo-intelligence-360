@@ -8,17 +8,12 @@ import { Separator } from "@/components/ui/separator";
 import { formatLocalizedDate } from "../misc/RelativeDate";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Deal, Sale } from "../types";
-import {
-  fundingTypes,
-  qvctWorkshopTypes,
-  trainingTypes,
-} from "./trainingOptions";
+import { fundingTypes, qvctWorkshopTypes } from "./trainingOptions";
 
 /** Every column the three blocks below can render. */
 const DELIVERY_SOURCES = [
   "trainer_ids",
   "external_trainers",
-  "training_type",
   "nb_trained_managers",
   "nb_trained_non_managers",
   "hours_delivered",
@@ -91,12 +86,6 @@ const TrainingBlock = ({ record }: { record: Deal }) => {
     record.nb_trained_non_managers != null;
 
   const entries: Entry[] = [
-    optionEntry(
-      "training_type",
-      trainingTypes,
-      record.training_type,
-      translate,
-    ),
     numberEntry("nb_trained_managers", record.nb_trained_managers),
     numberEntry("nb_trained_non_managers", record.nb_trained_non_managers),
     hasHeadcount ? entry("nb_trained_total", String(total)) : null,

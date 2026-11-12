@@ -655,7 +655,7 @@ export const frenchCrmMessages = {
         sales_id: "Consultant / Formateur",
         trainer_ids: "Intervenant(e)s",
         external_trainers: "Intervenant(e)s sans compte",
-        training_type: "Type de formation",
+        training_type: "Type de prestation",
         nb_trained_managers: "Personnes formées — directeurs / cadres",
         nb_trained_non_managers: "Personnes formées — non cadres",
         nb_trained_total: "Cumul des personnes formées",
@@ -697,7 +697,7 @@ export const frenchCrmMessages = {
       field_categories: {
         misc: "Divers",
         delivery: "Réalisation et facturation",
-        training: "Formation",
+        training: "Intervention",
         funding: "Financement",
         opco: "Détails OPCO",
         invoicing: "Facturation",
@@ -954,8 +954,8 @@ export const frenchCrmMessages = {
       hse: "HSE",
     },
     training_type: {
-      collective: "Collectif",
-      individual_workshop: "Atelier individuel",
+      workshop: "Atelier",
+      training: "Formation",
       conference: "Conférence",
     },
     qvct_workshop_type: {

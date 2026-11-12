@@ -100,6 +100,47 @@ describe("getDealAlerts", () => {
     expect(getDealAlerts(deals, on("2026-05-31"))).toHaveLength(1);
   });
 
+  it.each(["workshop", "conference"] as const)(
+    "owes nothing after a %s, even when the OPCO funds it",
+    (trainingType) => {
+      const deals = [
+        buildDeal({
+          training_type: trainingType,
+          quote_signed: true,
+          funding_type: "opco",
+        }),
+      ];
+
+      expect(getDealAlerts(deals, on("2026-07-15"))).toEqual([]);
+    },
+  );
+
+  it("still asks a workshop for its quote signature", () => {
+    const deals = [buildDeal({ training_type: "workshop" })];
+
+    expect(
+      getDealAlerts(deals, on("2026-06-15")).map((alert) => alert.kind),
+    ).toEqual(["quote_signed"]);
+  });
+
+  it("flags the post-session paperwork of a training as overdue", () => {
+    const deals = [
+      buildDeal({
+        training_type: "training",
+        quote_signed: true,
+        funding_type: "opco",
+      }),
+    ];
+
+    const alerts = getDealAlerts(deals, on("2026-07-15"));
+
+    expect(alerts.map((alert) => alert.kind)).toEqual([
+      "portal_data_sent",
+      "opco_file",
+    ]);
+    expect(alerts.every((alert) => alert.isOverdue)).toBe(true);
+  });
+
   it("ignores a contract whose closing date is unusable", () => {
     const deals = [buildDeal({ expected_closing_date: "not a date" })];
 

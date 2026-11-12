@@ -69,8 +69,11 @@ export type RelationshipStatus = "prospect" | "client" | "partner";
 /** Who commissions a training on the client side. */
 export type SponsorRole = "cse" | "hr" | "hse";
 
-/** Shape of a delivered training. */
-export type TrainingType = "collective" | "individual_workshop" | "conference";
+/**
+ * What the contract sells. Only a `training` owes the post-session paperwork
+ * (BPF answers, portal filing, OPCO file).
+ */
+export type TrainingType = "workshop" | "training" | "conference";
 
 /** Format of a QVCT workshop. */
 export type QvctWorkshopType = "webinar" | "collective_onsite" | "individual";

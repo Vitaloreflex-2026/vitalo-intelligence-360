@@ -18,6 +18,7 @@ import { relationshipStatuses } from "../misc/relationshipStatuses";
 import { DealFundingInputs } from "./DealFundingInputs";
 import { DealInvoicingInputs } from "./DealInvoicingInputs";
 import { DealTrainingInputs } from "./DealTrainingInputs";
+import { trainingTypes } from "./trainingOptions";
 
 export const DealInputs = () => {
   const isMobile = useIsMobile();
@@ -49,6 +50,12 @@ const DealInfoInputs = () => {
   return (
     <div className="flex flex-col gap-4 flex-1">
       <TextInput source="name" validate={required()} helperText={false} />
+      <SelectInput
+        source="training_type"
+        choices={trainingTypes}
+        validate={required()}
+        helperText={false}
+      />
       <TextInput source="reference" helperText={false} />
       <TextInput source="description" multiline rows={3} helperText={false} />
       <TextInput source="motivation" multiline rows={4} helperText={false} />

@@ -9,18 +9,18 @@ import { SelectInput } from "@/components/admin/select-input";
 
 import { ChoiceInput } from "../misc/ChoiceInput";
 import type { Sale } from "../types";
-import { qvctWorkshopTypes, trainingTypes } from "./trainingOptions";
+import { qvctWorkshopTypes } from "./trainingOptions";
 
 const saleOptionRenderer = (choice: Sale) =>
   `${choice.first_name} ${choice.last_name}`;
 
 /**
- * What was actually delivered: who taught, in which format, to how many people
- * and for how long. These answers are what the yearly BPF (bilan pedagogique et
- * financier) is filled from, so none of them blocks saving a contract.
+ * Who delivers the session. A workshop also records its format; only a training
+ * asks for the BPF answers, since nothing is owed after a workshop or a talk.
  */
 export const DealTrainingInputs = () => {
   const translate = useTranslate();
+  const trainingType = useWatch({ name: "training_type" });
 
   return (
     <div className="flex flex-col gap-4 flex-1">
@@ -48,53 +48,56 @@ export const DealTrainingInputs = () => {
         multiple
       />
 
-      <SelectInput
-        source="training_type"
-        choices={trainingTypes}
-        helperText={false}
-      />
+      {trainingType === "workshop" ? (
+        <SelectInput
+          source="qvct_workshop_type"
+          choices={qvctWorkshopTypes}
+          helperText={false}
+        />
+      ) : null}
 
-      <NumberInput source="nb_trained_managers" min={0} helperText={false} />
-      <NumberInput
-        source="nb_trained_non_managers"
-        min={0}
-        helperText={false}
-      />
-      <TrainedPeopleTotal />
-
-      <NumberInput
-        source="hours_delivered"
-        min={0}
-        step={0.5}
-        helperText={false}
-      />
-
-      <SelectInput
-        source="qvct_workshop_type"
-        choices={qvctWorkshopTypes}
-        helperText={false}
-      />
-
-      <BooleanInput source="passport_eligible" helperText={false} />
-      <BooleanInput source="qualiopi" helperText={false} />
-
-      <PortalDataInputs />
-
-      <NumberInput
-        source="appropriation_rate"
-        min={0}
-        max={100}
-        helperText={false}
-      />
-      <NumberInput
-        source="satisfaction_rate"
-        min={0}
-        max={100}
-        helperText={false}
-      />
+      {trainingType === "training" ? <TrainingDeliveryInputs /> : null}
     </div>
   );
 };
+
+/**
+ * What a training actually delivered: to how many people, for how long, and the
+ * post-session filing. These answers are what the yearly BPF (bilan pedagogique
+ * et financier) is filled from, so none of them blocks saving a contract.
+ */
+const TrainingDeliveryInputs = () => (
+  <>
+    <NumberInput source="nb_trained_managers" min={0} helperText={false} />
+    <NumberInput source="nb_trained_non_managers" min={0} helperText={false} />
+    <TrainedPeopleTotal />
+
+    <NumberInput
+      source="hours_delivered"
+      min={0}
+      step={0.5}
+      helperText={false}
+    />
+
+    <BooleanInput source="passport_eligible" helperText={false} />
+    <BooleanInput source="qualiopi" helperText={false} />
+
+    <PortalDataInputs />
+
+    <NumberInput
+      source="appropriation_rate"
+      min={0}
+      max={100}
+      helperText={false}
+    />
+    <NumberInput
+      source="satisfaction_rate"
+      min={0}
+      max={100}
+      helperText={false}
+    />
+  </>
+);
 
 /**
  * Read-only sum of the two headcounts. It is derived, never stored, so the two

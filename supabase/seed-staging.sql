@@ -579,7 +579,7 @@ from inserted;
 update public.deals d
 set
     trainer_ids = array[s.sales_id],
-    training_type = pg_temp.pick(array['collective', 'collective', 'individual_workshop', 'conference'], s.r_type),
+    training_type = pg_temp.pick(array['training', 'training', 'workshop', 'conference'], s.r_type),
     nb_trained_managers = floor(s.r_managers * 12)::int,
     nb_trained_non_managers = floor(s.r_staff * 60)::int,
     hours_delivered = pg_temp.pick(array[3.5, 7, 14, 21, 35], s.r_hours),
