@@ -179,12 +179,13 @@ Import `test-data/contacts.csv` via the Contacts page → Import button.
 
 ### Branches and Pull Requests
 
-The app is live in production. Every push to `main` deploys production (`.github/workflows/deploy.yml`); every push to `staging` deploys the staging environment (`.github/workflows/deploy-staging.yml`).
+The app is live in production. Every push to `main` deploys production (`.github/workflows/deploy.yml`) and the antenna instance (`.github/workflows/deploy-antenna.yml`: the same CRM for another branch office, with its own Supabase project and GitHub Pages repository); every push to `staging` deploys the staging environment (`.github/workflows/deploy-staging.yml`).
 
 - Create work branches from `staging` and open pull requests against `staging`, never against `main`. GitHub proposes `main` as the default base: change it.
 - `main` only receives `staging` → `main` pull requests, merged with a merge commit (no squash) once the change is validated on staging.
 - A hotfix made directly on `main` must be merged back into `staging`.
 - Once a migration has been applied to staging, do not edit it: add a new one.
+- A migration merged into `main` runs on both the production and the antenna databases, which hold different data: never rely on instance-specific rows (ids, user emails) in a migration.
 
 ### Git Hooks
 
