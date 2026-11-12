@@ -11,7 +11,8 @@ import Header from "./Header";
 export const Layout = ({ children }: { children: ReactNode }) => {
   useConfigurationLoader();
   return (
-    <>
+    // The cream page lets the white cards stand out, as on the website.
+    <div className="min-h-screen bg-vitalo-cream dark:bg-background">
       <Header />
       <main
         className="max-w-screen-xl mx-auto pt-4 px-4 pb-8"
@@ -25,6 +26,6 @@ export const Layout = ({ children }: { children: ReactNode }) => {
       </main>
       <MeetingNotifications />
       <Notification />
-    </>
+    </div>
   );
 };

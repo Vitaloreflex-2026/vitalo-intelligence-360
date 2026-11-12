@@ -197,7 +197,7 @@ const ContactShowContentMobile = () => {
           <TabsContent value="details" className="mt-4">
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-lg font-semibold text-vitalo-forest">
                   {translate("resources.contacts.fields.status")}
                 </h3>
                 <Separator />
@@ -206,7 +206,7 @@ const ContactShowContentMobile = () => {
                 </div>
               </div>
               <div>
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-lg font-semibold text-vitalo-forest">
                   {translate(
                     "resources.contacts.field_categories.personal_info",
                   )}
@@ -217,7 +217,7 @@ const ContactShowContentMobile = () => {
                 </div>
               </div>
               <div>
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-lg font-semibold text-vitalo-forest">
                   {translate("resources.contacts.field_categories.position")}
                 </h3>
                 <Separator />
@@ -226,7 +226,7 @@ const ContactShowContentMobile = () => {
                 </div>
               </div>
               <div>
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-lg font-semibold text-vitalo-forest">
                   {translate(
                     "resources.contacts.field_categories.background_info",
                   )}
@@ -237,7 +237,7 @@ const ContactShowContentMobile = () => {
                 </div>
               </div>
               <div>
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-lg font-semibold text-vitalo-forest">
                   {translate("resources.tags.name", { smart_count: 2 })}
                 </h3>
                 <Separator />
@@ -266,7 +266,7 @@ const ContactShowContent = () => {
             <div className="flex">
               <Avatar />
               <div className="ml-2 flex-1">
-                <h5 className="text-xl font-semibold">
+                <h5 className="font-heading text-2xl font-bold text-vitalo-forest">
                   <RecordRepresentation />
                 </h5>
                 <div className="inline-flex text-sm text-muted-foreground">

@@ -11,7 +11,7 @@ import { HeaderMenuButton } from "./HeaderMenuButton";
 import { HEADER_SECTIONS, matchHeaderSection } from "./headerSections";
 
 const Header = () => {
-  const { darkModeLogo, lightModeLogo, title } = useConfigurationContext();
+  const { darkModeLogo, title } = useConfigurationContext();
   const location = useLocation();
   const translate = useTranslate();
 
@@ -20,23 +20,16 @@ const Header = () => {
   return (
     <>
       <nav className="grow">
-        <header className="bg-secondary">
+        <header className="bg-vitalo-band text-white">
           <div className="px-4">
             <div className="flex justify-between items-center flex-1 gap-2">
               <Link
                 to="/"
-                className="flex items-center gap-2 text-secondary-foreground no-underline min-w-0"
+                className="flex items-center gap-2 text-white no-underline min-w-0"
               >
-                <img
-                  className="[.light_&]:hidden h-6"
-                  src={darkModeLogo}
-                  alt={title}
-                />
-                <img
-                  className="[.dark_&]:hidden h-6"
-                  src={lightModeLogo}
-                  alt={title}
-                />
+                {/* The band is green in both themes: the white-bodied logo
+                    is the one that reads on it. */}
+                <img className="h-6" src={darkModeLogo} alt={title} />
                 <h1 className="text-xl font-semibold truncate">{title}</h1>
               </Link>
               <div>
@@ -93,8 +86,8 @@ const NavigationTab = ({
     aria-current={isActive ? "page" : undefined}
     className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 whitespace-nowrap ${
       isActive
-        ? "text-secondary-foreground border-secondary-foreground"
-        : "text-secondary-foreground/70 border-transparent hover:text-secondary-foreground/80"
+        ? "text-white border-vitalo-orange"
+        : "text-white/80 border-transparent hover:text-white"
     }`}
   >
     {label}

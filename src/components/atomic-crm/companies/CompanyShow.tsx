@@ -123,7 +123,9 @@ const CompanyShowContent = () => {
           <CardContent>
             <div className="flex items-center mb-3">
               <CompanyAvatar />
-              <h5 className="text-xl ml-2 flex-1">{record.name}</h5>
+              <h5 className="font-heading text-2xl font-bold text-vitalo-forest ml-2 flex-1">
+                {record.name}
+              </h5>
               <CompanyAssessmentButton />
             </div>
             <div className="mb-4">
