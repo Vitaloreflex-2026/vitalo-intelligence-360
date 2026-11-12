@@ -22,8 +22,8 @@ export const MobileTopBar = () => {
 
   return (
     <>
-      <div className="fixed top-0 right-0 left-0 z-10 bg-secondary pt-[env(safe-area-inset-top)]">
-        <div className="flex h-14 items-center gap-2 px-4 text-secondary-foreground">
+      <div className="fixed top-0 right-0 left-0 z-10 bg-vitalo-cream pt-[env(safe-area-inset-top)]">
+        <div className="flex h-14 items-center gap-2 px-4 text-vitalo-forest">
           <img className="h-6 [.light_&]:hidden" src={darkModeLogo} alt="" />
           <img className="h-6 [.dark_&]:hidden" src={lightModeLogo} alt="" />
           <h1 className="truncate text-xl font-semibold">{title}</h1>

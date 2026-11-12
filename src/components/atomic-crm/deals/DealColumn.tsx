@@ -19,7 +19,7 @@ export const DealColumn = ({
   return (
     <div className="flex-1 min-w-52 pb-8">
       <div className="flex flex-col items-center">
-        <h3 className="text-base font-medium">
+        <h3 className="text-base font-bold text-vitalo-forest">
           {findDealLabel(dealStages, stage)}
         </h3>
         <p className="text-sm text-muted-foreground">
