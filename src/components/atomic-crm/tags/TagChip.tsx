@@ -1,16 +1,16 @@
 import { X } from "lucide-react";
 import { useState } from "react";
 
-import type { Tag } from "../types";
+import type { Tag, TagsResource } from "../types";
 import { TagEditModal } from "./TagEditModal";
 
 type TagChipProps = {
   tag: Tag;
-
+  tagsResource?: TagsResource;
   onUnlink: () => Promise<void>;
 };
 
-export function TagChip({ tag, onUnlink }: TagChipProps) {
+export function TagChip({ tag, tagsResource, onUnlink }: TagChipProps) {
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
@@ -39,7 +39,12 @@ export function TagChip({ tag, onUnlink }: TagChipProps) {
           <X className="w-4 h-4 md:w-3 md:h-3" />
         </button>
       </div>
-      <TagEditModal tag={tag} open={open} onClose={handleClose} />
+      <TagEditModal
+        tag={tag}
+        tagsResource={tagsResource}
+        open={open}
+        onClose={handleClose}
+      />
     </>
   );
 }

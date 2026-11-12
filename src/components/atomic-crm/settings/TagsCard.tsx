@@ -4,16 +4,26 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { useTags } from "../tags/useTags";
-import type { Tag } from "../types";
+import type { Tag, TagsResource } from "../types";
 
-const TagRow = ({ tag }: { tag: Tag }) => {
+type TagsCardProps = {
+  tagsResource: TagsResource;
+  /** The resource whose records carry these tags. */
+  usedBy: "contacts" | "companies";
+};
+
+const TagRow = ({
+  tag,
+  tagsResource,
+  usedBy,
+}: { tag: Tag } & TagsCardProps) => {
   const translate = useTranslate();
   const notify = useNotify();
   const [remove, { isPending: isRemoving }] = useDelete();
   // Only the total matters, hence the one-record page.
   // ponytail: one count request per tag; move to a tag usage view if the list
   // grows past a few dozen tags.
-  const { total } = useGetList("contacts", {
+  const { total } = useGetList(usedBy, {
     filter: { "tags@cs": `{${tag.id}}` },
     pagination: { page: 1, perPage: 1 },
   });
@@ -30,7 +40,9 @@ const TagRow = ({ tag }: { tag: Tag }) => {
         {total != null && (
           <span className="text-sm text-muted-foreground">
             {translate(
-              total ? "crm.settings.tags.usage" : "crm.settings.tags.unused",
+              total
+                ? `crm.settings.${tagsResource}.usage`
+                : `crm.settings.${tagsResource}.unused`,
               { smart_count: total },
             )}
           </span>
@@ -44,11 +56,13 @@ const TagRow = ({ tag }: { tag: Tag }) => {
           disabled={total !== 0 || isRemoving}
           onClick={() =>
             remove(
-              "tags",
+              tagsResource,
               { id: tag.id, previousData: tag },
               {
                 onError: () =>
-                  notify("crm.settings.tags.delete_error", { type: "error" }),
+                  notify(`crm.settings.${tagsResource}.delete_error`, {
+                    type: "error",
+                  }),
               },
             )
           }
@@ -62,31 +76,38 @@ const TagRow = ({ tag }: { tag: Tag }) => {
 };
 
 /**
- * Tags are created from the contact pages; this card is where the ones nobody
+ * Tags are created from the contact (or company) pages; this card is where the ones nobody
  * uses anymore get removed. Like the other standalone cards of this page, it
  * saves on its own rather than through the page's save button.
  */
-export const TagsCard = () => {
+export const TagsCard = ({ tagsResource, usedBy }: TagsCardProps) => {
   const translate = useTranslate();
-  const { data: tags, isPending } = useTags();
+  const { data: tags, isPending } = useTags({ resource: tagsResource });
 
   return (
-    <Card id="tags">
+    <Card id={tagsResource}>
       <CardContent className="space-y-4">
         <h2 className="text-xl font-semibold text-muted-foreground">
-          {translate("resources.tags.name", { smart_count: 2 })}
+          {translate(`resources.${tagsResource}.name`, { smart_count: 2 })}
         </h2>
         <p className="text-sm text-muted-foreground">
-          {translate("crm.settings.tags.hint")}
+          {translate(`crm.settings.${tagsResource}.hint`)}
         </p>
         {isPending ? null : tags?.length ? (
           <ul className="divide-y">
             {tags.map((tag) => (
-              <TagRow key={tag.id} tag={tag} />
+              <TagRow
+                key={tag.id}
+                tag={tag}
+                tagsResource={tagsResource}
+                usedBy={usedBy}
+              />
             ))}
           </ul>
         ) : (
-          <p className="text-sm">{translate("crm.settings.tags.empty")}</p>
+          <p className="text-sm">
+            {translate(`crm.settings.${tagsResource}.empty`)}
+          </p>
         )}
       </CardContent>
     </Card>

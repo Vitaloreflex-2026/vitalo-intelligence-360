@@ -1,6 +1,6 @@
 import { useTranslate } from "ra-core";
 
-import type { Tag } from "../types";
+import type { Tag, TagsResource } from "../types";
 import { TagDialog } from "./TagDialog";
 import { useCreateTag } from "./useCreateTag";
 
@@ -8,14 +8,16 @@ type TagCreateModalProps = {
   open: boolean;
   onClose(): void;
   onSuccess?(tag: Tag): Promise<void>;
+  tagsResource?: TagsResource;
 };
 
 export function TagCreateModal({
   open,
   onClose,
   onSuccess,
+  tagsResource,
 }: TagCreateModalProps) {
-  const createTag = useCreateTag();
+  const createTag = useCreateTag(tagsResource);
   const translate = useTranslate();
 
   const handleCreateTag = async (data: Pick<Tag, "name" | "color">) => {

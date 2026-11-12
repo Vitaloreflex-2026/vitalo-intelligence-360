@@ -434,6 +434,7 @@ export const englishCrmMessages = {
       name: "Company |||| Companies",
       forcedCaseName: "Company",
       fields: {
+        tags: "Tags",
         name: "Company name",
         website: "Website",
         linkedin_url: "LinkedIn URL",
@@ -878,6 +879,9 @@ export const englishCrmMessages = {
         name_placeholder: "Enter tag name",
       },
     },
+    company_tags: {
+      name: "Company tag |||| Company tags",
+    },
   },
   crm: {
     notifications: {
@@ -1130,6 +1134,14 @@ export const englishCrmMessages = {
         unused: "Unused",
         usage:
           "Used by %{smart_count} contact |||| Used by %{smart_count} contacts",
+        delete_error: "This tag could not be deleted",
+      },
+      company_tags: {
+        hint: "A company tag can only be deleted once no company uses it. Deletion is immediate.",
+        empty: "No company tag yet.",
+        unused: "Unused",
+        usage:
+          "Used by %{smart_count} company |||| Used by %{smart_count} companies",
         delete_error: "This tag could not be deleted",
       },
       external_trainers: {

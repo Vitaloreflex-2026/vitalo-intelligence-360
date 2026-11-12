@@ -98,7 +98,8 @@ select
     c.quote_approved,
     c.service_invoiced,
     count(distinct d.id) as nb_deals,
-    count(distinct co.id) as nb_contacts
+    count(distinct co.id) as nb_contacts,
+    c.tags
 from public.companies c
     left join public.deals d on c.id = d.company_id
     left join public.contacts co on c.id = co.company_id

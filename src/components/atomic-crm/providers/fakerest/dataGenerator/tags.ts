@@ -12,3 +12,13 @@ const tags = [
 export const generateTags = (_: Db) => {
   return [...tags];
 };
+
+const companyTags = [
+  { id: 0, name: "key-account", color: "#bcd4e6" },
+  { id: 1, name: "prospect", color: "#fde2e4" },
+  { id: 2, name: "partner", color: "#c5dedd" },
+];
+
+export const generateCompanyTags = (_: Db) => {
+  return [...companyTags];
+};

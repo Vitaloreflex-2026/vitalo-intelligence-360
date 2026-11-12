@@ -1,6 +1,6 @@
 import { useTranslate, useUpdate } from "ra-core";
 
-import type { Tag } from "../types";
+import type { Tag, TagsResource } from "../types";
 import { TagDialog } from "./TagDialog";
 
 type TagEditModalProps = {
@@ -8,6 +8,7 @@ type TagEditModalProps = {
   open: boolean;
   onClose(): void;
   onSuccess?(tag: Tag): Promise<void>;
+  tagsResource?: TagsResource;
 };
 
 export function TagEditModal({
@@ -15,13 +16,14 @@ export function TagEditModal({
   open,
   onClose,
   onSuccess,
+  tagsResource = "tags",
 }: TagEditModalProps) {
   const [update] = useUpdate<Tag>();
   const translate = useTranslate();
 
   const handleEditTag = async (data: Pick<Tag, "name" | "color">) => {
     await update(
-      "tags",
+      tagsResource,
       { id: tag.id, data, previousData: tag },
       {
         onSuccess: async (tag) => {

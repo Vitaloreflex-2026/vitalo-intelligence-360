@@ -24,6 +24,7 @@ export interface Db {
   sales: Sale[];
   sales_documents: SaleDocument[];
   tags: Tag[];
+  company_tags: Tag[];
   tasks: Task[];
   configuration: Array<{ id: number; config: ConfigurationContextValue }>;
 }

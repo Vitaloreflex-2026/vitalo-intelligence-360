@@ -441,6 +441,7 @@ export const frenchCrmMessages = {
       name: "Entreprise |||| Entreprises",
       forcedCaseName: "Entreprise",
       fields: {
+        tags: "Étiquettes",
         name: "Nom de l'entreprise",
         website: "Site web",
         linkedin_url: "LinkedIn",
@@ -892,6 +893,9 @@ export const frenchCrmMessages = {
         name_placeholder: "Saisir le nom de l'étiquette",
       },
     },
+    company_tags: {
+      name: "Étiquette entreprise |||| Étiquettes entreprises",
+    },
   },
   crm: {
     notifications: {
@@ -1147,6 +1151,14 @@ export const frenchCrmMessages = {
         unused: "Inutilisée",
         usage:
           "Utilisée par %{smart_count} contact |||| Utilisée par %{smart_count} contacts",
+        delete_error: "Impossible de supprimer cette étiquette",
+      },
+      company_tags: {
+        hint: "Une étiquette entreprise ne peut être supprimée que lorsqu'aucune entreprise ne l'utilise. La suppression est immédiate.",
+        empty: "Aucune étiquette entreprise pour le moment.",
+        unused: "Inutilisée",
+        usage:
+          "Utilisée par %{smart_count} entreprise |||| Utilisée par %{smart_count} entreprises",
         delete_error: "Impossible de supprimer cette étiquette",
       },
       external_trainers: {
