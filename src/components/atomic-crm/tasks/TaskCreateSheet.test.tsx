@@ -62,6 +62,7 @@ describe("TaskCreateSheet", () => {
     const dueDateInput = screen.getByLabelText(/date and time/i);
     await dueDateInput.clear();
     await dueDateInput.fill("2026-03-06T12:30");
+    await screen.getByLabelText(/end time/i).fill("14:00");
 
     await screen.getByRole("button", { name: /^save$/i }).click();
 
@@ -93,6 +94,8 @@ describe("TaskCreateSheet", () => {
 
     expect(createdTask).toMatchObject({
       contact_id: 2,
+      // 12:30 to 14:00: the end time is saved as the meeting's length.
+      duration_minutes: 90,
       text: "Follow up about onboarding",
       type: "Premier contact",
     });

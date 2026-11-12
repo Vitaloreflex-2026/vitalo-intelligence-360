@@ -54,6 +54,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/tasks/meetingEndTime.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/tasks/TasksListFilter.tsx",
           "type": "registry:component"
         },
