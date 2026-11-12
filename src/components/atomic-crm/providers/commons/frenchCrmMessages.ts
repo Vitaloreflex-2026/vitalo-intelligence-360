@@ -1055,6 +1055,10 @@ export const frenchCrmMessages = {
       load_more: "Charger plus d'activité",
     },
     dashboard: {
+      hero: {
+        greeting: "Bonjour %{name}",
+        subtitle: "Voici un aperçu de votre journée.",
+      },
       calendar: {
         title: "Les rendez-vous de l'équipe",
         reschedule_error: "Impossible de déplacer ce rendez-vous",

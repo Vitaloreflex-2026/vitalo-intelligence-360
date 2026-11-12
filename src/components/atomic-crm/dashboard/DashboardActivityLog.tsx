@@ -11,10 +11,10 @@ export function DashboardActivityLog() {
   return (
     <div className="flex flex-col">
       <div className="flex items-center mb-4 md:mb-2">
-        <div className="mr-3 flex">
-          <Clock className="text-muted-foreground w-6 h-6" />
+        <div className="mr-3 flex rounded-full bg-vitalo-blue p-2 shadow-sm">
+          <Clock className="text-background w-5 h-5" />
         </div>
-        <h2 className="text-xl font-semibold text-muted-foreground">
+        <h2 className="font-heading text-xl font-bold text-vitalo-forest">
           {translate("crm.dashboard.latest_activity", {
             _: "Latest Activity",
           })}
@@ -23,7 +23,7 @@ export function DashboardActivityLog() {
       {isMobile ? (
         <ActivityLog pageSize={10} />
       ) : (
-        <Card className="mb-2 p-6">
+        <Card className="mb-2 p-6 border-t-4 border-t-vitalo-blue shadow-md">
           <ActivityLog pageSize={10} />
         </Card>
       )}

@@ -46,7 +46,7 @@ import {
 const FIRST_SLOT = "07:00:00";
 const LAST_SLOT = "21:00:00";
 
-const GRID_HEIGHT = 520;
+const GRID_HEIGHT = 640;
 
 /** Meetings shown in a month cell before collapsing into a "+N more" link. */
 const MAX_EVENTS_PER_DAY = 3;
@@ -235,10 +235,10 @@ export const MeetingsCalendar = () => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center">
-        <div className="mr-3 flex">
-          <CalendarDays className="text-muted-foreground w-6 h-6" />
+        <div className="mr-3 flex rounded-full bg-vitalo-orange p-2 shadow-sm">
+          <CalendarDays className="text-vitalo-ink w-5 h-5" />
         </div>
-        <h2 className="text-xl font-semibold text-muted-foreground flex-1">
+        <h2 className="font-heading text-lg sm:text-xl font-bold text-vitalo-forest flex-1">
           {translate("crm.dashboard.calendar.title", { _: "Team meetings" })}
         </h2>
         <div className="flex items-center gap-2">
@@ -267,7 +267,7 @@ export const MeetingsCalendar = () => {
         </p>
       )}
 
-      <Card className="p-3 gap-3 meetings-calendar">
+      <Card className="p-3 gap-3 meetings-calendar shadow-md">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           // Seven day columns are unreadable on a phone, and scrolling the week

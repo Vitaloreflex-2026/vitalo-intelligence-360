@@ -8,77 +8,128 @@
   --fc-border-color: var(--border);
   --fc-page-bg-color: var(--card);
   --fc-neutral-bg-color: var(--muted);
-  --fc-today-bg-color: var(--accent);
+  --fc-today-bg-color: var(--vitalo-cream);
   --fc-now-indicator-color: var(--destructive);
   --fc-small-font-size: 0.75rem;
   --fc-event-selected-overlay-color: transparent;
 }
 
 .meetings-calendar .fc {
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
 }
 
-/* Header: the toolbar is chrome, not content, so it stays muted and compact. */
+/*
+ * Header: the toolbar is a forest-green band, as the website uses for its
+ * coloured sections, with white pill buttons and the active view in orange.
+ */
 .meetings-calendar .fc .fc-toolbar {
   gap: 0.5rem;
   margin-bottom: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.75rem;
+  background-color: var(--vitalo-band);
+  flex-wrap: wrap;
+}
+
+/* Keep each chunk on one line: a wrapped title or a stacked "today" button
+   doubles the height of the band. */
+.meetings-calendar .fc .fc-toolbar-chunk {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .meetings-calendar .fc .fc-toolbar-title {
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--foreground);
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #fff;
 }
 
 .meetings-calendar .fc .fc-button {
   background-color: transparent;
-  border-color: var(--border);
-  color: var(--muted-foreground);
-  font-size: 0.75rem;
+  border-color: rgb(255 255 255 / 0.55);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.8125rem;
   font-weight: 500;
-  padding: 0.25rem 0.5rem;
+  padding: 0.3125rem 0.75rem;
   text-transform: capitalize;
   box-shadow: none;
 }
 
+/* A button group is one pill: the group carries the outline, not its parts. */
+.meetings-calendar .fc .fc-toolbar .fc-button-group {
+  border: 1px solid rgb(255 255 255 / 0.55);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.meetings-calendar .fc .fc-toolbar .fc-button-group > .fc-button {
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+}
+
 .meetings-calendar .fc .fc-button:hover:not(:disabled) {
-  background-color: var(--muted);
-  color: var(--foreground);
+  background-color: rgb(255 255 255 / 0.18);
+  color: #fff;
 }
 
 .meetings-calendar .fc .fc-button:disabled {
-  opacity: 0.4;
+  opacity: 0.55;
 }
 
 .meetings-calendar .fc .fc-button-primary:not(:disabled).fc-button-active {
-  background-color: var(--muted);
-  border-color: var(--border);
-  color: var(--foreground);
+  background-color: var(--vitalo-orange);
+  color: var(--vitalo-ink);
+  font-weight: 600;
 }
 
 .meetings-calendar .fc .fc-button:focus-visible {
-  outline: 2px solid var(--ring);
+  outline: 2px solid #fff;
   outline-offset: 1px;
   box-shadow: none;
 }
 
-/* Grid: axis and day headers read as labels, not as data. */
+/* Grid: a tinted header row frames the week, and today's column is called out. */
+.meetings-calendar .fc .fc-col-header-cell {
+  background-color: var(--vitalo-cream);
+}
+
+/* The forest green falls under 4.5:1 on the cream at this size, so the day
+   labels use the theme's text color, which also stays light in dark mode. */
+.meetings-calendar .fc .fc-col-header-cell .fc-col-header-cell-cushion {
+  color: var(--foreground);
+}
+
+.meetings-calendar .fc .fc-col-header-cell.fc-day-today {
+  background-color: var(--vitalo-orange);
+}
+
+.meetings-calendar
+  .fc
+  .fc-col-header-cell.fc-day-today
+  .fc-col-header-cell-cushion {
+  color: var(--vitalo-ink);
+}
+
 .meetings-calendar .fc .fc-col-header-cell-cushion,
 .meetings-calendar .fc .fc-timegrid-axis-cushion,
 .meetings-calendar .fc .fc-timegrid-slot-label-cushion {
-  color: var(--muted-foreground);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  padding: 0.25rem;
+  color: var(--vitalo-forest);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.375rem 0.25rem;
   text-decoration: none;
 }
 
 .meetings-calendar .fc .fc-timegrid-slot {
-  height: 2rem;
+  height: 2.5rem;
 }
 
 .meetings-calendar .fc .fc-scrollgrid {
-  border-radius: 0.375rem;
+  border-radius: 0.75rem;
   overflow: hidden;
 }
 
@@ -88,10 +139,10 @@
  * which is what stays legible once a column is too narrow for the label.
  */
 .meetings-calendar .fc .fc-timegrid-event {
-  border-radius: 0.25rem;
-  border-width: 0 0 0 3px;
-  box-shadow: none;
-  padding: 1px 2px;
+  border-radius: 0.375rem;
+  border-width: 0 0 0 4px;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.18);
+  padding: 2px 4px;
 }
 
 .meetings-calendar .fc .fc-event-main {
@@ -99,7 +150,7 @@
 }
 
 .meetings-calendar .fc .fc-event-time {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
@@ -114,21 +165,26 @@
 /* Month view: same block treatment as the time grid, on a single line. */
 .meetings-calendar .fc .fc-daygrid-event {
   border-radius: 0.25rem;
-  border-width: 0 0 0 3px;
+  border-width: 0 0 0 4px;
   box-shadow: none;
   margin: 1px 2px;
   padding: 0 2px;
 }
 
 .meetings-calendar .fc .fc-daygrid-day-number {
-  color: var(--muted-foreground);
-  font-size: 0.6875rem;
+  color: var(--foreground);
+  font-size: 0.75rem;
   padding: 0.25rem;
   text-decoration: none;
 }
 
 .meetings-calendar .fc .fc-daygrid-day.fc-day-today {
-  background-color: var(--accent);
+  background-color: var(--vitalo-cream);
+}
+
+.meetings-calendar .fc .fc-day-today .fc-daygrid-day-number {
+  color: var(--vitalo-forest);
+  font-weight: 700;
 }
 
 .meetings-calendar .fc .fc-daygrid-more-link {

@@ -34,10 +34,10 @@ export const HotContacts = () => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center">
-        <div className="mr-3 flex">
-          <Users className="text-muted-foreground w-6 h-6" />
+        <div className="mr-3 flex rounded-full bg-vitalo-red p-2 shadow-sm">
+          <Users className="text-background w-5 h-5" />
         </div>
-        <h2 className="text-xl font-semibold text-muted-foreground">
+        <h2 className="font-heading text-xl font-bold text-vitalo-forest">
           {translate("resources.contacts.hot.title")}
         </h2>
         <TooltipProvider>
@@ -60,7 +60,7 @@ export const HotContacts = () => {
           </Tooltip>
         </TooltipProvider>
       </div>
-      <Card className="py-0">
+      <Card className="py-0 border-t-4 border-t-vitalo-red shadow-md">
         <SimpleList<Contact>
           linkType="show"
           data={contactData}
