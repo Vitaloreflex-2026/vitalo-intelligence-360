@@ -187,7 +187,7 @@ describe("MeetingsCalendar", () => {
     expect(fills).toContain("rgb(226, 217, 243)"); // Bruno — #e2d9f3
   });
 
-  it("names the contact and the company of the meeting a click opens", async () => {
+  it("links the meeting a click opens to its contact and company pages", async () => {
     // Arrange
     const screen = await renderCalendar();
     const block = screen.getByText("Cadrage Acme");
@@ -199,12 +199,16 @@ describe("MeetingsCalendar", () => {
     // Assert — the form has no contact field, so these links are the only
     // thing saying whose meeting was opened.
     const dialog = screen.getByRole("dialog");
+    const contactLink = dialog.getByRole("link", { name: "Ada Lovelace" });
+    const companyLink = dialog.getByRole("link", { name: "Acme", exact: true });
+    await expect.element(contactLink).toBeVisible();
     await expect
-      .element(dialog.getByRole("link", { name: "Ada Lovelace" }))
-      .toBeVisible();
+      .element(contactLink)
+      .toHaveAttribute("href", "/contacts/1/show");
+    await expect.element(companyLink).toBeVisible();
     await expect
-      .element(dialog.getByRole("link", { name: "Acme", exact: true }))
-      .toBeVisible();
+      .element(companyLink)
+      .toHaveAttribute("href", "/companies/1/show");
   });
 
   it("shows the user's external calendars as busy blocks", async () => {

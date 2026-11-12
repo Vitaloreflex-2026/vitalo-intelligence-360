@@ -23,13 +23,23 @@ import {
 import { TaskFormContent } from "./TaskFormContent";
 
 /** The record the enclosing reference resolved, named and linked to its page. */
-const RelatedRecord = ({ label }: { label: string }) => {
+const RelatedRecord = ({
+  label,
+  onFollow,
+}: {
+  label: string;
+  onFollow: () => void;
+}) => {
   const path = useGetPathForRecord({ link: "show" });
   if (!path) return null;
   return (
     <span>
       {label}{" "}
-      <Link to={path} className="font-medium text-foreground hover:underline">
+      <Link
+        to={path}
+        onClick={onFollow}
+        className="font-medium text-foreground hover:underline"
+      >
         <RecordRepresentation />
       </Link>
     </span>
@@ -40,17 +50,25 @@ const RelatedRecord = ({ label }: { label: string }) => {
  * Who the meeting is with. The form cannot change the contact, so this line is
  * the only place the dialog says whose meeting it is, which matters when it is
  * opened from the calendar, away from any contact page.
+ *
+ * Following a link closes the dialog: its host can outlive the navigation (the
+ * notifications panel, the contact's own page), and the dialog would otherwise
+ * stay on top of the page the link leads to.
  */
-const TaskContactSummary = () => {
+const TaskContactSummary = ({ close }: { close: () => void }) => {
   const translate = useTranslate();
   return (
     // min-h keeps the form from jumping once the names have loaded.
     <DialogDescription className="flex min-h-5 flex-wrap justify-center gap-x-4 gap-y-1 sm:justify-start">
       <ReferenceField source="contact_id" reference="contacts" link={false}>
-        <RelatedRecord label={translate("resources.tasks.fields.contact_id")} />
+        <RelatedRecord
+          label={translate("resources.tasks.fields.contact_id")}
+          onFollow={close}
+        />
         <ReferenceField source="company_id" reference="companies" link={false}>
           <RelatedRecord
             label={translate("resources.contacts.fields.company_id")}
+            onFollow={close}
           />
         </ReferenceField>
       </ReferenceField>
@@ -93,7 +111,7 @@ export const TaskEdit = ({
                 <DialogTitle>
                   {translate("resources.tasks.action.edit")}
                 </DialogTitle>
-                <TaskContactSummary />
+                <TaskContactSummary close={close} />
               </DialogHeader>
               <TaskFormContent />
               <DialogFooter className="w-full sm:justify-between gap-4">

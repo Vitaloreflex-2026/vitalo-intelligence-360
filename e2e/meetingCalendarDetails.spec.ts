@@ -69,4 +69,34 @@ test.describe("meeting details in the dashboard calendar", () => {
       dialog.getByRole("link", { name: "Smith Corp" }),
     ).toBeVisible();
   });
+
+  test("closes the meeting dialog when its contact link is followed from the notifications", async ({
+    page,
+    isMobile,
+  }) => {
+    // The notification panel lives in the desktop layout only.
+    test.skip(!!isMobile, "desktop-only panel");
+
+    await page.goto("/");
+    await page.getByLabel("Email").fill("john@doe.com");
+    await page
+      .getByRole("textbox", { name: "Password", exact: true })
+      .fill("password");
+    await page.getByRole("button", { name: "Sign in" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Team meetings" }),
+    ).toBeVisible();
+
+    await page.getByRole("button", { name: "Notifications" }).click();
+    await page.getByRole("button", { name: "Postpone" }).first().click();
+    await page.getByRole("menuitem", { name: "Edit" }).click();
+    const dialog = page.getByRole("dialog", { name: "Edit meeting" });
+
+    // The panel outlives the navigation, so only the dialog closing itself
+    // can uncover the contact page the link leads to.
+    await dialog.getByRole("link", { name: "Jane Smith" }).click();
+
+    await expect(dialog).toBeHidden();
+    await expect(page).toHaveURL(/\/contacts\/\d+\/show/);
+  });
 });
