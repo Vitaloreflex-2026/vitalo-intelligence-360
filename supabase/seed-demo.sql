@@ -309,24 +309,24 @@ insert into public.deal_notes (deal_id, text, date) values
 -- 8. Meetings (tasks). `type` and `mode` use the `choices` labels
 --    (rdv_type / rdv_mode); `location` stays empty for the remote modes.
 --
-insert into public.tasks (contact_id, type, mode, location, text, due_date, done_date) values
-    (1,  'Rendez-vous de suivi',            'Présentiel',      'Siège Batilor, Lyon 7e',     'Présenter le chiffrage détaillé par agence pour le déploiement.', now() + interval '3 days', null),
-    (2,  'Rendez-vous de suivi',            'Présentiel',      'Chantier Villeurbanne',      'Observer une séance d''échauffement menée par l''équipe.', now() + interval '8 days', null),
-    (5,  'Rendez-vous découverte',          'Visioconférence', null,                         'Analyser les plannings de nuit sur les trois derniers mois.', now() + interval '2 days', null),
-    (4,  'Préparation d''une proposition',  'Téléphone',       null,                         'Valider le périmètre avant envoi de la proposition définitive.', now() - interval '5 days', now() - interval '5 days'),
-    (6,  'Lancement de mission',            'Présentiel',      'Novaterre, quai Malakoff',   'Comité de lancement avec les référents des 4 sites pilotes.', now() + interval '12 days', null),
-    (7,  'Rendez-vous de suivi',            'Visioconférence', null,                         'Caler le planning des diagnostics site par site.', now() + interval '6 days', null),
-    (8,  'Premier contact',                 'Téléphone',       null,                         'Comprendre les contraintes achats et le découpage en lots.', now() + interval '4 days', null),
-    (9,  'Rendez-vous découverte',          'Présentiel',      'Maison Delorme, Reims',      'Visiter l''atelier et cadrer le format de la sensibilisation.', now() + interval '15 days', null),
-    (11, 'Préparation d''une proposition',  'Visioconférence', null,                         'Présenter la proposition RPS avant passage en commission.', now() + interval '5 days', null),
-    (12, 'Premier contact',                 'Téléphone',       null,                         'Associer les organisations syndicales au cadrage.', now() + interval '9 days', null),
-    (14, 'Rendez-vous découverte',          'Visioconférence', null,                         'Recadrer le format des modules manageurs sur une journée.', now() + interval '7 days', null),
-    (17, 'Rendez-vous de suivi',            'Présentiel',      'Mairie de Sainte-Hélène',    'Relire ensemble le cahier des charges du marché.', now() + interval '2 days', null),
-    (16, 'Bilan annuel',                    'Présentiel',      'Mairie de Sainte-Hélène',    'Point d''avancement sur la mise à jour du DUERP.', now() + interval '30 days', null),
-    (18, 'Premier contact',                 'Salon',           'Salon Préventica, Lille',    'Reprendre contact sur le stand, budget à rouvrir.', now() + interval '45 days', null),
-    (19, 'Rendez-vous découverte',          'Présentiel',      'Agence de Marcq-en-Barœul',  'Suivre une tournée pour objectiver les temps de conduite.', now() + interval '18 days', null),
-    (3,  'Restitution',                     'Présentiel',      'Siège Batilor, Lyon 7e',     'Restituer les résultats du diagnostic en CSE.', now() - interval '30 days', now() - interval '30 days'),
-    (20, 'Rendez-vous de suivi',            'Téléphone',       null,                         'Remercier pour les recommandations et faire un point trimestriel.', now() - interval '10 days', now() - interval '10 days');
+insert into public.tasks (contact_ids, type, mode, location, text, due_date, done_date) values
+    (array[1],  'Rendez-vous de suivi',            'Présentiel',      'Siège Batilor, Lyon 7e',     'Présenter le chiffrage détaillé par agence pour le déploiement.', now() + interval '3 days', null),
+    (array[2],  'Rendez-vous de suivi',            'Présentiel',      'Chantier Villeurbanne',      'Observer une séance d''échauffement menée par l''équipe.', now() + interval '8 days', null),
+    (array[5],  'Rendez-vous découverte',          'Visioconférence', null,                         'Analyser les plannings de nuit sur les trois derniers mois.', now() + interval '2 days', null),
+    (array[4],  'Préparation d''une proposition',  'Téléphone',       null,                         'Valider le périmètre avant envoi de la proposition définitive.', now() - interval '5 days', now() - interval '5 days'),
+    (array[6],  'Lancement de mission',            'Présentiel',      'Novaterre, quai Malakoff',   'Comité de lancement avec les référents des 4 sites pilotes.', now() + interval '12 days', null),
+    (array[7],  'Rendez-vous de suivi',            'Visioconférence', null,                         'Caler le planning des diagnostics site par site.', now() + interval '6 days', null),
+    (array[8],  'Premier contact',                 'Téléphone',       null,                         'Comprendre les contraintes achats et le découpage en lots.', now() + interval '4 days', null),
+    (array[9],  'Rendez-vous découverte',          'Présentiel',      'Maison Delorme, Reims',      'Visiter l''atelier et cadrer le format de la sensibilisation.', now() + interval '15 days', null),
+    (array[11], 'Préparation d''une proposition',  'Visioconférence', null,                         'Présenter la proposition RPS avant passage en commission.', now() + interval '5 days', null),
+    (array[12], 'Premier contact',                 'Téléphone',       null,                         'Associer les organisations syndicales au cadrage.', now() + interval '9 days', null),
+    (array[14], 'Rendez-vous découverte',          'Visioconférence', null,                         'Recadrer le format des modules manageurs sur une journée.', now() + interval '7 days', null),
+    (array[17], 'Rendez-vous de suivi',            'Présentiel',      'Mairie de Sainte-Hélène',    'Relire ensemble le cahier des charges du marché.', now() + interval '2 days', null),
+    (array[16], 'Bilan annuel',                    'Présentiel',      'Mairie de Sainte-Hélène',    'Point d''avancement sur la mise à jour du DUERP.', now() + interval '30 days', null),
+    (array[18], 'Premier contact',                 'Salon',           'Salon Préventica, Lille',    'Reprendre contact sur le stand, budget à rouvrir.', now() + interval '45 days', null),
+    (array[19], 'Rendez-vous découverte',          'Présentiel',      'Agence de Marcq-en-Barœul',  'Suivre une tournée pour objectiver les temps de conduite.', now() + interval '18 days', null),
+    (array[3],  'Restitution',                     'Présentiel',      'Siège Batilor, Lyon 7e',     'Restituer les résultats du diagnostic en CSE.', now() - interval '30 days', now() - interval '30 days'),
+    (array[20], 'Rendez-vous de suivi',            'Téléphone',       null,                         'Remercier pour les recommandations et faire un point trimestriel.', now() - interval '10 days', now() - interval '10 days');
 
 --
 -- 9. Assessments ("états des lieux"). One row per company at a different stage
@@ -647,7 +647,7 @@ begin
     update public.deals set trainer_ids = array[owner_id]
     where hours_delivered is not null and trainer_ids is null;
     update public.deal_notes    set sales_id = owner_id where sales_id is null;
-    update public.tasks         set sales_id = owner_id where sales_id is null;
+    update public.tasks         set sales_ids = array[owner_id] where sales_ids is null;
 
     -- Assessments carry no sales_id, but the closed one names who closed it and
     -- every planned next step names an owner.

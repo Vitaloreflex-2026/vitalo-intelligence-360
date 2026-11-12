@@ -42,9 +42,26 @@ export type MeetingEvent = {
     /** The full record, so a drag can send it as `previousData` on update. */
     task: Task;
     type: string;
-    salesId: Identifier | null;
+    /** One fill per consultant holding the meeting, striped across the block. */
+    fills: string[];
     isDone: boolean;
   };
+};
+
+const STRIPE_PX = 8;
+
+/**
+ * Background for a meeting held by several consultants: diagonal bands cycling
+ * through each one's color. A single fill needs none, the plain background
+ * color already carries it.
+ */
+export const stripedFill = (fills: string[]): string | undefined => {
+  if (fills.length < 2) return undefined;
+  const bands = fills.map(
+    (fill, index) =>
+      `${fill} ${index * STRIPE_PX}px ${(index + 1) * STRIPE_PX}px`,
+  );
+  return `repeating-linear-gradient(135deg, ${bands.join(", ")})`;
 };
 
 export const meetingEndDate = (
@@ -83,7 +100,7 @@ export const useMeetingEvents = (range: CalendarRange | undefined) => {
     sort: { field: "id", order: "ASC" },
   });
 
-  // Keyed by string: a task's `sales_id` may be a number here and a string
+  // Keyed by string: a task's `sales_ids` may hold numbers here and strings
   // there depending on the provider, and a Map would treat those as two keys.
   const colorBySalesId = useMemo(() => {
     const colors = new Map<string, string>();
@@ -99,8 +116,13 @@ export const useMeetingEvents = (range: CalendarRange | undefined) => {
   const events = useMemo<MeetingEvent[]>(
     () =>
       (tasks ?? []).map((task) => {
-        const fill =
-          colorBySalesId.get(String(task.sales_id)) ?? UNASSIGNED_FILL;
+        const salesIds = task.sales_ids ?? [];
+        const fills = salesIds.length
+          ? salesIds.map(
+              (id) => colorBySalesId.get(String(id)) ?? UNASSIGNED_FILL,
+            )
+          : [UNASSIGNED_FILL];
+        const fill = fills[0];
         const isDone = !!task.done_date;
         return {
           id: String(task.id),
@@ -114,7 +136,7 @@ export const useMeetingEvents = (range: CalendarRange | undefined) => {
           extendedProps: {
             task,
             type: task.type,
-            salesId: task.sales_id ?? null,
+            fills,
             isDone,
           },
         };
@@ -125,7 +147,9 @@ export const useMeetingEvents = (range: CalendarRange | undefined) => {
   // Only the consultants on screen: a legend listing a whole inactive team
   // would be longer than the calendar it explains.
   const legend = useMemo<MeetingConsultant[]>(() => {
-    const visible = new Set((tasks ?? []).map((task) => String(task.sales_id)));
+    const visible = new Set(
+      (tasks ?? []).flatMap((task) => (task.sales_ids ?? []).map(String)),
+    );
     return (consultants ?? [])
       .filter((consultant) => visible.has(String(consultant.id)))
       .map((consultant) => ({

@@ -69,7 +69,7 @@ export const MeetingNotifications = ({
       pagination: { page: 1, perPage: 100 },
       sort: { field: "due_date", order: "DESC" },
       filter: {
-        sales_id: identity?.id,
+        "sales_ids@cs": `{${identity?.id}}`,
         "due_date@lte": endOfToday().toISOString(),
       },
     },

@@ -824,8 +824,8 @@ export const englishCrmMessages = {
         type: "Meeting type",
         mode: "Meeting mode",
         location: "Location",
-        sales_id: "Consultant / Trainer",
-        contact_id: "Contact",
+        sales_ids: "Consultants / Trainers",
+        contact_ids: "Contacts",
         due_short: "on",
       },
       action: {
@@ -846,7 +846,6 @@ export const englishCrmMessages = {
       },
       sheet: {
         edit: "Edit meeting",
-        edit_for: "Edit meeting for %{name}",
       },
       empty: "No meetings yet",
       empty_list_hint: "Meetings added to your contacts will appear here.",
@@ -858,7 +857,7 @@ export const englishCrmMessages = {
         tomorrow: "Tomorrow",
         with_pending: "With pending meetings",
       },
-      regarding_contact: "(Re: %{name})",
+      regarding: "Re:",
       updated: "Meeting updated",
       validation: {
         end_another_day: "The meeting must end on the day it starts",
