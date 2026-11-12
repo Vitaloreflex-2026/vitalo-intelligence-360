@@ -99,6 +99,10 @@ jobs:
 
             - name: ⚙️ Setup supabase
               uses: supabase/setup-cli@v1
+              with:
+                  # Pinned: CLI v3 rejects the [inbucket] section of supabase/config.toml.
+                  # 2.121.0 is the version used by the last successful production deploy.
+                  version: 2.121.0
 
             - name: 📥 Download deps
               run: npm ci
@@ -107,13 +111,13 @@ jobs:
               run: npm run build
 
             - name: 🔗 Supabase Link
-              run: npx supabase link --project-ref "$SUPABASE_PROJECT_ID"
+              run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
 
             - name: 📡 Push supabase migrations
-              run: npx supabase db push
+              run: supabase db push
 
             - name: 📡 Deploy supabase functions
-              run: npx supabase functions deploy
+              run: supabase functions deploy
 
             - name: 📡 Deploy GitHub pages (staging repository)
               run: npx gh-pages --remote staging -d dist -b gh-pages
