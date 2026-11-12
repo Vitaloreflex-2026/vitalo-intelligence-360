@@ -1,3 +1,5 @@
+import escapeRegExp from "lodash/escapeRegExp";
+
 import { transformContainsFilter } from "./transformContainsFilter";
 import { transformInFilter } from "./transformInFilter";
 import { transformOrFilter } from "./transformOrFilter";
@@ -42,6 +44,12 @@ export function transformFilter(filter: Record<string, any>) {
     if (key.endsWith("@cs")) {
       transformedFilters[`${key.slice(0, -3)}`] =
         transformContainsFilter(value);
+      continue;
+    }
+
+    // FakeRest's `_q` operator matches a case-insensitive regular expression
+    if (key.endsWith("@ilike")) {
+      transformedFilters[`${key.slice(0, -6)}_q`] = escapeRegExp(String(value));
       continue;
     }
 

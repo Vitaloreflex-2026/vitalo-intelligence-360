@@ -8,6 +8,7 @@ import {
   DesktopLoading,
   DesktopError,
   BulkTagButton,
+  LocationFilter,
   NonAdminAccountManagerFilter,
 } from "./ContactList.stories";
 
@@ -218,6 +219,25 @@ describe("ContactList", () => {
       await expect.element(screen.getByText("Grace Hopper")).toBeVisible();
       await expect
         .element(screen.getByText("Ada Lovelace"))
+        .not.toBeInTheDocument();
+    });
+  });
+
+  describe("location filter", () => {
+    beforeAll(() => {
+      page.viewport(1600, 900);
+    });
+
+    it("narrows the list down to the contacts whose company is in the typed city", async () => {
+      const screen = await render(<LocationFilter />);
+
+      await expect.element(screen.getByText("Grace Hopper")).toBeVisible();
+
+      await screen.getByRole("textbox", { name: "City" }).fill("lyon");
+
+      await expect.element(screen.getByText("Ada Lovelace")).toBeVisible();
+      await expect
+        .element(screen.getByText("Grace Hopper"))
         .not.toBeInTheDocument();
     });
   });

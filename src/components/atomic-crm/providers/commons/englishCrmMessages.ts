@@ -993,6 +993,7 @@ export const englishCrmMessages = {
       details: "Details",
       last_activity_with_date: "last activity %{date}",
       load_more: "Load more",
+      location: "Location",
       misc: "Misc",
       past: "Past",
       read_more: "Read more",
