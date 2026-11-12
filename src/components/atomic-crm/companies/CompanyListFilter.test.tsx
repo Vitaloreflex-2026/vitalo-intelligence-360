@@ -11,9 +11,9 @@ const companies = [
   buildCompany({ id: 2, name: "Novaterre", sector: "Énergie" }),
 ];
 
-const renderCompanyList = () =>
+const renderCompanyList = (initialEntries?: string[]) =>
   render(
-    <StoryWrapper data={{ companies }}>
+    <StoryWrapper data={{ companies }} initialEntries={initialEntries}>
       <ResourceContextProvider value="companies">
         <CompanyList />
       </ResourceContextProvider>
@@ -57,5 +57,16 @@ describe("CompanyListFilter", () => {
 
     await expect.element(screen.getByText("Batilor")).toBeVisible();
     await expect.element(screen.getByText("Novaterre")).toBeVisible();
+  });
+
+  it("still shows an active sector that is no longer in the sector list", async () => {
+    const filter = encodeURIComponent(
+      JSON.stringify({ sector: "Agriculture" }),
+    );
+    const screen = await renderCompanyList([`/?filter=${filter}`]);
+
+    await expect
+      .element(screen.getByRole("combobox", { name: "Sector" }))
+      .toHaveTextContent("Agriculture");
   });
 });

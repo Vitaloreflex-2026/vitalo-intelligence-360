@@ -3,6 +3,7 @@ import {
   FilterLiveForm,
   useGetIdentity,
   useGetList,
+  useListContext,
   useTranslate,
 } from "ra-core";
 import type { FormHTMLAttributes } from "react";
@@ -30,6 +31,18 @@ export const CompanyListFilter = () => {
     pagination: { page: 1, perPage: 200 },
     sort: { field: "id", order: "ASC" },
   });
+  // Keep an active sector visible even when it left the referential (deleted
+  // option, filter restored from the store or a bookmarked URL).
+  const { filterValues } = useListContext();
+  const activeSector: unknown = filterValues.sector;
+  const sectorChoices =
+    typeof activeSector === "string" &&
+    !sectors?.some((sector) => sector.label === activeSector)
+      ? [
+          ...(sectors ?? []),
+          { id: activeSector, category: "company_sector", label: activeSector },
+        ]
+      : (sectors ?? []);
   const translatedSizes = sizes.map((size) => ({
     ...size,
     name: getTranslatedCompanySizeLabel(size, translate),
@@ -62,7 +75,7 @@ export const CompanyListFilter = () => {
             // minmax(0, 1fr) track: lets a long sector truncate instead of
             // widening the field past the sidebar.
             className="grid-cols-1"
-            choices={sectors ?? []}
+            choices={sectorChoices}
             optionText="label"
             optionValue="label"
             translateChoice={false}
@@ -72,7 +85,9 @@ export const CompanyListFilter = () => {
             modal={isMobile}
             placeholder={translate("resources.companies.fields.sector")}
             inputText={(sector?: Choice) => (
-              <span className="min-w-0 truncate">{sector?.label}</span>
+              <span className="min-w-0 truncate" title={sector?.label}>
+                {sector?.label}
+              </span>
             )}
           />
         </FilterLiveForm>
