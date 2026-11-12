@@ -97,6 +97,12 @@
   background-color: var(--vitalo-cream);
 }
 
+/* The forest green falls under 4.5:1 on the cream at this size, so the day
+   labels use the theme's text color, which also stays light in dark mode. */
+.meetings-calendar .fc .fc-col-header-cell .fc-col-header-cell-cushion {
+  color: var(--foreground);
+}
+
 .meetings-calendar .fc .fc-col-header-cell.fc-day-today {
   background-color: var(--vitalo-orange);
 }
