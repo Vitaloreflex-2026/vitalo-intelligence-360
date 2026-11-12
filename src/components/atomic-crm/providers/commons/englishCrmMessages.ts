@@ -1037,6 +1037,10 @@ export const englishCrmMessages = {
       load_more: "Load more activity",
     },
     dashboard: {
+      hero: {
+        greeting: "Hello %{name}",
+        subtitle: "Here is your day at a glance.",
+      },
       calendar: {
         title: "Team meetings",
         reschedule_error: "This meeting could not be moved",
