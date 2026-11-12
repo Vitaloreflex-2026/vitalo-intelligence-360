@@ -855,6 +855,7 @@ export const englishCrmMessages = {
       regarding_contact: "(Re: %{name})",
       updated: "Meeting updated",
       validation: {
+        end_another_day: "The meeting must end on the day it starts",
         end_before_start: "The end time must be after the start time",
       },
     },

@@ -867,6 +867,8 @@ export const frenchCrmMessages = {
       regarding_contact: "(Concernant : %{name})",
       updated: "Rendez-vous mis à jour",
       validation: {
+        end_another_day:
+          "Le rendez-vous doit se terminer le jour où il commence",
         end_before_start:
           "L'heure de fin doit être postérieure à l'heure de début",
       },

@@ -67,6 +67,40 @@ describe("TaskFormContent end time", () => {
       .toBeVisible();
   });
 
+  it("refuses an end time equal to the start", async () => {
+    const screen = await renderMeetingForm();
+
+    await screen.getByLabelText(/end time/i).fill("14:00");
+    await screen.getByRole("button", { name: /^save$/i }).click();
+
+    await expect
+      .element(screen.getByText("The end time must be after the start time"))
+      .toBeVisible();
+  });
+
+  it("refuses a meeting that would end on another day", async () => {
+    const screen = await renderMeetingForm();
+
+    const startInput = screen.getByLabelText(/date and time/i);
+    await startInput.clear();
+    await startInput.fill("2026-03-06T23:00");
+    await screen.getByRole("button", { name: /^save$/i }).click();
+
+    await expect
+      .element(screen.getByText("The meeting must end on the day it starts"))
+      .toBeVisible();
+  });
+
+  it("keeps the meeting's length when the end time is emptied", async () => {
+    const screen = await renderMeetingForm();
+
+    await screen.getByLabelText(/end time/i).clear();
+
+    await expect
+      .element(screen.getByLabelText(/end time/i))
+      .toHaveValue("15:30");
+  });
+
   it("asks for a start once the date has been emptied", async () => {
     const screen = await renderMeetingForm();
 

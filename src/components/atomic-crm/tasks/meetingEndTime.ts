@@ -19,6 +19,28 @@ export const meetingEndTime = (
 };
 
 /**
+ * Translation key of what is wrong with a meeting's end, if anything. The form
+ * only shows a time for the end, so a meeting must end the day it starts: a
+ * longer one would look like a short one.
+ */
+export const meetingEndError = (
+  dueDate: string | null | undefined,
+  durationMinutes?: number,
+): string | undefined => {
+  if (!dueDate) return undefined;
+  if (durationMinutes != null && durationMinutes < 1) {
+    return "resources.tasks.validation.end_before_start";
+  }
+  const end = meetingEndDate({
+    due_date: dueDate,
+    duration_minutes: durationMinutes,
+  });
+  return new Date(dueDate).toDateString() === end.toDateString()
+    ? undefined
+    : "resources.tasks.validation.end_another_day";
+};
+
+/**
  * Length in minutes of a meeting starting at `dueDate` and ending at `endTime`
  * ("HH:mm") on the same local day; negative when it would end before it starts.
  * Undefined when either is unusable, so the caller can keep the stored length.

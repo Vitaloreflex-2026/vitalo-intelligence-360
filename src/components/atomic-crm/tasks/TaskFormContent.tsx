@@ -2,7 +2,7 @@ import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { ReferenceInput } from "@/components/admin/reference-input";
 import { SelectInput } from "@/components/admin/select-input";
 import { TextInput } from "@/components/admin/text-input";
-import { minValue, required } from "ra-core";
+import { required } from "ra-core";
 import { useEffect, useRef } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { DateTimeInput } from "@/components/admin";
@@ -10,7 +10,11 @@ import { DateTimeInput } from "@/components/admin";
 import { contactOptionText } from "../misc/ContactOption";
 import { ChoiceInput } from "../misc/ChoiceInput";
 import type { Sale } from "../types";
-import { meetingDurationMinutes, meetingEndTime } from "./meetingEndTime";
+import {
+  meetingDurationMinutes,
+  meetingEndError,
+  meetingEndTime,
+} from "./meetingEndTime";
 
 /**
  * Meeting modes that have no physical location, so the `location` input is
@@ -18,11 +22,11 @@ import { meetingDurationMinutes, meetingEndTime } from "./meetingEndTime";
  */
 const REMOTE_MEETING_MODES = ["visioconférence", "téléphone"];
 
-/** The stored length must be positive, i.e. the meeting ends after it starts. */
-const endsAfterStart = minValue(
-  1,
-  "resources.tasks.validation.end_before_start",
-);
+/** Validates the stored length against the start it is counted from. */
+const validateEnd = (
+  durationMinutes: number | undefined,
+  values: { due_date?: string | null },
+) => meetingEndError(values.due_date, durationMinutes);
 
 const saleOptionRenderer = (choice: Sale) =>
   `${choice.first_name} ${choice.last_name}`;
@@ -82,8 +86,9 @@ export const TaskFormContent = ({
         {/*
           The user picks when the meeting ends; what is stored stays its length,
           so moving the start moves the end along with it.
-          ponytail: time only, the meeting ends the day it starts. Switch to a
-          date-time input if overnight meetings become a need.
+          ponytail: time only, so the meeting must end the day it starts (see
+          meetingEndError). Switch to a date-time input if overnight meetings
+          become a need.
         */}
         <TextInput
           source="duration_minutes"
@@ -95,7 +100,7 @@ export const TaskFormContent = ({
             meetingDurationMinutes(dueDate, endTime) ??
             getValues("duration_minutes")
           }
-          validate={endsAfterStart}
+          validate={validateEnd}
         />
         <ChoiceInput source="type" category="rdv_type" validate={required()} />
         <ChoiceInput source="mode" category="rdv_mode" />

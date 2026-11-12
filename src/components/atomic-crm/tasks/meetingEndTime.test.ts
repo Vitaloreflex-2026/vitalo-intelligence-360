@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { meetingDurationMinutes, meetingEndTime } from "./meetingEndTime";
+import {
+  meetingDurationMinutes,
+  meetingEndError,
+  meetingEndTime,
+} from "./meetingEndTime";
 
 /** Built in local time, as the form inputs are, so any timezone passes. */
 const startAt = (hours: number, minutes: number, seconds = 0): string =>
@@ -17,6 +21,38 @@ describe("meetingEndTime", () => {
 
   it("returns an empty time when the meeting has no start", () => {
     expect(meetingEndTime(null, 60)).toBe("");
+  });
+});
+
+describe("meetingEndError", () => {
+  it("accepts a meeting ending later the same day", () => {
+    expect(meetingEndError(startAt(14, 0), 90)).toBeUndefined();
+  });
+
+  it("accepts a one-minute meeting", () => {
+    expect(meetingEndError(startAt(14, 0), 1)).toBeUndefined();
+  });
+
+  it("refuses a meeting with no length", () => {
+    expect(meetingEndError(startAt(14, 0), 0)).toBe(
+      "resources.tasks.validation.end_before_start",
+    );
+  });
+
+  it("refuses a meeting running past midnight", () => {
+    expect(meetingEndError(startAt(23, 0), 90)).toBe(
+      "resources.tasks.validation.end_another_day",
+    );
+  });
+
+  it("refuses a meeting lasting more than a day", () => {
+    expect(meetingEndError(startAt(10, 0), 1500)).toBe(
+      "resources.tasks.validation.end_another_day",
+    );
+  });
+
+  it("leaves a meeting with no start to the start's own validation", () => {
+    expect(meetingEndError(null, 90)).toBeUndefined();
   });
 });
 
