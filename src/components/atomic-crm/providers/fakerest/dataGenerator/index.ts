@@ -6,7 +6,7 @@ import { generateDealNotes } from "./dealNotes";
 import { generateDeals } from "./deals";
 import { finalize } from "./finalize";
 import { generateSales } from "./sales";
-import { generateTags } from "./tags";
+import { generateCompanyTags, generateTags } from "./tags";
 import { generateTasks } from "./tasks";
 import type { Db } from "./types";
 
@@ -19,6 +19,7 @@ export default (): Db => {
   // with none — which is exactly what the notification panel reports.
   db.sales_documents = [];
   db.tags = generateTags(db);
+  db.company_tags = generateCompanyTags(db);
   db.choices = generateChoices(db);
   db.companies = generateCompanies(db);
   db.contacts = generateContacts(db);

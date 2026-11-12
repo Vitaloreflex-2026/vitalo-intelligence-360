@@ -49,6 +49,11 @@ const SECTIONS = [
   { id: "tasks", label: "resources.tasks.name", fallback: "Tasks" },
   { id: "tags", label: "resources.tags.name", fallback: "Tags" },
   {
+    id: "company_tags",
+    label: "resources.company_tags.name",
+    fallback: "Company tags",
+  },
+  {
     id: "consultant-colors",
     label: "crm.settings.consultant_colors.title",
     fallback: "Consultant colours",
@@ -474,7 +479,8 @@ const SettingsFormFields = () => {
         </Card>
 
         {/* Tags are their own table: deleting one saves immediately. */}
-        <TagsCard />
+        <TagsCard tagsResource="tags" usedBy="contacts" />
+        <TagsCard tagsResource="company_tags" usedBy="companies" />
 
         {/* Consultant colours live on the `sales` rows, not in the
             configuration record, so this card saves on its own. */}

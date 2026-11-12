@@ -19,22 +19,30 @@ import {
 import { TagChip } from "../tags/TagChip";
 import { TagCreateModal } from "../tags/TagCreateModal";
 import { useTags } from "../tags/useTags";
-import type { Contact, Tag } from "../types";
+import type { Company, Contact, Tag, TagsResource } from "../types";
 
-export const TagsListEdit = () => {
-  const record = useRecordContext<Contact>();
+type TagsListEditProps = {
+  /** The tagged resource; companies use a tag catalog of their own. */
+  resource?: "contacts" | "companies";
+};
+
+export const TagsListEdit = ({ resource = "contacts" }: TagsListEditProps) => {
+  const tagsResource: TagsResource =
+    resource === "companies" ? "company_tags" : "tags";
+  const record = useRecordContext<Contact | Company>();
   const [open, setOpen] = useState(false);
   const translate = useTranslate();
 
   const { data: allTags, isPending: isPendingAllTags } = useTags({
     perPage: 10,
+    resource: tagsResource,
   });
   const { data: tags, isPending: isPendingRecordTags } = useGetMany<Tag>(
-    "tags",
+    tagsResource,
     { ids: record?.tags },
     { enabled: record && record.tags && record.tags.length > 0 },
   );
-  const [update] = useUpdate<Contact>();
+  const [update] = useUpdate();
 
   const unselectedTags =
     allTags &&
@@ -43,10 +51,10 @@ export const TagsListEdit = () => {
 
   const handleTagAdd = (id: number) => {
     if (!record) {
-      throw new Error("No contact record found");
+      throw new Error("No record found");
     }
     const tags = [...(record.tags ?? []), id];
-    update("contacts", {
+    update(resource, {
       id: record.id,
       data: { tags },
       previousData: record,
@@ -55,10 +63,10 @@ export const TagsListEdit = () => {
 
   const handleTagDelete = async (id: Identifier) => {
     if (!record) {
-      throw new Error("No contact record found");
+      throw new Error("No record found");
     }
-    const tags = record.tags.filter((tagId) => tagId !== id);
-    await update("contacts", {
+    const tags = (record.tags ?? []).filter((tagId) => tagId !== id);
+    await update(resource, {
       id: record.id,
       data: { tags },
       previousData: record,
@@ -76,14 +84,14 @@ export const TagsListEdit = () => {
   const handleTagCreated = useCallback(
     async (tag: Tag) => {
       if (!record) {
-        throw new Error("No contact record found");
+        throw new Error("No record found");
       }
 
       await update(
-        "contacts",
+        resource,
         {
           id: record.id,
-          data: { tags: [...record.tags, tag.id] },
+          data: { tags: [...(record.tags ?? []), tag.id] },
           previousData: record,
         },
         {
@@ -93,7 +101,7 @@ export const TagsListEdit = () => {
         },
       );
     },
-    [update, record],
+    [update, record, resource],
   );
 
   if (isPendingRecordTags || isPendingAllTags) return null;
@@ -102,7 +110,11 @@ export const TagsListEdit = () => {
     <div className="flex flex-wrap gap-2">
       {tags?.map((tag) => (
         <div key={tag.id}>
-          <TagChip tag={tag} onUnlink={() => handleTagDelete(tag.id)} />
+          <TagChip
+            tag={tag}
+            tagsResource={tagsResource}
+            onUnlink={() => handleTagDelete(tag.id)}
+          />
         </div>
       ))}
 
@@ -150,6 +162,7 @@ export const TagsListEdit = () => {
       </div>
 
       <TagCreateModal
+        tagsResource={tagsResource}
         open={open}
         onClose={handleTagCreateClose}
         onSuccess={handleTagCreated}

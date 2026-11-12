@@ -272,6 +272,7 @@ const DesktopAdmin = (
       <Resource name="tasks" />
       <Resource name="sales" {...sales} />
       <Resource name="tags" />
+      <Resource name="company_tags" />
     </Admin>
   );
 };
@@ -356,6 +357,7 @@ const MobileAdmin = (
         <Resource name="tasks" list={MobileTasksList} />
         <Resource name="sales" {...sales} />
         <Resource name="tags" />
+        <Resource name="company_tags" />
       </Admin>
     </PersistQueryClientProvider>
   );

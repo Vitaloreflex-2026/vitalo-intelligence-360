@@ -125,6 +125,7 @@ export type Company = {
   training_date?: string | null;
   quote_approved?: boolean | null;
   service_invoiced?: boolean | null;
+  tags?: number[];
 } & Pick<RaRecord, "id">;
 
 export type EmailAndType = {
@@ -348,6 +349,9 @@ export type Tag = {
   name: string;
   color: string;
 };
+
+/** Contacts and companies each have their own tag catalog. */
+export type TagsResource = "tags" | "company_tags";
 
 export type Task = {
   contact_id: Identifier;

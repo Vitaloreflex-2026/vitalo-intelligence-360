@@ -1,4 +1,4 @@
-import { Building, Truck, Users } from "lucide-react";
+import { Building, Tag, Truck, Users } from "lucide-react";
 import {
   FilterLiveForm,
   useGetIdentity,
@@ -9,11 +9,13 @@ import {
 import type { FormHTMLAttributes } from "react";
 import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { ToggleFilterButton } from "@/components/admin/toggle-filter-button";
+import { Badge } from "@/components/ui/badge";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 import { FilterCategory } from "../filters/FilterCategory";
 import { LocationFilter } from "../filters/LocationFilter";
 import { ResponsiveFilters } from "../misc/ResponsiveFilters";
+import { useTags } from "../tags/useTags";
 import type { Choice } from "../types";
 import { AccountManagerFilter } from "../sales/AccountManagerInput";
 import { getTranslatedCompanySizeLabel } from "./getTranslatedCompanySizeLabel";
@@ -32,6 +34,7 @@ export const CompanyListFilter = () => {
     pagination: { page: 1, perPage: 200 },
     sort: { field: "id", order: "ASC" },
   });
+  const { data: tags } = useTags({ resource: "company_tags" });
   // Keep an active sector visible even when it left the referential (deleted
   // option, filter restored from the store or a bookmarked URL).
   const { filterValues } = useListContext();
@@ -93,6 +96,30 @@ export const CompanyListFilter = () => {
           />
         </FilterLiveForm>
       </FilterCategory>
+
+      {tags?.length ? (
+        <FilterCategory
+          icon={<Tag className="h-4 w-4" />}
+          label="resources.companies.fields.tags"
+        >
+          {tags.map((tag) => (
+            <ToggleFilterButton
+              className="w-full justify-between"
+              key={tag.id}
+              label={
+                <Badge
+                  variant="secondary"
+                  className="text-black text-xs font-normal cursor-pointer"
+                  style={{ backgroundColor: tag.color }}
+                >
+                  {tag.name}
+                </Badge>
+              }
+              value={{ "tags@cs": `{${tag.id}}` }}
+            />
+          ))}
+        </FilterCategory>
+      ) : null}
 
       <LocationFilter citySource="city@ilike" regionSource="state_abbr@ilike" />
 
