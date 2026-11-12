@@ -427,7 +427,7 @@ insert into public.assessments (
     '{management_decision,budget_approval}', (now() - interval '4 months')::date,
     'approved', 48000,
     jsonb_build_array(
-        jsonb_build_object('action', 'Planifier les sessions PSMM des 8 agences restantes', 'due_date', (now() + interval '25 days')::date),
+        jsonb_build_object('action', 'Planifier les sessions PSMT managers des 8 agences restantes', 'due_date', (now() + interval '25 days')::date),
         jsonb_build_object('action', 'Cadrer le questionnaire du baromètre annuel', 'due_date', (now() + interval '2 months')::date)
     ),
     '{commercial_proposal,client_references,quote,barometer}', (now() + interval '20 days')::date, 'in_person',
