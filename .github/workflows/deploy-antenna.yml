@@ -1,0 +1,139 @@
+# Deploys the `main` branch to the antenna instance: the same CRM as production,
+# run for another branch office with its own database. deploy.yml (production)
+# is deliberately left untouched and keeps deploying on the same push.
+#   - backend:  a dedicated Supabase project
+#   - frontend: the GitHub Pages site of a dedicated repository
+#
+# Configuration (Settings > Secrets and variables > Actions):
+#   Secrets
+#     SUPABASE_ACCESS_TOKEN         already set for production (account-wide);
+#                                   its account must have access to the antenna project
+#     ANTENNA_SUPABASE_PROJECT_ID   antenna project ref
+#     ANTENNA_SUPABASE_DB_PASSWORD  antenna database password
+#     ANTENNA_SUPABASE_URL          https://<antenna-project-ref>.supabase.co
+#     ANTENNA_SB_PUBLISHABLE_KEY    antenna publishable key
+#     ANTENNA_DEPLOY_TOKEN          token with write access to the antenna repository
+#   Variables
+#     ANTENNA_DEPLOY_REPOSITORY     <owner>/<name> of the antenna repository
+#
+# ponytail: third copy of the deploy steps (deploy.yml, deploy-staging.yml).
+# Extract a reusable workflow (workflow_call) when a second antenna is added.
+name: 🚀 Deploy antenna
+on:
+    push:
+        branches:
+            - main
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+permissions:
+    contents: read
+
+jobs:
+    deploy-antenna:
+        name: 🚀 Deploy (antenna)
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        env:
+            SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+            SUPABASE_DB_PASSWORD: ${{ secrets.ANTENNA_SUPABASE_DB_PASSWORD }}
+            SUPABASE_PROJECT_ID: ${{ secrets.ANTENNA_SUPABASE_PROJECT_ID }}
+            VITE_SUPABASE_URL: ${{ secrets.ANTENNA_SUPABASE_URL }}
+            VITE_SB_PUBLISHABLE_KEY: ${{ secrets.ANTENNA_SB_PUBLISHABLE_KEY }}
+            VITE_IS_DEMO: ${{ vars.VITE_IS_DEMO }}
+            # Empty on purpose: the antenna has no inbound mailbox of its own.
+            VITE_INBOUND_EMAIL: ''
+            VITE_ATTACHMENTS_BUCKET: ${{ vars.VITE_ATTACHMENTS_BUCKET || 'attachments' }}
+            ANTENNA_DEPLOY_TOKEN: ${{ secrets.ANTENNA_DEPLOY_TOKEN }}
+            ANTENNA_DEPLOY_REPOSITORY: ${{ vars.ANTENNA_DEPLOY_REPOSITORY }}
+
+        steps:
+            # Fails before anything is deployed if the antenna is not fully
+            # configured, or if its configuration would make this job write to
+            # production or staging.
+            - name: 🛡️ Check antenna configuration
+              env:
+                  PRODUCTION_SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+                  PRODUCTION_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+                  STAGING_SUPABASE_PROJECT_ID: ${{ secrets.STAGING_SUPABASE_PROJECT_ID }}
+                  STAGING_SUPABASE_URL: ${{ secrets.STAGING_SUPABASE_URL }}
+                  STAGING_DEPLOY_REPOSITORY: ${{ vars.STAGING_DEPLOY_REPOSITORY }}
+              run: |
+                  missing=""
+                  require() { [ -n "$2" ] || missing="$missing $1"; }
+                  require SUPABASE_ACCESS_TOKEN "$SUPABASE_ACCESS_TOKEN"
+                  require ANTENNA_SUPABASE_PROJECT_ID "$SUPABASE_PROJECT_ID"
+                  require ANTENNA_SUPABASE_DB_PASSWORD "$SUPABASE_DB_PASSWORD"
+                  require ANTENNA_SUPABASE_URL "$VITE_SUPABASE_URL"
+                  require ANTENNA_SB_PUBLISHABLE_KEY "$VITE_SB_PUBLISHABLE_KEY"
+                  require ANTENNA_DEPLOY_TOKEN "$ANTENNA_DEPLOY_TOKEN"
+                  require ANTENNA_DEPLOY_REPOSITORY "$ANTENNA_DEPLOY_REPOSITORY"
+                  if [ -n "$missing" ]; then
+                      echo "::error::The antenna is not configured. Missing secrets/variables:$missing"
+                      exit 1
+                  fi
+
+                  normalize() { local value="${1,,}"; value="${value%/}"; echo "${value%.git}"; }
+                  same() { [ "$(normalize "$1")" = "$(normalize "$2")" ]; }
+                  if same "$SUPABASE_PROJECT_ID" "$PRODUCTION_SUPABASE_PROJECT_ID" ||
+                      same "$SUPABASE_PROJECT_ID" "$STAGING_SUPABASE_PROJECT_ID" ||
+                      same "$VITE_SUPABASE_URL" "$PRODUCTION_SUPABASE_URL" ||
+                      same "$VITE_SUPABASE_URL" "$STAGING_SUPABASE_URL" ||
+                      same "$ANTENNA_DEPLOY_REPOSITORY" "$GITHUB_REPOSITORY" ||
+                      same "$ANTENNA_DEPLOY_REPOSITORY" "$STAGING_DEPLOY_REPOSITORY"; then
+                      echo "::error::Antenna configuration points to production or staging. Refusing to deploy."
+                      exit 1
+                  fi
+
+            - name: 📥 Checkout repo
+              uses: actions/checkout@v4
+              with:
+                  # Keep the workflow token out of git: the push to the antenna
+                  # repository must authenticate with ANTENNA_DEPLOY_TOKEN only.
+                  persist-credentials: false
+
+            - name: ⚙️ Setup node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+
+            - name: ⚙️ Setup git
+              run: |
+                  git remote add antenna "https://git:${ANTENNA_DEPLOY_TOKEN}@github.com/${ANTENNA_DEPLOY_REPOSITORY}"
+                  git config --global user.email support+actions@github.com
+                  git config --global user.name github-actions-bot
+
+            - name: ⚙️ Setup supabase
+              uses: supabase/setup-cli@v1
+              with:
+                  # Pinned: CLI v3 rejects the [inbucket] section of supabase/config.toml.
+                  # 2.121.0 is the version used by the last successful production deploy.
+                  version: 2.121.0
+
+            - name: 📥 Download deps
+              run: npm ci
+
+            - name: 🔨 Build
+              run: npm run build
+
+            - name: 🔗 Supabase Link
+              run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
+
+            - name: 📡 Push supabase migrations
+              run: supabase db push
+
+            # The edge functions authenticate the caller with this key
+            # (supabase/functions/_shared/authentication.ts). Pushing it here
+            # keeps a fresh project from needing a manual `supabase secrets set`.
+            - name: 📡 Push supabase function secrets
+              run: supabase secrets set SB_PUBLISHABLE_KEY="$VITE_SB_PUBLISHABLE_KEY"
+
+            - name: 📡 Deploy supabase functions
+              run: supabase functions deploy
+
+            - name: 📡 Deploy GitHub pages (antenna repository)
+              run: npx gh-pages --remote antenna -d dist -b gh-pages
