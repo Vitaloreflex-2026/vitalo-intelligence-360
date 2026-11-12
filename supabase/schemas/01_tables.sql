@@ -291,7 +291,9 @@ create table public.assessments (
     deployment_short_term text[],
     deployment_medium_term text[],
     deployment_long_term text[],
-    -- Recommend / expected benefits, success factors and watch points
+    -- Recommend / workshops and conferences selected for the client
+    selected_workshops text,
+    -- Recommend / expected benefits (v1 form only, no longer edited), success factors and watch points
     expected_benefits text,
     success_factors text[],
     success_factors_other text,
