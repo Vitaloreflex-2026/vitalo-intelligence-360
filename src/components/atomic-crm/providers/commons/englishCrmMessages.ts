@@ -814,7 +814,7 @@ export const englishCrmMessages = {
       fields: {
         text: "Description",
         due_date: "Date and time",
-        duration_minutes: "Duration (min)",
+        end_time: "End time",
         type: "Meeting type",
         mode: "Meeting mode",
         location: "Location",
@@ -854,6 +854,9 @@ export const englishCrmMessages = {
       },
       regarding_contact: "(Re: %{name})",
       updated: "Meeting updated",
+      validation: {
+        end_before_start: "The end time must be after the start time",
+      },
     },
     tags: {
       name: "Tag |||| Tags",

@@ -1,9 +1,8 @@
 import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { ReferenceInput } from "@/components/admin/reference-input";
-import { NumberInput } from "@/components/admin/number-input";
 import { SelectInput } from "@/components/admin/select-input";
 import { TextInput } from "@/components/admin/text-input";
-import { required } from "ra-core";
+import { minValue, required } from "ra-core";
 import { useEffect, useRef } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { DateTimeInput } from "@/components/admin";
@@ -11,6 +10,7 @@ import { DateTimeInput } from "@/components/admin";
 import { contactOptionText } from "../misc/ContactOption";
 import { ChoiceInput } from "../misc/ChoiceInput";
 import type { Sale } from "../types";
+import { meetingDurationMinutes, meetingEndTime } from "./meetingEndTime";
 
 /**
  * Meeting modes that have no physical location, so the `location` input is
@@ -18,9 +18,11 @@ import type { Sale } from "../types";
  */
 const REMOTE_MEETING_MODES = ["visioconférence", "téléphone"];
 
-/** A meeting cannot be shorter than a quarter of an hour, and moves by quarters. */
-const MIN_DURATION_MINUTES = 15;
-const DURATION_STEP_MINUTES = 15;
+/** The stored length must be positive, i.e. the meeting ends after it starts. */
+const endsAfterStart = minValue(
+  1,
+  "resources.tasks.validation.end_before_start",
+);
 
 const saleOptionRenderer = (choice: Sale) =>
   `${choice.first_name} ${choice.last_name}`;
@@ -30,7 +32,8 @@ export const TaskFormContent = ({
 }: {
   selectContact?: boolean;
 }) => {
-  const { setValue } = useFormContext();
+  const { getValues, setValue } = useFormContext();
+  const dueDate = useWatch({ name: "due_date" });
   const mode = useWatch({ name: "mode" });
   const isRemote = REMOTE_MEETING_MODES.includes(
     (mode ?? "").toLowerCase().trim(),
@@ -76,11 +79,23 @@ export const TaskFormContent = ({
           helperText={false}
           validate={required()}
         />
-        <NumberInput
+        {/*
+          The user picks when the meeting ends; what is stored stays its length,
+          so moving the start moves the end along with it.
+          ponytail: time only, the meeting ends the day it starts. Switch to a
+          date-time input if overnight meetings become a need.
+        */}
+        <TextInput
           source="duration_minutes"
+          type="time"
+          label="resources.tasks.fields.end_time"
           helperText={false}
-          min={MIN_DURATION_MINUTES}
-          step={DURATION_STEP_MINUTES}
+          format={(minutes?: number) => meetingEndTime(dueDate, minutes)}
+          parse={(endTime: string) =>
+            meetingDurationMinutes(dueDate, endTime) ??
+            getValues("duration_minutes")
+          }
+          validate={endsAfterStart}
         />
         <ChoiceInput source="type" category="rdv_type" validate={required()} />
         <ChoiceInput source="mode" category="rdv_mode" />

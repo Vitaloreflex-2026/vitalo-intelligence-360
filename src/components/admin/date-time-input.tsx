@@ -257,6 +257,9 @@ const formatDateTime = (value: string | Date) => {
 // converts a date string entered usinf a datetime-local input
 // into an ISO date using the browser timezone
 const convertDateStringToISO = (date: string) => {
+  // An emptied input has no date to convert, and `new Date("")` cannot be
+  // serialized: it would throw and leave the previous date in the form.
+  if (!date) return null;
   const localDate = new Date(date);
   return localDate.toISOString();
 };

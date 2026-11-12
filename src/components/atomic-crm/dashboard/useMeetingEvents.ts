@@ -47,7 +47,9 @@ export type MeetingEvent = {
   };
 };
 
-export const meetingEndDate = (task: Task): Date =>
+export const meetingEndDate = (
+  task: Pick<Task, "due_date" | "duration_minutes">,
+): Date =>
   new Date(
     new Date(task.due_date).getTime() +
       (task.duration_minutes ?? DEFAULT_MEETING_MINUTES) * MINUTE_MS,
