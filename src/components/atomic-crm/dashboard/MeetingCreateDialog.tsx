@@ -1,4 +1,3 @@
-import type { Identifier, RaRecord } from "ra-core";
 import {
   CreateBase,
   Form,
@@ -18,6 +17,8 @@ import {
 } from "@/components/ui/dialog";
 
 import { TaskFormContent } from "../tasks/TaskFormContent";
+import { touchTaskContacts } from "../tasks/touchTaskContacts";
+import type { Task } from "../types";
 import type { CalendarRange } from "./useMeetingEvents";
 
 const MINUTE_MS = 60 * 1000;
@@ -41,20 +42,10 @@ export const MeetingCreateDialog = ({
   const translate = useTranslate();
 
   // Creating a meeting counts as touching the contact, same as AddTask does.
-  const handleSuccess = async (record: RaRecord) => {
+  const handleSuccess = async (record: Task) => {
     close();
     notify("resources.tasks.added");
-    const contactId = record.contact_id as Identifier | undefined;
-    if (contactId == null) return;
-    const contact = await dataProvider.getOne("contacts", {
-      id: contactId,
-    });
-    if (!contact.data) return;
-    await update("contacts", {
-      id: contact.data.id,
-      data: { last_seen: new Date().toISOString() },
-      previousData: contact.data,
-    });
+    await touchTaskContacts(record, dataProvider, update);
   };
 
   if (!identity) return null;
@@ -68,7 +59,8 @@ export const MeetingCreateDialog = ({
           1,
           Math.round((slot.end.getTime() - slot.start.getTime()) / MINUTE_MS),
         ),
-        sales_id: identity.id,
+        contact_ids: [],
+        sales_ids: [identity.id],
       }}
       mutationOptions={{ onSuccess: handleSuccess }}
     >
@@ -80,7 +72,7 @@ export const MeetingCreateDialog = ({
                 {translate("resources.tasks.dialog.create")}
               </DialogTitle>
             </DialogHeader>
-            <TaskFormContent selectContact />
+            <TaskFormContent />
             <DialogFooter className="w-full justify-end">
               <SaveButton />
             </DialogFooter>

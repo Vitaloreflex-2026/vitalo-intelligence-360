@@ -647,7 +647,7 @@ export const englishCrmMessages = {
         sales_id: "Account manager",
         trainer_ids: "Trainers",
         external_trainers: "Trainers without an account",
-        training_type: "Training type",
+        training_type: "Service type",
         nb_trained_managers: "People trained — directors / managers",
         nb_trained_non_managers: "People trained — non-managers",
         nb_trained_total: "Total people trained",
@@ -689,7 +689,7 @@ export const englishCrmMessages = {
       field_categories: {
         misc: "Misc",
         delivery: "Delivery and invoicing",
-        training: "Training",
+        training: "Session",
         funding: "Funding",
         opco: "OPCO details",
         invoicing: "Invoicing",
@@ -824,8 +824,8 @@ export const englishCrmMessages = {
         type: "Meeting type",
         mode: "Meeting mode",
         location: "Location",
-        sales_id: "Consultant / Trainer",
-        contact_id: "Contact",
+        sales_ids: "Consultants / Trainers",
+        contact_ids: "Contacts",
         due_short: "on",
       },
       action: {
@@ -846,7 +846,6 @@ export const englishCrmMessages = {
       },
       sheet: {
         edit: "Edit meeting",
-        edit_for: "Edit meeting for %{name}",
       },
       empty: "No meetings yet",
       empty_list_hint: "Meetings added to your contacts will appear here.",
@@ -858,7 +857,7 @@ export const englishCrmMessages = {
         tomorrow: "Tomorrow",
         with_pending: "With pending meetings",
       },
-      regarding_contact: "(Re: %{name})",
+      regarding: "Re:",
       updated: "Meeting updated",
       validation: {
         end_another_day: "The meeting must end on the day it starts",
@@ -944,8 +943,8 @@ export const englishCrmMessages = {
       hse: "HSE department",
     },
     training_type: {
-      collective: "Collective",
-      individual_workshop: "Individual workshop",
+      workshop: "Workshop",
+      training: "Training",
       conference: "Conference",
     },
     qvct_workshop_type: {
@@ -1041,6 +1040,10 @@ export const englishCrmMessages = {
       load_more: "Load more activity",
     },
     dashboard: {
+      hero: {
+        greeting: "Hello %{name}",
+        subtitle: "Here is your day at a glance.",
+      },
       calendar: {
         title: "Team meetings",
         reschedule_error: "This meeting could not be moved",

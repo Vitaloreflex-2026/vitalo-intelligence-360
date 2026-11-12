@@ -1,11 +1,14 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "@fontsource-variable/inter";
+@import "@fontsource/amaranth/700.css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  /* Heading face of the vitaloreflex.fr website, used by the dashboard titles. */
+  --font-heading: "Amaranth", "Inter Variable", ui-sans-serif, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -37,6 +40,14 @@
   --color-brand-foreground: var(--brand-foreground);
   --color-brand-muted: var(--brand-muted);
   --color-brand-heading: var(--brand-heading);
+  --color-vitalo-orange: var(--vitalo-orange);
+  --color-vitalo-green: var(--vitalo-green);
+  --color-vitalo-forest: var(--vitalo-forest);
+  --color-vitalo-cream: var(--vitalo-cream);
+  --color-vitalo-blue: var(--vitalo-blue);
+  --color-vitalo-red: var(--vitalo-red);
+  --color-vitalo-ink: var(--vitalo-ink);
+  --color-vitalo-band: var(--vitalo-band);
   --color-profile-1: var(--profile-1);
   --color-profile-2: var(--profile-2);
   --color-profile-3: var(--profile-3);
@@ -97,6 +108,20 @@
   --brand-foreground: oklch(1 0 0);
   --brand-muted: oklch(0.96 0.03 141);
   --brand-heading: oklch(0.37 0.06 250);
+  /* Palette of the vitaloreflex.fr website, used by the dashboard: orange is
+     the site's primary, forest and cream its secondary surfaces, blue its
+     links. The ink is the site's title color and is what stays readable on
+     the orange (white on it, as the site does, falls under 2:1). */
+  --vitalo-orange: #faa94a;
+  --vitalo-green: #83ae5f;
+  --vitalo-forest: #577f67;
+  --vitalo-cream: #fff2e3;
+  --vitalo-blue: #456896;
+  --vitalo-red: #e84b41;
+  --vitalo-ink: #2d2d2d;
+  /* The forest green as a surface under white text: unlike --vitalo-forest,
+     it does not lighten in the dark theme. */
+  --vitalo-band: #577f67;
   --profile-1: oklch(0.63 0.15 141);
   --profile-2: oklch(0.76 0.15 75);
   --profile-3: oklch(0.65 0.18 45);
@@ -140,6 +165,9 @@
   --brand-foreground: oklch(0.205 0 0);
   --brand-muted: oklch(0.3 0.04 141);
   --brand-heading: oklch(0.85 0.05 250);
+  --vitalo-forest: #a3c9b1;
+  --vitalo-cream: oklch(0.3 0.04 70);
+  --vitalo-blue: #8fb0dc;
   --profile-1: oklch(0.72 0.15 141);
   --profile-2: oklch(0.82 0.14 75);
   --profile-3: oklch(0.72 0.16 45);

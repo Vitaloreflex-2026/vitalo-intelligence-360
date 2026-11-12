@@ -137,7 +137,7 @@ select
     c.city as company_city,
     c.state_abbr as company_state_abbr
 from public.contacts co
-    left join public.tasks t on co.id = t.contact_id
+    left join public.tasks t on co.id = any(t.contact_ids)
     left join public.companies c on co.company_id = c.id
 group by co.id, c.name, c.city, c.state_abbr;
 

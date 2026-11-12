@@ -39,7 +39,7 @@ export const generateTasks = (db: Db) => {
     contact.nb_tasks = (contact.nb_tasks ?? 0) + 1;
     return {
       id,
-      contact_id: contact.id,
+      contact_ids: [contact.id],
       type: random.arrayElement(choiceLabels.rdv_type),
       mode: random.arrayElement(choiceLabels.rdv_mode),
       location: random.arrayElement(["Paris", "Lyon", "Nantes", "Bordeaux"]),
@@ -50,7 +50,7 @@ export const generateTasks = (db: Db) => {
       ).toISOString(),
       done_date: undefined,
       duration_minutes: random.arrayElement([30, 45, 60, 90, 120]),
-      sales_id: 0,
+      sales_ids: [0],
     };
   });
 };

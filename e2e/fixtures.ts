@@ -294,7 +294,13 @@ async function createTask({
 }) {
   const { data, error } = await adminSupabase
     .from("tasks")
-    .insert({ contact_id, sales_id, text, due_date, type })
+    .insert({
+      contact_ids: [contact_id],
+      sales_ids: [sales_id],
+      text,
+      due_date,
+      type,
+    })
     .select("id")
     .single();
 

@@ -653,7 +653,7 @@ export const frenchCrmMessages = {
         sales_id: "Consultant / Formateur",
         trainer_ids: "Intervenant(e)s",
         external_trainers: "Intervenant(e)s sans compte",
-        training_type: "Type de formation",
+        training_type: "Type de prestation",
         nb_trained_managers: "Personnes formées — directeurs / cadres",
         nb_trained_non_managers: "Personnes formées — non cadres",
         nb_trained_total: "Cumul des personnes formées",
@@ -695,7 +695,7 @@ export const frenchCrmMessages = {
       field_categories: {
         misc: "Divers",
         delivery: "Réalisation et facturation",
-        training: "Formation",
+        training: "Intervention",
         funding: "Financement",
         opco: "Détails OPCO",
         invoicing: "Facturation",
@@ -832,8 +832,8 @@ export const frenchCrmMessages = {
         type: "Type de rendez-vous",
         mode: "Mode de rendez-vous",
         location: "Lieu",
-        sales_id: "Consultant / Formateur",
-        contact_id: "Contact",
+        sales_ids: "Consultants / Formateurs",
+        contact_ids: "Contacts",
         due_short: "le",
       },
       action: {
@@ -854,7 +854,6 @@ export const frenchCrmMessages = {
       },
       sheet: {
         edit: "Modifier le rendez-vous",
-        edit_for: "Modifier le rendez-vous pour %{name}",
       },
       empty: "Aucun rendez-vous pour l'instant",
       empty_list_hint:
@@ -867,7 +866,7 @@ export const frenchCrmMessages = {
         tomorrow: "Demain",
         with_pending: "Avec des rendez-vous en attente",
       },
-      regarding_contact: "(Concernant : %{name})",
+      regarding: "Concernant :",
       updated: "Rendez-vous mis à jour",
       validation: {
         end_another_day:
@@ -955,8 +954,8 @@ export const frenchCrmMessages = {
       hse: "HSE",
     },
     training_type: {
-      collective: "Collectif",
-      individual_workshop: "Atelier individuel",
+      workshop: "Atelier",
+      training: "Formation",
       conference: "Conférence",
     },
     qvct_workshop_type: {
@@ -1052,6 +1051,10 @@ export const frenchCrmMessages = {
       load_more: "Charger plus d'activité",
     },
     dashboard: {
+      hero: {
+        greeting: "Bonjour %{name}",
+        subtitle: "Voici un aperçu de votre journée.",
+      },
       calendar: {
         title: "Les rendez-vous de l'équipe",
         reschedule_error: "Impossible de déplacer ce rendez-vous",

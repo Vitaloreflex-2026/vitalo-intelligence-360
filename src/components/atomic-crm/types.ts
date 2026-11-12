@@ -69,8 +69,11 @@ export type RelationshipStatus = "prospect" | "client" | "partner";
 /** Who commissions a training on the client side. */
 export type SponsorRole = "cse" | "hr" | "hse";
 
-/** Shape of a delivered training. */
-export type TrainingType = "collective" | "individual_workshop" | "conference";
+/**
+ * What the contract sells. Only a `training` owes the post-session paperwork
+ * (BPF answers, portal filing, OPCO file).
+ */
+export type TrainingType = "workshop" | "training" | "conference";
 
 /** Format of a QVCT workshop. */
 export type QvctWorkshopType = "webinar" | "collective_onsite" | "individual";
@@ -355,12 +358,14 @@ export type Tag = {
 export type TagsResource = "tags" | "company_tags";
 
 export type Task = {
-  contact_id: Identifier;
+  /** Every contact the meeting is with; at least one. */
+  contact_ids: Identifier[];
   type: string;
   text: string;
   due_date: string;
   done_date?: string | null;
-  sales_id?: Identifier;
+  /** The consultants/trainers holding the meeting. */
+  sales_ids?: Identifier[] | null;
   location?: string | null;
   mode?: string | null;
   /** Length of the meeting in minutes, used to size its calendar block. */

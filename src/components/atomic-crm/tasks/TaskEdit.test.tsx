@@ -19,8 +19,8 @@ describe("TaskEdit", () => {
           tasks: [
             {
               id: 1,
-              contact_id: 1,
-              sales_id: 0,
+              contact_ids: [1],
+              sales_ids: [0],
               type: "Premier contact",
               text: "Cadrage Acme",
               due_date: "2099-01-01T10:00:00.000Z",

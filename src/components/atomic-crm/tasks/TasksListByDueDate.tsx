@@ -27,13 +27,15 @@ export const TasksListByDueDate = ({
   const isMobile = useIsMobile();
   const translate = useTranslate();
 
-  // Not scoped to the current sales_id: the list shows every upcoming meeting,
+  // Not scoped to the current consultant: the list shows every upcoming meeting,
   // whoever the consultant is. The meeting notifications stay personal.
   const { data: tasks, isPending } = useGetList("tasks", {
     pagination: { page: 1, perPage: 1000 },
     sort: { field: "due_date", order: "ASC" },
     filter: {
-      ...(filterByContact != null ? { contact_id: filterByContact } : {}),
+      ...(filterByContact != null
+        ? { "contact_ids@cs": `{${filterByContact}}` }
+        : {}),
     },
   });
 

@@ -45,19 +45,19 @@ describe("ContactShow", () => {
           contacts: [contact],
           tasks: [
             {
-              contact_id: contact.id,
+              contact_ids: [contact.id],
               done_date: "2025-01-02T10:00:00.000Z",
               due_date: "2025-01-01T10:00:00.000Z",
               id: 1,
-              sales_id: 0,
+              sales_ids: [0],
               text: "Rendez-vous traite",
               type: "meeting",
             },
             {
-              contact_id: contact.id,
+              contact_ids: [contact.id],
               due_date: "2099-01-01T10:00:00.000Z",
               id: 2,
-              sales_id: 0,
+              sales_ids: [0],
               text: "Rendez-vous a venir",
               type: "meeting",
             },
@@ -81,6 +81,40 @@ describe("ContactShow", () => {
     expect(asideText.indexOf("Rendez-vous a venir")).toBeLessThan(
       asideText.indexOf("Rendez-vous traite"),
     );
+  });
+
+  it("lists a meeting shared with another contact in the aside", async () => {
+    // Arrange
+    mockIsMobile.mockReturnValue(false);
+    const contact = buildContact({ id: 1 });
+    const screen = await render(
+      <StoryWrapper
+        data={{
+          contacts: [contact, buildContact({ id: 2 })],
+          tasks: [
+            {
+              contact_ids: [2, contact.id],
+              due_date: "2099-01-01T10:00:00.000Z",
+              id: 1,
+              sales_ids: [0],
+              text: "Atelier commun",
+              type: "meeting",
+            },
+          ],
+        }}
+      >
+        <ResourceContextProvider value="contacts">
+          <ShowBase id={contact.id}>
+            <ContactAside />
+          </ShowBase>
+        </ResourceContextProvider>
+      </StoryWrapper>,
+    );
+
+    // Assert
+    await expect
+      .element(screen.getByText("Atelier commun"))
+      .toBeInTheDocument();
   });
 
   it("updates the contact status from the aside", async () => {
