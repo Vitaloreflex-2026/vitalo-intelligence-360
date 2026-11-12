@@ -989,6 +989,13 @@ export const frenchCrmMessages = {
       reset_password: "Réinitialiser le mot de passe",
     },
     auth: {
+      confirm_email: {
+        title: "Activer votre compte",
+        recovery_title: "Réinitialiser votre mot de passe",
+        action: "Continuer",
+        invalid_link:
+          "Ce lien est invalide ou a expiré. Demandez-en un nouveau ci-dessous.",
+      },
       first_name: "Prénom",
       last_name: "Nom",
       confirm_password: "Confirmer le mot de passe",
