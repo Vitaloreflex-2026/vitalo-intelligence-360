@@ -83,3 +83,18 @@ export const MobileError = () => (
     </ResourceContextProvider>
   </StoryWrapper>
 );
+
+export const MobileLocationFilter = () => (
+  <StoryWrapper
+    data={{
+      contacts: [
+        { ...successContacts[0], company_city: "Lyon" },
+        { ...successContacts[1], company_city: "Nantes" },
+      ],
+    }}
+  >
+    <ResourceContextProvider value="contacts">
+      <ContactListMobile />
+    </ResourceContextProvider>
+  </StoryWrapper>
+);

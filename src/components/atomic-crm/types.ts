@@ -156,6 +156,8 @@ export type Contact = {
   phone_jsonb: PhoneNumberAndType[];
   nb_tasks?: number;
   company_name?: string;
+  company_city?: string;
+  company_state_abbr?: string;
   company_start_date?: string | null;
   decision_role?: string | null;
   relationship_status?: RelationshipStatus | null;

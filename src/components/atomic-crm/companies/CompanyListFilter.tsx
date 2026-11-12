@@ -3,6 +3,7 @@ import { useGetIdentity, useGetList, useTranslate } from "ra-core";
 import { ToggleFilterButton } from "@/components/admin/toggle-filter-button";
 
 import { FilterCategory } from "../filters/FilterCategory";
+import { LocationFilter } from "../filters/LocationFilter";
 import { ResponsiveFilters } from "../misc/ResponsiveFilters";
 import type { Choice } from "../types";
 import { AccountManagerFilter } from "../sales/AccountManagerInput";
@@ -50,6 +51,8 @@ export const CompanyListFilter = () => {
           />
         ))}
       </FilterCategory>
+
+      <LocationFilter citySource="city@ilike" regionSource="state_abbr@ilike" />
 
       <FilterCategory
         icon={<Users className="h-4 w-4" />}
