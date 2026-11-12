@@ -11,7 +11,9 @@ const filterByLocation = async (
   if (isMobile) {
     await page.getByRole("button", { name: "Add filter" }).click();
   }
-  await page.getByRole("textbox", { name: field, exact: true }).fill(value);
+  await page.getByRole("combobox", { name: field, exact: true }).click();
+  // Picking the selected option again clears the filter.
+  await page.getByRole("option", { name: value, exact: true }).click();
   if (isMobile) {
     await page.getByRole("button", { name: "Confirm" }).click();
   }
@@ -71,12 +73,12 @@ test.describe("filtering by location", () => {
     await expect(page.getByText("Ada Lovelace")).toBeVisible();
     await expect(page.getByText("Grace Hopper")).toBeVisible();
 
-    await filterByLocation(page, isMobile, "City", "lyon");
+    await filterByLocation(page, isMobile, "City", "Lyon");
 
     await expect(page.getByText("Ada Lovelace")).toBeVisible();
     await expect(page.getByText("Grace Hopper")).toBeHidden();
 
-    await filterByLocation(page, isMobile, "City", "");
+    await filterByLocation(page, isMobile, "City", "Lyon");
 
     await expect(page.getByText("Ada Lovelace")).toBeVisible();
     await expect(page.getByText("Grace Hopper")).toBeVisible();
@@ -86,7 +88,7 @@ test.describe("filtering by location", () => {
     page,
     isMobile,
   }) => {
-    await filterByLocation(page, isMobile, "State", "loire");
+    await filterByLocation(page, isMobile, "State", "Pays de la Loire");
 
     await expect(page.getByText("Grace Hopper")).toBeVisible();
     await expect(page.getByText("Ada Lovelace")).toBeHidden();
@@ -100,15 +102,15 @@ test.describe("filtering by location", () => {
     await expect(page.getByText("Batilor")).toBeVisible();
     await expect(page.getByText("Novaterre")).toBeVisible();
 
-    await filterByLocation(page, isMobile, "City", "nantes");
+    await filterByLocation(page, isMobile, "City", "Nantes");
 
     await expect(page.getByText("Novaterre")).toBeVisible();
     await expect(page.getByText("Batilor")).toBeHidden();
 
-    await filterByLocation(page, isMobile, "City", "");
+    await filterByLocation(page, isMobile, "City", "Nantes");
     await expect(page.getByText("Batilor")).toBeVisible();
 
-    await filterByLocation(page, isMobile, "State", "rhône");
+    await filterByLocation(page, isMobile, "State", "Auvergne-Rhône-Alpes");
 
     await expect(page.getByText("Batilor")).toBeVisible();
     await expect(page.getByText("Novaterre")).toBeHidden();

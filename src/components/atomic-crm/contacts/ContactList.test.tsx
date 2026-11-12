@@ -229,12 +229,13 @@ describe("ContactList", () => {
       page.viewport(1600, 900);
     });
 
-    it("narrows the list down to the contacts whose company is in the typed city", async () => {
+    it("narrows the list down to the contacts whose company is in the picked city", async () => {
       const screen = await render(<LocationFilter />);
 
       await expect.element(screen.getByText("Grace Hopper")).toBeVisible();
 
-      await screen.getByRole("textbox", { name: "City" }).fill("lyon");
+      await screen.getByRole("combobox", { name: "City" }).click();
+      await screen.getByRole("option", { name: "Lyon" }).click();
 
       await expect.element(screen.getByText("Ada Lovelace")).toBeVisible();
       await expect
@@ -248,22 +249,23 @@ describe("ContactList", () => {
       page.viewport(375, 667);
     });
 
-    it("shows the typed city as a chip that removes the filter when tapped", async () => {
+    it("shows the picked city as a chip that removes the filter when tapped", async () => {
       const screen = await render(<MobileLocationFilter />);
 
       await screen.getByRole("button", { name: "Add filter" }).click();
-      await screen.getByRole("textbox", { name: "City" }).fill("lyon");
+      await screen.getByRole("combobox", { name: "City" }).click();
+      await screen.getByRole("option", { name: "Lyon" }).click();
       await screen.getByRole("button", { name: "Confirm" }).click();
 
       await expect
         .element(screen.getByText("Grace Hopper"))
         .not.toBeInTheDocument();
 
-      await screen.getByRole("button", { name: "lyon" }).click();
+      await screen.getByRole("button", { name: "Lyon" }).click();
 
       await expect.element(screen.getByText("Grace Hopper")).toBeVisible();
       await expect
-        .element(screen.getByRole("button", { name: "lyon" }))
+        .element(screen.getByRole("button", { name: "Lyon" }))
         .not.toBeInTheDocument();
     });
   });
