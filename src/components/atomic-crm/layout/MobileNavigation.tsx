@@ -33,7 +33,9 @@ export const MobileNavigation = () => {
             className={cn(
               // Five slots share a screen as narrow as 360px
               "h-auto min-w-0 max-w-20 flex-1 flex-col gap-1 rounded-md px-0.5 py-1",
-              currentPath === to ? null : "text-muted-foreground",
+              currentPath === to
+                ? "text-vitalo-forest"
+                : "text-muted-foreground",
             )}
           >
             <Link
