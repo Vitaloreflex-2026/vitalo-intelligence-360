@@ -10,6 +10,10 @@ else
 run-silent-tty = script -eq /dev/null -c "$1" >/tmp/atomic-crm-$2.log 2>&1 || (cat /tmp/atomic-crm-$2.log && false)
 endif
 
+# Pinned: Supabase CLI v3 rejects the [inbucket] section of supabase/config.toml.
+# Keep in sync with the version pinned in .github/workflows/deploy*.yml.
+SUPABASE = npx supabase@2.121.0
+
 help:
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -27,16 +31,16 @@ install-lsp:
 	npm install -g typescript-language-server
 
 start-supabase: ## start supabase locally
-	npx supabase start
+	$(SUPABASE) start
 
 start-supabase-functions: ## start the supabase Functions watcher
-	npx supabase functions serve
+	$(SUPABASE) functions serve
 
 supabase-migrate-database: ## apply the migrations to the database
-	npx supabase migration up
+	$(SUPABASE) migration up
 
 supabase-reset-database: ## reset (and clear!) the database
-	npx supabase db reset
+	$(SUPABASE) db reset
 
 seed: ## load the local demo data (destructive: replaces companies, contacts, deals, notes, tasks and assessments)
 	@docker exec -i $$(docker ps -qf name=supabase_db) \
@@ -61,12 +65,12 @@ start-demo: ## start the app locally in demo mode
 	npm run dev:demo
 
 stop-supabase: ## stop local supabase
-	npx supabase stop
+	$(SUPABASE) stop
 
 stop: stop-supabase ## stop the stack locally
 
 start-supabase-e2e: ## start a separate supabase instance for e2e (fresh DB every run)
-	@npx supabase stop --workdir .supabase-e2e --no-backup 2>/dev/null || true
+	@$(SUPABASE) stop --workdir .supabase-e2e --no-backup 2>/dev/null || true
 	rm -rf .supabase-e2e/supabase
 	mkdir -p .supabase-e2e/supabase
 	cp supabase/config.e2e.toml .supabase-e2e/supabase/config.toml
@@ -76,10 +80,10 @@ start-supabase-e2e: ## start a separate supabase instance for e2e (fresh DB ever
 	cp -r supabase/templates .supabase-e2e/supabase/templates
 	cp supabase/seed.sql .supabase-e2e/supabase/seed.sql
 	cp supabase/signing_keys.json .supabase-e2e/supabase/signing_keys.json
-	@$(call run-silent-tty,npx supabase start --workdir .supabase-e2e,supabase-e2e)
+	@$(call run-silent-tty,$(SUPABASE) start --workdir .supabase-e2e,supabase-e2e)
 
 stop-supabase-e2e: ## stop the e2e supabase instance
-	npx supabase stop --workdir .supabase-e2e --no-backup
+	$(SUPABASE) stop --workdir .supabase-e2e --no-backup
 
 start-e2e: start-supabase-e2e start-app-e2e ## start the stack in e2e mode (fresh supabase instance + app pointing to it)
 
@@ -107,8 +111,8 @@ supabase-remote-init:
 	$(MAKE) supabase-deploy
 
 supabase-deploy:
-	npx supabase db push
-	npx supabase functions deploy
+	$(SUPABASE) db push
+	$(SUPABASE) functions deploy
 
 test-unit: test-app test-functions 
 
