@@ -3,7 +3,12 @@ import { userEvent } from "vitest/browser";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
-import { StoryWrapper, buildContact, buildSale } from "@/test/StoryWrapper";
+import {
+  StoryWrapper,
+  buildCompany,
+  buildContact,
+  buildSale,
+} from "@/test/StoryWrapper";
 import type { Sale, Task } from "../types";
 import { MeetingsCalendar } from "./MeetingsCalendar";
 
@@ -61,7 +66,8 @@ const renderCalendar = (
   render(
     <StoryWrapper
       data={{
-        contacts: [buildContact()],
+        companies: [buildCompany()],
+        contacts: [buildContact({ company_id: 1 })],
         sales: buildTeam(),
         tasks: buildMeetings(),
       }}
@@ -179,6 +185,26 @@ describe("MeetingsCalendar", () => {
     );
     expect(fills).toContain("rgb(207, 227, 247)"); // Alice — #cfe3f7
     expect(fills).toContain("rgb(226, 217, 243)"); // Bruno — #e2d9f3
+  });
+
+  it("names the contact and the company of the meeting a click opens", async () => {
+    // Arrange
+    const screen = await renderCalendar();
+    const block = screen.getByText("Cadrage Acme");
+    await expect.element(block).toBeVisible();
+
+    // Act
+    await block.click();
+
+    // Assert — the form has no contact field, so these links are the only
+    // thing saying whose meeting was opened.
+    const dialog = screen.getByRole("dialog");
+    await expect
+      .element(dialog.getByRole("link", { name: "Ada Lovelace" }))
+      .toBeVisible();
+    await expect
+      .element(dialog.getByRole("link", { name: "Acme", exact: true }))
+      .toBeVisible();
   });
 
   it("shows the user's external calendars as busy blocks", async () => {
