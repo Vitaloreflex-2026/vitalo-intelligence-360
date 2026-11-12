@@ -126,7 +126,8 @@ export const ASSESSMENT_COLUMNS: Record<string, ColumnSpec> = {
   deployment_short_term: choices(DEPLOYMENT_SHORT_TERM_CHOICES),
   deployment_medium_term: choices(DEPLOYMENT_MEDIUM_TERM_CHOICES),
   deployment_long_term: choices(DEPLOYMENT_LONG_TERM_CHOICES),
-  // Recommend / benefits, success factors and watch points
+  // Recommend / selected workshops, benefits, success factors and watch points
+  selected_workshops: text,
   expected_benefits: text,
   success_factors: choices(SUCCESS_FACTOR_CHOICES),
   success_factors_other: text,

@@ -44,16 +44,16 @@ export const BUDGET_STATUS_CHOICES = buildChoices("budget_status", [
 
 export const DOCUMENT_CHOICES = buildChoices("documents_to_send", [
   "brochure",
-  "commercial_proposal",
-  "psmt_program",
-  // Legacy id, stored in the database: now labelled "PSMT managers".
-  "psmm_program",
-  "pssm_documentation",
-  "client_references",
-  "quote",
+  "mental_health_modules_brochure",
+  "workshop_sheets",
   "agreement",
-  "barometer",
-  "workshops_conferences",
+  "psmt_program",
+  "psmt_access",
+  // Legacy id, stored in the database: now labelled "PSSM company program".
+  "pssm_documentation",
+  "custom_program",
+  "quote",
+  "client_references",
   "other",
 ]);
 

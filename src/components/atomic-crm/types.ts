@@ -229,6 +229,7 @@ export type Assessment = {
   deployment_medium_term?: string[] | null;
   deployment_long_term?: string[] | null;
   expected_benefits?: string | null;
+  selected_workshops?: string | null;
   success_factors?: string[] | null;
   success_factors_other?: string | null;
   watch_points?: string | null;

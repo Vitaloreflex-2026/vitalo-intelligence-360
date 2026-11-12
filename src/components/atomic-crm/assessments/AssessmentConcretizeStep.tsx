@@ -179,7 +179,6 @@ export const AssessmentConcretizeStep = () => {
             source="development_opportunities_other"
             group="development_opportunities"
           />
-          <TextInput source="development_comments" multiline />
         </AssessmentSection>
 
         <AssessmentSection
