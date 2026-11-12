@@ -153,6 +153,17 @@ const DealShowContent = () => {
               </div>
             )}
 
+            {record.training_type && (
+              <div className="flex flex-col">
+                <span className="text-xs text-muted-foreground tracking-wide">
+                  {translate("resources.deals.fields.training_type")}
+                </span>
+                <span className="text-sm">
+                  {translate(`crm.training_type.${record.training_type}`)}
+                </span>
+              </div>
+            )}
+
             {record.category && (
               <div className="flex flex-col">
                 <span className="text-xs text-muted-foreground tracking-wide">

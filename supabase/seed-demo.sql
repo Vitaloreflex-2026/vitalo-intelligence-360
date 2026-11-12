@@ -184,7 +184,7 @@ insert into public.deals (id, name, company_id, contact_ids, stage, category, in
 --     its OPCO file, and contract 3 has an unsigned quote past its deadline.
 --
 update public.deals set
-    training_type = 'collective',
+    training_type = 'training',
     nb_trained_managers = 4,
     nb_trained_non_managers = 18,
     hours_delivered = 35,
@@ -213,7 +213,7 @@ update public.deals set
 where id = 1;
 
 update public.deals set
-    training_type = 'collective',
+    training_type = 'training',
     qualiopi = true,
     funding_type = 'hr_hse',
     quote_signed = true,
@@ -229,7 +229,7 @@ update public.deals set
 where id = 3;
 
 update public.deals set
-    training_type = 'collective',
+    training_type = 'training',
     qualiopi = true,
     funding_type = 'opco',
     quote_signed = false,

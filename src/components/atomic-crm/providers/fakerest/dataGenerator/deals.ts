@@ -60,8 +60,8 @@ export const generateDeals = (db: Db): Deal[] => {
         .arrayElements(db.sales, datatype.number({ min: 1, max: 2 }))
         .map((sale) => sale.id),
       training_type: random.arrayElement([
-        "collective",
-        "individual_workshop",
+        "workshop",
+        "training",
         "conference",
       ] as const),
       nb_trained_managers: datatype.number({ min: 0, max: 12 }),
