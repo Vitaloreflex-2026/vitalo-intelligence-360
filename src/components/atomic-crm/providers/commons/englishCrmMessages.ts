@@ -248,7 +248,7 @@ export const englishCrmMessages = {
         },
         recommended_path: {
           psmt_awareness: "PSMT awareness",
-          psmm_managers: "Manager training (PSMM)",
+          psmm_managers: "PSMT managers training",
           pssm_training: "PSSM training",
           impact_360_deployment: "VitalO IMPACT 360° deployment",
           annual_barometer: "Annual barometer (measure & follow-up)",
@@ -256,7 +256,7 @@ export const englishCrmMessages = {
         },
         consultant_recommendations: {
           psmt: "PSMT (2h e-learning)",
-          psmm: "PSMM (manager training)",
+          psmm: "PSMT managers (training)",
           pssm: "PSSM (mental health first aiders)",
           impact_360: "VitalO IMPACT 360° (full journey)",
           vitalo_app: "VitalOApp (digital platform)",
@@ -353,7 +353,7 @@ export const englishCrmMessages = {
           brochure: "Brochure",
           commercial_proposal: "Commercial proposal",
           psmt_program: "PSMT program",
-          psmm_program: "PSMM program",
+          psmm_program: "PSMT managers program",
           pssm_documentation: "PSSM documentation",
           client_references: "Client references",
           quote: "Quote",
