@@ -40,7 +40,7 @@ export const Dashboard = () => {
   return (
     <div className="mt-1 flex flex-col gap-6">
       <DashboardHero />
-      <div className="grid grid-cols-1 gap-6 rounded-3xl bg-vitalo-cream/60 p-4 lg:grid-cols-12 lg:p-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <div className="lg:col-span-3">
           <div className="flex flex-col gap-4">
             {import.meta.env.VITE_IS_DEMO === "true" ? <Welcome /> : null}
