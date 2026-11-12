@@ -69,7 +69,8 @@ jobs:
               
     test-app:
         name: 🔎 Test
-        runs-on: ubuntu-latest
+        # Pinned: ubuntu-latest is now Ubuntu 26.04, which Playwright 1.60 does not support.
+        runs-on: ubuntu-24.04
         timeout-minutes: 10
         if: ${{ !github.event.pull_request.draft || github.event_name == 'push' }}
         steps:
@@ -95,7 +96,8 @@ jobs:
 
     e2e-test:
       timeout-minutes: 10
-      runs-on: ubuntu-latest
+      # Pinned: ubuntu-latest is now Ubuntu 26.04, which Playwright 1.60 does not support.
+      runs-on: ubuntu-24.04
       steps:
       - name: 📥 Checkout repo
         uses: actions/checkout@v4
