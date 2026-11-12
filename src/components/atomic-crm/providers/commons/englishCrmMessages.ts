@@ -970,6 +970,13 @@ export const englishCrmMessages = {
       reset_password: "Reset Password",
     },
     auth: {
+      confirm_email: {
+        title: "Activate your account",
+        recovery_title: "Reset your password",
+        action: "Continue",
+        invalid_link:
+          "This link is invalid or has expired. Request a new one below.",
+      },
       first_name: "First name",
       last_name: "Last name",
       confirm_password: "Confirm password",
