@@ -183,18 +183,42 @@ async function createNotes({
 async function createCompany({
   name,
   salesId,
+  city,
+  state_abbr,
 }: {
   name: string;
   salesId: string | number;
+  city?: string;
+  state_abbr?: string;
 }) {
   const { data, error } = await adminSupabase
     .from("companies")
-    .insert({ name, sales_id: salesId })
+    .insert({ name, sales_id: salesId, city, state_abbr })
     .select("id")
     .single();
 
   if (error) {
     throw new Error(`Failed to create company: ${error.message}`);
+  }
+
+  return data;
+}
+
+async function createTag({
+  name,
+  color = "#eddcd2",
+}: {
+  name: string;
+  color?: string;
+}) {
+  const { data, error } = await adminSupabase
+    .from("tags")
+    .insert({ name, color })
+    .select("id")
+    .single();
+
+  if (error) {
+    throw new Error(`Failed to create tag: ${error.message}`);
   }
 
   return data;
@@ -206,6 +230,7 @@ async function createContact({
   title = "",
   company_id = null,
   sales_id,
+  tags = [],
   notes = [],
 }: {
   first_name: string;
@@ -213,6 +238,7 @@ async function createContact({
   title?: string;
   company_id?: string | number | null;
   sales_id: string | number;
+  tags?: number[];
   notes?: {
     text: string;
     date?: string;
@@ -230,7 +256,7 @@ async function createContact({
       first_seen: new Date().toISOString(),
       last_seen: new Date().toISOString(),
       has_newsletter: false,
-      tags: [],
+      tags,
       gender: "unknown",
       status: "cold",
       background: "",
@@ -268,7 +294,13 @@ async function createTask({
 }) {
   const { data, error } = await adminSupabase
     .from("tasks")
-    .insert({ contact_id, sales_id, text, due_date, type })
+    .insert({
+      contact_ids: [contact_id],
+      sales_ids: [sales_id],
+      text,
+      due_date,
+      type,
+    })
     .select("id")
     .single();
 
@@ -304,6 +336,7 @@ export const test = base.extend<{
   inviteUser: typeof inviteUser;
   createCompany: typeof createCompany;
   createContact: typeof createContact;
+  createTag: typeof createTag;
   createNotes: typeof createNotes;
   createTask: typeof createTask;
   createDocumentType: typeof createDocumentType;
@@ -339,6 +372,10 @@ export const test = base.extend<{
   // eslint-disable-next-line no-empty-pattern
   createContact: async ({}, cb) => {
     await cb(createContact);
+  },
+  // eslint-disable-next-line no-empty-pattern
+  createTag: async ({}, cb) => {
+    await cb(createTag);
   },
   // eslint-disable-next-line no-empty-pattern
   createNotes: async ({}, cb) => {

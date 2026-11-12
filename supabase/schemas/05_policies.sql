@@ -13,6 +13,7 @@ alter table public.deal_notes enable row level security;
 alter table public.sales enable row level security;
 alter table public.sales_documents enable row level security;
 alter table public.tags enable row level security;
+alter table public.company_tags enable row level security;
 alter table public.tasks enable row level security;
 alter table public.choices enable row level security;
 alter table public.configuration enable row level security;
@@ -75,6 +76,12 @@ create policy "Enable read access for authenticated users" on public.tags for se
 create policy "Enable insert for authenticated users only" on public.tags for insert to authenticated with check (true);
 create policy "Enable update for authenticated users only" on public.tags for update to authenticated using (true);
 create policy "Enable delete for authenticated users only" on public.tags for delete to authenticated using (true);
+
+-- Company tags
+create policy "Enable read access for authenticated users" on public.company_tags for select to authenticated using (true);
+create policy "Enable insert for authenticated users only" on public.company_tags for insert to authenticated with check (true);
+create policy "Enable update for authenticated users only" on public.company_tags for update to authenticated using (true);
+create policy "Enable delete for authenticated users only" on public.company_tags for delete to authenticated using (true);
 
 -- Tasks
 create policy "Enable read access for authenticated users" on public.tasks for select to authenticated using (true);

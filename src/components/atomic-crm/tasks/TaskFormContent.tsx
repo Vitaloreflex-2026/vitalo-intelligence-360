@@ -1,7 +1,5 @@
-import { AutocompleteInput } from "@/components/admin/autocomplete-input";
-import { ReferenceInput } from "@/components/admin/reference-input";
-import { NumberInput } from "@/components/admin/number-input";
-import { SelectInput } from "@/components/admin/select-input";
+import { AutocompleteArrayInput } from "@/components/admin/autocomplete-array-input";
+import { ReferenceArrayInput } from "@/components/admin/reference-array-input";
 import { TextInput } from "@/components/admin/text-input";
 import { required } from "ra-core";
 import { useEffect, useRef } from "react";
@@ -11,6 +9,11 @@ import { DateTimeInput } from "@/components/admin";
 import { contactOptionText } from "../misc/ContactOption";
 import { ChoiceInput } from "../misc/ChoiceInput";
 import type { Sale } from "../types";
+import {
+  meetingDurationMinutes,
+  meetingEndError,
+  meetingEndTime,
+} from "./meetingEndTime";
 
 /**
  * Meeting modes that have no physical location, so the `location` input is
@@ -18,19 +21,18 @@ import type { Sale } from "../types";
  */
 const REMOTE_MEETING_MODES = ["visioconférence", "téléphone"];
 
-/** A meeting cannot be shorter than a quarter of an hour, and moves by quarters. */
-const MIN_DURATION_MINUTES = 15;
-const DURATION_STEP_MINUTES = 15;
+/** Validates the stored length against the start it is counted from. */
+const validateEnd = (
+  durationMinutes: number | undefined,
+  values: { due_date?: string | null },
+) => meetingEndError(values.due_date, durationMinutes);
 
 const saleOptionRenderer = (choice: Sale) =>
   `${choice.first_name} ${choice.last_name}`;
 
-export const TaskFormContent = ({
-  selectContact,
-}: {
-  selectContact?: boolean;
-}) => {
-  const { setValue } = useFormContext();
+export const TaskFormContent = () => {
+  const { getValues, setValue } = useFormContext();
+  const dueDate = useWatch({ name: "due_date" });
   const mode = useWatch({ name: "mode" });
   const isRemote = REMOTE_MEETING_MODES.includes(
     (mode ?? "").toLowerCase().trim(),
@@ -58,17 +60,14 @@ export const TaskFormContent = ({
         className="m-0"
         helperText={false}
       />
-      {selectContact && (
-        <ReferenceInput source="contact_id" reference="contacts_summary">
-          <AutocompleteInput
-            label="resources.tasks.fields.contact_id"
-            optionText={contactOptionText}
-            helperText={false}
-            validate={required()}
-            modal
-          />
-        </ReferenceInput>
-      )}
+      <ReferenceArrayInput source="contact_ids" reference="contacts_summary">
+        <AutocompleteArrayInput
+          label="resources.tasks.fields.contact_ids"
+          optionText={contactOptionText}
+          helperText={false}
+          validate={required()}
+        />
+      </ReferenceArrayInput>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <DateTimeInput
@@ -76,29 +75,42 @@ export const TaskFormContent = ({
           helperText={false}
           validate={required()}
         />
-        <NumberInput
+        {/*
+          The user picks when the meeting ends; what is stored stays its length,
+          so moving the start moves the end along with it.
+          ponytail: time only, so the meeting must end the day it starts (see
+          meetingEndError). Switch to a date-time input if overnight meetings
+          become a need.
+        */}
+        <TextInput
           source="duration_minutes"
+          type="time"
+          label="resources.tasks.fields.end_time"
           helperText={false}
-          min={MIN_DURATION_MINUTES}
-          step={DURATION_STEP_MINUTES}
+          format={(minutes?: number) => meetingEndTime(dueDate, minutes)}
+          parse={(endTime: string) =>
+            meetingDurationMinutes(dueDate, endTime) ??
+            getValues("duration_minutes")
+          }
+          validate={validateEnd}
         />
         <ChoiceInput source="type" category="rdv_type" validate={required()} />
         <ChoiceInput source="mode" category="rdv_mode" />
         <TextInput source="location" helperText={false} disabled={isRemote} />
       </div>
 
-      <ReferenceInput
+      <ReferenceArrayInput
         reference="sales"
-        source="sales_id"
+        source="sales_ids"
         sort={{ field: "last_name", order: "ASC" }}
         filter={{ "disabled@neq": true }}
       >
-        <SelectInput
-          label="resources.tasks.fields.sales_id"
+        <AutocompleteArrayInput
+          label="resources.tasks.fields.sales_ids"
           helperText={false}
           optionText={saleOptionRenderer}
         />
-      </ReferenceInput>
+      </ReferenceArrayInput>
     </div>
   );
 };

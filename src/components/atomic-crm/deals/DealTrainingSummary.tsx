@@ -8,16 +8,12 @@ import { Separator } from "@/components/ui/separator";
 import { formatLocalizedDate } from "../misc/RelativeDate";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Deal, Sale } from "../types";
-import {
-  fundingTypes,
-  qvctWorkshopTypes,
-  trainingTypes,
-} from "./trainingOptions";
+import { fundingTypes, qvctWorkshopTypes } from "./trainingOptions";
 
 /** Every column the three blocks below can render. */
 const DELIVERY_SOURCES = [
   "trainer_ids",
-  "training_type",
+  "external_trainers",
   "nb_trained_managers",
   "nb_trained_non_managers",
   "hours_delivered",
@@ -90,12 +86,6 @@ const TrainingBlock = ({ record }: { record: Deal }) => {
     record.nb_trained_non_managers != null;
 
   const entries: Entry[] = [
-    optionEntry(
-      "training_type",
-      trainingTypes,
-      record.training_type,
-      translate,
-    ),
     numberEntry("nb_trained_managers", record.nb_trained_managers),
     numberEntry("nb_trained_non_managers", record.nb_trained_non_managers),
     hasHeadcount ? entry("nb_trained_total", String(total)) : null,
@@ -114,7 +104,10 @@ const TrainingBlock = ({ record }: { record: Deal }) => {
     percentEntry("satisfaction_rate", record.satisfaction_rate),
   ].filter(isEntry);
 
-  const hasTrainers = !!record.trainer_ids?.length;
+  // Trainers with and without a CRM account read as one list.
+  const hasAccountTrainers = !!record.trainer_ids?.length;
+  const externalTrainers = record.external_trainers ?? [];
+  const hasTrainers = hasAccountTrainers || externalTrainers.length > 0;
   if (!entries.length && !hasTrainers) return null;
 
   return (
@@ -122,16 +115,25 @@ const TrainingBlock = ({ record }: { record: Deal }) => {
       {hasTrainers ? (
         <div className="flex flex-col">
           <FieldLabel source="trainer_ids" />
-          <ReferenceArrayField source="trainer_ids" reference="sales">
-            <SingleFieldList
-              className="flex-wrap"
-              render={(sale: Sale) => (
-                <Badge variant="outline">
-                  {sale.first_name} {sale.last_name}
-                </Badge>
-              )}
-            />
-          </ReferenceArrayField>
+          <div className="flex flex-wrap gap-2">
+            {hasAccountTrainers ? (
+              <ReferenceArrayField source="trainer_ids" reference="sales">
+                <SingleFieldList
+                  className="flex-wrap"
+                  render={(sale: Sale) => (
+                    <Badge variant="outline">
+                      {sale.first_name} {sale.last_name}
+                    </Badge>
+                  )}
+                />
+              </ReferenceArrayField>
+            ) : null}
+            {externalTrainers.map((name) => (
+              <Badge key={name} variant="outline">
+                {name}
+              </Badge>
+            ))}
+          </div>
         </div>
       ) : null}
       <EntryList entries={entries} />

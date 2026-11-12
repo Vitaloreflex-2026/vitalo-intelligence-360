@@ -46,11 +46,19 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/tasks/touchTaskContacts.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/tasks/tasksPredicate.ts",
           "type": "registry:component"
         },
         {
           "path": "src/components/atomic-crm/tasks/postponeDueDate.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/tasks/meetingEndTime.ts",
           "type": "registry:component"
         },
         {
@@ -87,6 +95,10 @@
         },
         {
           "path": "src/components/atomic-crm/tasks/TaskCreateSheet.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/tasks/TaskContacts.tsx",
           "type": "registry:component"
         },
         {
@@ -162,6 +174,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/settings/TagsCard.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/settings/SettingsPageMobile.tsx",
           "type": "registry:component"
         },
@@ -171,6 +187,10 @@
         },
         {
           "path": "src/components/atomic-crm/settings/ProfilePage.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/settings/ExternalTrainersCard.tsx",
           "type": "registry:component"
         },
         {
@@ -666,6 +686,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/filters/LocationFilter.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/filters/FilterCategory.tsx",
           "type": "registry:component"
         },
@@ -719,6 +743,10 @@
         },
         {
           "path": "src/components/atomic-crm/deals/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/deals/externalTrainers.ts",
           "type": "registry:component"
         },
         {
@@ -907,6 +935,10 @@
         },
         {
           "path": "src/components/atomic-crm/dashboard/DashboardStepper.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/dashboard/DashboardHero.tsx",
           "type": "registry:component"
         },
         {
@@ -1259,6 +1291,10 @@
         },
         {
           "path": "src/components/supabase/forgot-password-page.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/supabase/confirm-email-page.tsx",
           "type": "registry:component"
         },
         {

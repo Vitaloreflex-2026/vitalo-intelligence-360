@@ -3,7 +3,7 @@ import { ResourceContextProvider } from "ra-core";
 
 import { ContactListMobile } from "./ContactList";
 
-import { StoryWrapper, buildContact } from "@/test/StoryWrapper";
+import { StoryWrapper, buildCompany, buildContact } from "@/test/StoryWrapper";
 
 const meta = {
   title: "Atomic CRM/Contacts/Contact List",
@@ -76,6 +76,25 @@ export const MobileError = () => (
         }
         return { data: [], total: 0 };
       },
+    }}
+  >
+    <ResourceContextProvider value="contacts">
+      <ContactListMobile />
+    </ResourceContextProvider>
+  </StoryWrapper>
+);
+
+export const MobileLocationFilter = () => (
+  <StoryWrapper
+    data={{
+      contacts: [
+        { ...successContacts[0], company_city: "Lyon" },
+        { ...successContacts[1], company_city: "Nantes" },
+      ],
+      companies: [
+        buildCompany({ id: 1, city: "Lyon" }),
+        buildCompany({ id: 2, city: "Nantes" }),
+      ],
     }}
   >
     <ResourceContextProvider value="contacts">

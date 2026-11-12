@@ -51,6 +51,8 @@ export const choiceLabels: Record<string, string[]> = {
     "Préparation d'une proposition",
     "Lancement de mission",
   ],
+  // Appended last: choice ids are positional, earlier ones must not shift.
+  external_trainer: ["Joëlle Fernandez", "Lauriane Forest"],
 };
 
 /**

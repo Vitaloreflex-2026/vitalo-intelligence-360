@@ -68,6 +68,12 @@ grant all on function public.merge_contacts(bigint, bigint) to service_role;
 grant all on function public.set_sales_id_default() to anon;
 grant all on function public.set_sales_id_default() to authenticated;
 grant all on function public.set_sales_id_default() to service_role;
+grant all on function public.set_task_sales_ids_default() to anon;
+grant all on function public.set_task_sales_ids_default() to authenticated;
+grant all on function public.set_task_sales_ids_default() to service_role;
+grant all on function public.remove_deleted_contact_from_tasks() to anon;
+grant all on function public.remove_deleted_contact_from_tasks() to authenticated;
+grant all on function public.remove_deleted_contact_from_tasks() to service_role;
 
 -- Table grants
 grant all on table public.assessments to anon;
@@ -109,6 +115,10 @@ grant all on table public.sales_documents to service_role;
 grant all on table public.tags to anon;
 grant all on table public.tags to authenticated;
 grant all on table public.tags to service_role;
+
+grant all on table public.company_tags to anon;
+grant all on table public.company_tags to authenticated;
+grant all on table public.company_tags to service_role;
 
 grant all on table public.tasks to anon;
 grant all on table public.tasks to authenticated;
@@ -183,6 +193,10 @@ grant all on sequence public.choices_id_seq to service_role;
 grant all on sequence public.tags_id_seq to anon;
 grant all on sequence public.tags_id_seq to authenticated;
 grant all on sequence public.tags_id_seq to service_role;
+
+grant all on sequence public.company_tags_id_seq to anon;
+grant all on sequence public.company_tags_id_seq to authenticated;
+grant all on sequence public.company_tags_id_seq to service_role;
 
 grant all on sequence public.tasks_id_seq to anon;
 grant all on sequence public.tasks_id_seq to authenticated;

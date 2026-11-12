@@ -3,8 +3,8 @@ import {
   Clock,
   Crosshair,
   Lightbulb,
+  Presentation,
   Puzzle,
-  Star,
   TriangleAlert,
   Trophy,
   Users,
@@ -102,10 +102,6 @@ export const AssessmentRecommendStep = () => {
             choices={CONSULTANT_RECOMMENDATION_CHOICES}
             columns={2}
           />
-          <AssessmentOtherInput
-            source="consultant_recommendations_other"
-            group="consultant_recommendations"
-          />
         </AssessmentSection>
 
         <AssessmentSection
@@ -129,10 +125,18 @@ export const AssessmentRecommendStep = () => {
 
       <AssessmentSection
         number={6}
-        title="resources.assessments.recommend.sections.deployment_priority"
-        icon={Clock}
+        title="resources.assessments.recommend.sections.selected_workshops"
+        icon={Presentation}
       >
-        <div className="grid gap-6 sm:grid-cols-3">
+        <TextInput source="selected_workshops" label={false} multiline />
+      </AssessmentSection>
+
+      <div className="grid gap-8 lg:grid-cols-3">
+        <AssessmentSection
+          number={7}
+          title="resources.assessments.recommend.sections.deployment_priority"
+          icon={Clock}
+        >
           <CheckboxGroupInput
             source="deployment_short_term"
             label="resources.assessments.fields.deployment_short_term"
@@ -148,17 +152,6 @@ export const AssessmentRecommendStep = () => {
             label="resources.assessments.fields.deployment_long_term"
             choices={DEPLOYMENT_LONG_TERM_CHOICES}
           />
-        </div>
-      </AssessmentSection>
-
-      <div className="grid gap-8 lg:grid-cols-2">
-        <AssessmentSection
-          number={7}
-          title="resources.assessments.recommend.sections.expected_benefits"
-          icon={Star}
-          hint="resources.assessments.recommend.hints.expected_benefits"
-        >
-          <TextInput source="expected_benefits" label={false} multiline />
         </AssessmentSection>
 
         <AssessmentSection
@@ -177,16 +170,16 @@ export const AssessmentRecommendStep = () => {
             group="success_factors"
           />
         </AssessmentSection>
-      </div>
 
-      <AssessmentSection
-        number={9}
-        title="resources.assessments.recommend.sections.watch_points"
-        icon={TriangleAlert}
-        hint="resources.assessments.recommend.hints.watch_points"
-      >
-        <TextInput source="watch_points" label={false} multiline />
-      </AssessmentSection>
+        <AssessmentSection
+          number={9}
+          title="resources.assessments.recommend.sections.watch_points"
+          icon={TriangleAlert}
+          hint="resources.assessments.recommend.hints.watch_points"
+        >
+          <TextInput source="watch_points" label={false} multiline />
+        </AssessmentSection>
+      </div>
     </div>
   );
 };

@@ -3,7 +3,12 @@ import { ResourceContextProvider } from "ra-core";
 
 import { ContactList } from "./ContactList";
 
-import { StoryWrapper, buildContact, buildSale } from "@/test/StoryWrapper";
+import {
+  StoryWrapper,
+  buildCompany,
+  buildContact,
+  buildSale,
+} from "@/test/StoryWrapper";
 
 const meta = {
   title: "Atomic CRM/Contacts/Contact List",
@@ -149,6 +154,26 @@ export const NonAdminAccountManagerFilter = () => (
       canAccess: async ({ resource }) => resource !== "sales",
     }}
     data={dataForAccountManagerFilter}
+  >
+    <ResourceContextProvider value="contacts">
+      <ContactList />
+    </ResourceContextProvider>
+  </StoryWrapper>
+);
+
+const contactsAcrossCities = [
+  { ...successContacts[0], company_city: "Lyon" },
+  { ...successContacts[1], company_city: "Nantes" },
+];
+
+const companiesAcrossCities = [
+  buildCompany({ id: 1, city: "Lyon" }),
+  buildCompany({ id: 2, city: "Nantes" }),
+];
+
+export const LocationFilter = () => (
+  <StoryWrapper
+    data={{ contacts: contactsAcrossCities, companies: companiesAcrossCities }}
   >
     <ResourceContextProvider value="contacts">
       <ContactList />

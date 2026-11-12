@@ -69,8 +69,11 @@ export type RelationshipStatus = "prospect" | "client" | "partner";
 /** Who commissions a training on the client side. */
 export type SponsorRole = "cse" | "hr" | "hse";
 
-/** Shape of a delivered training. */
-export type TrainingType = "collective" | "individual_workshop" | "conference";
+/**
+ * What the contract sells. Only a `training` owes the post-session paperwork
+ * (BPF answers, portal filing, OPCO file).
+ */
+export type TrainingType = "workshop" | "training" | "conference";
 
 /** Format of a QVCT workshop. */
 export type QvctWorkshopType = "webinar" | "collective_onsite" | "individual";
@@ -125,6 +128,7 @@ export type Company = {
   training_date?: string | null;
   quote_approved?: boolean | null;
   service_invoiced?: boolean | null;
+  tags?: number[];
 } & Pick<RaRecord, "id">;
 
 export type EmailAndType = {
@@ -156,6 +160,8 @@ export type Contact = {
   phone_jsonb: PhoneNumberAndType[];
   nb_tasks?: number;
   company_name?: string;
+  company_city?: string;
+  company_state_abbr?: string;
   company_start_date?: string | null;
   decision_role?: string | null;
   relationship_status?: RelationshipStatus | null;
@@ -226,6 +232,7 @@ export type Assessment = {
   deployment_medium_term?: string[] | null;
   deployment_long_term?: string[] | null;
   expected_benefits?: string | null;
+  selected_workshops?: string | null;
   success_factors?: string[] | null;
   success_factors_other?: string | null;
   watch_points?: string | null;
@@ -294,6 +301,8 @@ export type Deal = {
   // Training delivery, reported in the yearly BPF.
   /** `sales` ids of the consultants who delivered the training. */
   trainer_ids?: Identifier[] | null;
+  /** Names of the trainers who have no CRM account (`external_trainer` choices). */
+  external_trainers?: string[] | null;
   training_type?: TrainingType | null;
   nb_trained_managers?: number | null;
   nb_trained_non_managers?: number | null;
@@ -345,13 +354,18 @@ export type Tag = {
   color: string;
 };
 
+/** Contacts and companies each have their own tag catalog. */
+export type TagsResource = "tags" | "company_tags";
+
 export type Task = {
-  contact_id: Identifier;
+  /** Every contact the meeting is with; at least one. */
+  contact_ids: Identifier[];
   type: string;
   text: string;
   due_date: string;
   done_date?: string | null;
-  sales_id?: Identifier;
+  /** The consultants/trainers holding the meeting. */
+  sales_ids?: Identifier[] | null;
   location?: string | null;
   mode?: string | null;
   /** Length of the meeting in minutes, used to size its calendar block. */

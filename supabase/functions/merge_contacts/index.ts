@@ -105,11 +105,13 @@ async function mergeContacts(
           .executeTakeFirstOrThrow(),
       ]);
 
-      // 2. Reassign tasks from loser to winner
+      // 2. Reassign tasks from loser to winner, keeping each id once
       await trx
         .updateTable("tasks")
-        .set({ contact_id: winnerId })
-        .where("contact_id", "=", loserId)
+        .set({
+          contact_ids: sql`case when ${winnerId} = any(contact_ids) then array_remove(contact_ids, ${loserId}::bigint) else array_replace(contact_ids, ${loserId}::bigint, ${winnerId}::bigint) end`,
+        })
+        .where(sql<boolean>`contact_ids @> ARRAY[${loserId}]::bigint[]`)
         .execute();
 
       // 3. Reassign notes from loser to winner

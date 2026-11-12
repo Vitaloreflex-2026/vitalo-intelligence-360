@@ -719,3 +719,18 @@ it("should remove summary suffix", async () => {
   });
   expect(updateMany).toHaveBeenCalledWith("resource", { ids: [1], data: {} });
 });
+
+it("turns '@ilike' into a case-insensitive text search on that field", async () => {
+  const getList = vi.fn().mockResolvedValueOnce([{ id: 1 }]);
+  const { getList: getListAdapter } = withSupabaseFilterAdapter({
+    getList,
+  } as unknown as DataProvider);
+
+  await getListAdapter("companies", {
+    filter: { "city@ilike": "Saint-Ouen (93)" },
+  });
+
+  expect(getList).toHaveBeenCalledWith("companies", {
+    filter: { city_q: "Saint-Ouen \\(93\\)" },
+  });
+});

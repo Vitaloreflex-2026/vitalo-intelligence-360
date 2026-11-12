@@ -12,8 +12,8 @@ const createTask = (id: number, dueDate: Date, doneDate?: Date) => ({
   id,
   due_date: iso(dueDate),
   done_date: doneDate ? iso(doneDate) : null,
-  contact_id: null,
-  sales_id: null,
+  contact_ids: [],
+  sales_ids: null,
   type: "Call",
   text: `Task ${id}`,
 });

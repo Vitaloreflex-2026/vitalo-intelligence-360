@@ -34,9 +34,31 @@ import generateData from "./dataGenerator";
 import type { Db } from "./dataGenerator/types";
 import { withSupabaseFilterAdapter } from "./internal/supabaseAdapter";
 
-const TASK_MARKED_AS_DONE = "TASK_MARKED_AS_DONE";
-const TASK_MARKED_AS_UNDONE = "TASK_MARKED_AS_UNDONE";
-const TASK_DONE_NOT_CHANGED = "TASK_DONE_NOT_CHANGED";
+/** How each contact's pending-meeting count moves for one meeting. */
+const pendingTaskCounts = (
+  task: Partial<Task>,
+  sign = 1,
+): Map<Identifier, number> =>
+  new Map(
+    task.done_date ? [] : (task.contact_ids ?? []).map((id) => [id, sign]),
+  );
+
+const adjustPendingTasks = async (
+  dataProvider: DataProvider,
+  deltas: Map<Identifier, number>,
+) => {
+  for (const [id, delta] of deltas) {
+    if (!delta) continue;
+    const { data: contact } = await dataProvider.getOne<Contact>("contacts", {
+      id,
+    });
+    await dataProvider.update("contacts", {
+      id,
+      data: { nb_tasks: (contact.nb_tasks ?? 0) + delta },
+      previousData: contact,
+    });
+  }
+};
 
 const processCompanyLogo = async (params: any) => {
   let logo = params.data.logo;
@@ -110,6 +132,8 @@ async function fetchAndUpdateCompanyData(
   }
 
   newData.company_name = company.name;
+  newData.company_city = company.city;
+  newData.company_state_abbr = company.state_abbr;
   return { ...params, data: newData };
 }
 
@@ -147,7 +171,7 @@ export const createDataProvider = ({
   silent = false,
 }: CreateFakeRestDataProviderOptions = {}): CrmDataProvider => {
   const baseDataProvider = fakeRestDataProvider(db, !silent, latency);
-  let taskUpdateType = TASK_DONE_NOT_CHANGED;
+  let taskCountDelta = new Map<Identifier, number>();
   const getIdentity = async () =>
     authProvider?.getIdentity?.() ?? defaultAuthProvider.getIdentity?.();
 
@@ -477,64 +501,33 @@ export const createDataProvider = ({
       {
         resource: "tasks",
         afterCreate: async (result, dataProvider) => {
-          // update the task count in the related contact
-          const { contact_id } = result.data;
-          const { data: contact } = await dataProvider.getOne("contacts", {
-            id: contact_id,
-          });
-          await dataProvider.update("contacts", {
-            id: contact_id,
-            data: {
-              nb_tasks: (contact.nb_tasks ?? 0) + 1,
-            },
-            previousData: contact,
-          });
+          await adjustPendingTasks(
+            dataProvider,
+            pendingTaskCounts(result.data),
+          );
           return result;
         },
         beforeUpdate: async (params) => {
-          const { data, previousData } = params;
-          if (previousData.done_date !== data.done_date) {
-            taskUpdateType = data.done_date
-              ? TASK_MARKED_AS_DONE
-              : TASK_MARKED_AS_UNDONE;
-          } else {
-            taskUpdateType = TASK_DONE_NOT_CHANGED;
-          }
+          // Contacts and done state can both change: count the pending meeting
+          // against the contacts it leaves and for the ones it joins.
+          taskCountDelta = pendingTaskCounts(params.previousData, -1);
+          pendingTaskCounts(
+            { ...params.previousData, ...params.data },
+            1,
+          ).forEach((delta, id) =>
+            taskCountDelta.set(id, (taskCountDelta.get(id) ?? 0) + delta),
+          );
           return params;
         },
         afterUpdate: async (result, dataProvider) => {
-          // update the contact: if the task is done, decrement the nb tasks, otherwise increment it
-          const { contact_id } = result.data;
-          const { data: contact } = await dataProvider.getOne("contacts", {
-            id: contact_id,
-          });
-          if (taskUpdateType !== TASK_DONE_NOT_CHANGED) {
-            await dataProvider.update("contacts", {
-              id: contact_id,
-              data: {
-                nb_tasks:
-                  taskUpdateType === TASK_MARKED_AS_DONE
-                    ? (contact.nb_tasks ?? 0) - 1
-                    : (contact.nb_tasks ?? 0) + 1,
-              },
-              previousData: contact,
-            });
-          }
+          await adjustPendingTasks(dataProvider, taskCountDelta);
           return result;
         },
         afterDelete: async (result, dataProvider) => {
-          // update the task count in the related contact
-          const { contact_id } = result.data;
-          const { data: contact } = await dataProvider.getOne("contacts", {
-            id: contact_id,
-          });
-          await dataProvider.update("contacts", {
-            id: contact_id,
-            data: {
-              nb_tasks: (contact.nb_tasks ?? 0) - 1,
-            },
-            previousData: contact,
-          });
+          await adjustPendingTasks(
+            dataProvider,
+            pendingTaskCounts(result.data, -1),
+          );
           return result;
         },
       } satisfies ResourceCallbacks<Task>,
@@ -555,8 +548,8 @@ export const createDataProvider = ({
           return await processCompanyLogo(params);
         },
         afterUpdate: async (result, dataProvider) => {
-          // get all contacts of the company and for each contact, update the company_name
-          const { id, name } = result.data;
+          // get all contacts of the company and for each contact, update the company fields it mirrors
+          const { id, name, city, state_abbr } = result.data;
           const { data: contacts } = await dataProvider.getList("contacts", {
             filter: { company_id: id },
             pagination: { page: 1, perPage: 1000 },
@@ -566,7 +559,11 @@ export const createDataProvider = ({
           const contactIds = contacts.map((contact) => contact.id);
           await dataProvider.updateMany("contacts", {
             ids: contactIds,
-            data: { company_name: name },
+            data: {
+              company_name: name,
+              company_city: city,
+              company_state_abbr: state_abbr,
+            },
           });
           return result;
         },

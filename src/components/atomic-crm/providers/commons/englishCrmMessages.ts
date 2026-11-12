@@ -42,7 +42,7 @@ export const englishCrmMessages = {
         support_objectives_other: "Other",
         journey_steps: "Journey steps",
         recommended_path: "Recommended path",
-        consultant_recommendations: "Consultant recommendations",
+        consultant_recommendations: "Recommendations",
         consultant_recommendations_other: "Other",
         target_audiences: "Audiences covered",
         target_audience_other: "Target population",
@@ -50,6 +50,7 @@ export const englishCrmMessages = {
         deployment_medium_term: "Medium term",
         deployment_long_term: "Long term",
         expected_benefits: "Expected benefits",
+        selected_workshops: "Selected workshops and conferences",
         success_factors: "Key success factors",
         success_factors_other: "Other",
         watch_points: "Watch points",
@@ -80,7 +81,7 @@ export const englishCrmMessages = {
         next_action: "Possible next action",
       },
       diagnostic: {
-        subtitle: "Where does the company stand today?",
+        subtitle: "The company's situation today",
         sections: {
           governance: "Governance & commitment",
           existing_programs: "Existing programs",
@@ -212,10 +213,10 @@ export const englishCrmMessages = {
           support_objectives: "Priority support objectives",
           journey: "Recommended VitalO IMPACT 360° journey",
           recommended_path: "Recommended path",
-          consultant_recommendations: "Consultant recommendations",
+          consultant_recommendations: "Recommendations",
           target_audiences: "Audiences covered",
+          selected_workshops: "Selected workshops and conferences",
           deployment_priority: "Deployment priority",
-          expected_benefits: "Expected benefits",
           success_factors: "Key success factors",
           watch_points: "Watch points",
         },
@@ -224,7 +225,6 @@ export const englishCrmMessages = {
           journey: "Tick the steps that are relevant for your organization",
           recommended_path:
             "Build the path that fits your needs here (indicative example)",
-          expected_benefits: "What results are expected for your organization?",
           watch_points: "What difficulties could hold the project back?",
         },
         support_objectives: {
@@ -248,25 +248,25 @@ export const englishCrmMessages = {
         },
         recommended_path: {
           psmt_awareness: "PSMT awareness",
-          psmm_managers: "Manager training (PSMM)",
+          psmm_managers: "PSMT managers training",
           pssm_training: "PSSM training",
           impact_360_deployment: "VitalO IMPACT 360° deployment",
-          annual_barometer: "Annual barometer (measure & follow-up)",
-          managers_club: "Managers club / quality-of-work-life leads",
+          annual_barometer: "Annual barometer – Measure and follow-up",
+          managers_club: "Managers club / Quality-of-work-life lead",
         },
         consultant_recommendations: {
-          psmt: "PSMT (2h e-learning)",
-          psmm: "PSMM (manager training)",
-          pssm: "PSSM (mental health first aiders)",
-          impact_360: "VitalO IMPACT 360° (full journey)",
-          vitalo_app: "VitalOApp (digital platform)",
-          in_depth_diagnostic: "In-depth diagnostic",
-          barometer: "Barometer (internal measurement)",
-          thematic_workshops: "Thematic workshops",
-          conference: "Conference / awareness session",
-          coaching: "Coaching",
           strategic_support: "Strategic support",
-          other: "Other",
+          mental_health_conferences: "Mental health / well-being conferences",
+          psychosocial_risks_conference:
+            "Psychosocial risk prevention conference",
+          psychosocial_risks_training: "Psychosocial risks training",
+          psmt: "PSMT journey",
+          psmm: "PSMT managers journey",
+          pssm: "PSSM company module",
+          qvct_group_workshops: "Group quality-of-work-life workshops",
+          qvct_individual_workshops:
+            "Individual quality-of-work-life workshops",
+          barometer: "Barometer & dashboards",
         },
         target_audiences: {
           all_employees: "All employees",
@@ -314,7 +314,7 @@ export const englishCrmMessages = {
         },
         hints: {
           interview_summary:
-            "The consultant summarizes the client situation and the main recommendation.",
+            "Summarize the client situation and the main recommendation.",
           next_steps: "This part becomes the core of the sales follow-up.",
           development_potential: "Opportunities identified",
         },
@@ -350,16 +350,16 @@ export const englishCrmMessages = {
           unknown: "Budget unknown",
         },
         documents_to_send: {
-          brochure: "Brochure",
-          commercial_proposal: "Commercial proposal",
+          brochure: "Corporate brochure",
+          mental_health_modules_brochure: "3 mental health modules brochure",
+          workshop_sheets: "Workshop sheets",
+          agreement: "Training agreement",
           psmt_program: "PSMT program",
-          psmm_program: "PSMM program",
-          pssm_documentation: "PSSM documentation",
-          client_references: "Client references",
+          psmt_access: "PSMT login",
+          pssm_documentation: "PSSM company program",
+          custom_program: "Custom program (off-catalog)",
           quote: "Quote",
-          agreement: "Agreement",
-          barometer: "Barometer",
-          workshops_conferences: "Workshops / conferences",
+          client_references: "Client references",
           other: "Other",
         },
         follow_up_modes: {
@@ -434,6 +434,7 @@ export const englishCrmMessages = {
       name: "Company |||| Companies",
       forcedCaseName: "Company",
       fields: {
+        tags: "Tags",
         name: "Company name",
         website: "Website",
         linkedin_url: "LinkedIn URL",
@@ -471,7 +472,7 @@ export const englishCrmMessages = {
       field_categories: {
         contact: "Contact",
         additional_info: "Additional information",
-        address: "Headquarters location",
+        address: "Address",
         context: "Context",
         training: "Trainings",
       },
@@ -645,7 +646,8 @@ export const englishCrmMessages = {
         stage: "Stage",
         sales_id: "Account manager",
         trainer_ids: "Trainers",
-        training_type: "Training type",
+        external_trainers: "Trainers without an account",
+        training_type: "Service type",
         nb_trained_managers: "People trained — directors / managers",
         nb_trained_non_managers: "People trained — non-managers",
         nb_trained_total: "Total people trained",
@@ -687,7 +689,7 @@ export const englishCrmMessages = {
       field_categories: {
         misc: "Misc",
         delivery: "Delivery and invoicing",
-        training: "Training",
+        training: "Session",
         funding: "Funding",
         opco: "OPCO details",
         invoicing: "Invoicing",
@@ -787,6 +789,10 @@ export const englishCrmMessages = {
         success:
           "User created. They will soon receive an email to set their password.",
         title: "Create a new user",
+        external_trainer_hint:
+          "This account replaces %{name}: every contract naming them will point to it.",
+        external_trainer_error:
+          "The user was created, but the contracts naming %{name} could not be moved onto the account.",
       },
       edit: {
         error: "An error occurred. Please try again.",
@@ -814,12 +820,12 @@ export const englishCrmMessages = {
       fields: {
         text: "Description",
         due_date: "Date and time",
-        duration_minutes: "Duration (min)",
+        end_time: "End time",
         type: "Meeting type",
         mode: "Meeting mode",
         location: "Location",
-        sales_id: "Consultant / Trainer",
-        contact_id: "Contact",
+        sales_ids: "Consultants / Trainers",
+        contact_ids: "Contacts",
         due_short: "on",
       },
       action: {
@@ -840,7 +846,6 @@ export const englishCrmMessages = {
       },
       sheet: {
         edit: "Edit meeting",
-        edit_for: "Edit meeting for %{name}",
       },
       empty: "No meetings yet",
       empty_list_hint: "Meetings added to your contacts will appear here.",
@@ -852,8 +857,12 @@ export const englishCrmMessages = {
         tomorrow: "Tomorrow",
         with_pending: "With pending meetings",
       },
-      regarding_contact: "(Re: %{name})",
+      regarding: "Re:",
       updated: "Meeting updated",
+      validation: {
+        end_another_day: "The meeting must end on the day it starts",
+        end_before_start: "The end time must be after the start time",
+      },
     },
     tags: {
       name: "Tag |||| Tags",
@@ -868,6 +877,9 @@ export const englishCrmMessages = {
         name_label: "Tag name",
         name_placeholder: "Enter tag name",
       },
+    },
+    company_tags: {
+      name: "Company tag |||| Company tags",
     },
   },
   crm: {
@@ -931,8 +943,8 @@ export const englishCrmMessages = {
       hse: "HSE department",
     },
     training_type: {
-      collective: "Collective",
-      individual_workshop: "Individual workshop",
+      workshop: "Workshop",
+      training: "Training",
       conference: "Conference",
     },
     qvct_workshop_type: {
@@ -966,6 +978,13 @@ export const englishCrmMessages = {
       reset_password: "Reset Password",
     },
     auth: {
+      confirm_email: {
+        title: "Activate your account",
+        recovery_title: "Reset your password",
+        action: "Continue",
+        invalid_link:
+          "This link is invalid or has expired. Request a new one below.",
+      },
       first_name: "First name",
       last_name: "Last name",
       confirm_password: "Confirm password",
@@ -993,6 +1012,7 @@ export const englishCrmMessages = {
       details: "Details",
       last_activity_with_date: "last activity %{date}",
       load_more: "Load more",
+      location: "Location",
       misc: "Misc",
       past: "Past",
       read_more: "Read more",
@@ -1020,6 +1040,10 @@ export const englishCrmMessages = {
       load_more: "Load more activity",
     },
     dashboard: {
+      hero: {
+        greeting: "Hello %{name}",
+        subtitle: "Here is your day at a glance.",
+      },
       calendar: {
         title: "Team meetings",
         reschedule_error: "This meeting could not be moved",
@@ -1107,12 +1131,37 @@ export const englishCrmMessages = {
         requires_renewal: "Renew every year",
         save_error: "This document type could not be saved",
       },
+      tags: {
+        hint: "A tag can only be deleted once no contact uses it. Deletion is immediate.",
+        empty: "No tag yet.",
+        unused: "Unused",
+        usage:
+          "Used by %{smart_count} contact |||| Used by %{smart_count} contacts",
+        delete_error: "This tag could not be deleted",
+      },
+      company_tags: {
+        hint: "A company tag can only be deleted once no company uses it. Deletion is immediate.",
+        empty: "No company tag yet.",
+        unused: "Unused",
+        usage:
+          "Used by %{smart_count} company |||| Used by %{smart_count} companies",
+        delete_error: "This tag could not be deleted",
+      },
+      external_trainers: {
+        hint: "Trainers listed on contracts by name only. Once one of them gets an account, create it from here: their contracts move onto it.",
+        empty: "No trainer without an account yet.",
+        add: "Add",
+        new_placeholder: "First and last name",
+        create_account: "Create their account",
+        save_error: "This trainer could not be saved",
+      },
       preferences: "Preferences",
       title: "Settings",
       app_title: "App Title",
       sections: {
         branding: "Branding",
         documents: "User documents",
+        external_trainers: "Trainers without an account",
       },
       validation: {
         duplicate: "Duplicate %{display_name}: %{items}",

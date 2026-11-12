@@ -1,22 +1,52 @@
-import { Building, Truck, Users } from "lucide-react";
-import { useGetIdentity, useGetList, useTranslate } from "ra-core";
+import { Building, Tag, Truck, Users } from "lucide-react";
+import {
+  FilterLiveForm,
+  useGetIdentity,
+  useGetList,
+  useListContext,
+  useTranslate,
+} from "ra-core";
+import type { FormHTMLAttributes } from "react";
+import { AutocompleteInput } from "@/components/admin/autocomplete-input";
 import { ToggleFilterButton } from "@/components/admin/toggle-filter-button";
+import { Badge } from "@/components/ui/badge";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import { FilterCategory } from "../filters/FilterCategory";
+import { LocationFilter } from "../filters/LocationFilter";
 import { ResponsiveFilters } from "../misc/ResponsiveFilters";
+import { useTags } from "../tags/useTags";
 import type { Choice } from "../types";
 import { AccountManagerFilter } from "../sales/AccountManagerInput";
 import { getTranslatedCompanySizeLabel } from "./getTranslatedCompanySizeLabel";
 import { sizes } from "./sizes";
 
+const FullWidthForm = (props: FormHTMLAttributes<HTMLFormElement>) => (
+  <form className="w-full" {...props} />
+);
+
 export const CompanyListFilter = () => {
   const { identity } = useGetIdentity();
   const translate = useTranslate();
+  const isMobile = useIsMobile();
   const { data: sectors } = useGetList<Choice>("choices", {
     filter: { category: "company_sector" },
     pagination: { page: 1, perPage: 200 },
     sort: { field: "id", order: "ASC" },
   });
+  const { data: tags } = useTags({ resource: "company_tags" });
+  // Keep an active sector visible even when it left the referential (deleted
+  // option, filter restored from the store or a bookmarked URL).
+  const { filterValues } = useListContext();
+  const activeSector: unknown = filterValues.sector;
+  const sectorChoices =
+    typeof activeSector === "string" &&
+    !sectors?.some((sector) => sector.label === activeSector)
+      ? [
+          ...(sectors ?? []),
+          { id: activeSector, category: "company_sector", label: activeSector },
+        ]
+      : (sectors ?? []);
   const translatedSizes = sizes.map((size) => ({
     ...size,
     name: getTranslatedCompanySizeLabel(size, translate),
@@ -41,15 +71,57 @@ export const CompanyListFilter = () => {
         icon={<Truck className="h-4 w-4" />}
         label="resources.companies.fields.sector"
       >
-        {(sectors ?? []).map((sector) => (
-          <ToggleFilterButton
-            className="w-full justify-between"
-            label={sector.label}
-            key={sector.id}
-            value={{ sector: sector.label }}
+        {/* A dropdown rather than one button per sector: the list is
+            user-extensible and grows too long for the sidebar. */}
+        <FilterLiveForm formComponent={FullWidthForm} debounce={0}>
+          <AutocompleteInput
+            source="sector"
+            // minmax(0, 1fr) track: lets a long sector truncate instead of
+            // widening the field past the sidebar.
+            className="grid-cols-1"
+            choices={sectorChoices}
+            optionText="label"
+            optionValue="label"
+            translateChoice={false}
+            label={false}
+            helperText={false}
+            clearable
+            modal={isMobile}
+            placeholder={translate("resources.companies.fields.sector")}
+            inputText={(sector?: Choice) => (
+              <span className="min-w-0 truncate" title={sector?.label}>
+                {sector?.label}
+              </span>
+            )}
           />
-        ))}
+        </FilterLiveForm>
       </FilterCategory>
+
+      {tags?.length ? (
+        <FilterCategory
+          icon={<Tag className="h-4 w-4" />}
+          label="resources.companies.fields.tags"
+        >
+          {tags.map((tag) => (
+            <ToggleFilterButton
+              className="w-full justify-between"
+              key={tag.id}
+              label={
+                <Badge
+                  variant="secondary"
+                  className="text-black text-xs font-normal cursor-pointer"
+                  style={{ backgroundColor: tag.color }}
+                >
+                  {tag.name}
+                </Badge>
+              }
+              value={{ "tags@cs": `{${tag.id}}` }}
+            />
+          ))}
+        </FilterCategory>
+      ) : null}
+
+      <LocationFilter citySource="city@ilike" regionSource="state_abbr@ilike" />
 
       <FilterCategory
         icon={<Users className="h-4 w-4" />}

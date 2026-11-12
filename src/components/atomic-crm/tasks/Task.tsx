@@ -2,13 +2,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { MoreVertical } from "lucide-react";
 import {
   useDeleteWithUndoController,
-  useGetRecordRepresentation,
   useNotify,
   useTranslate,
   useUpdate,
 } from "ra-core";
 import { useEffect, useState } from "react";
-import { ReferenceField } from "@/components/admin/reference-field";
 import { DateField } from "@/components/admin/date-field";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -20,7 +18,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
-import type { Contact, Task as TData } from "../types";
+import type { Task as TData } from "../types";
+import { TaskContacts } from "./TaskContacts";
 import { TaskEdit } from "./TaskEdit";
 import { TaskExit } from "./TaskExit";
 import { useTaskExit } from "./useTaskExit";
@@ -47,7 +46,6 @@ export const Task = ({
   const notify = useNotify();
   const translate = useTranslate();
   const queryClient = useQueryClient();
-  const getContactRepresentation = useGetRecordRepresentation("contacts");
 
   const [openEdit, setOpenEdit] = useState(false);
   const { isLeaving, leave } = useTaskExit();
@@ -168,24 +166,11 @@ export const Task = ({
                 &nbsp;
                 <DateField source="due_date" record={task} showDate showTime />
                 {showContact && (
-                  <ReferenceField<TData, Contact>
-                    source="contact_id"
-                    reference="contacts"
-                    record={task}
-                    link="show"
-                    className="inline text-sm text-muted-foreground"
-                    render={({ referenceRecord }) => {
-                      if (!referenceRecord) return null;
-                      return (
-                        <>
-                          {" "}
-                          {translate("resources.tasks.regarding_contact", {
-                            name: getContactRepresentation(referenceRecord),
-                          })}
-                        </>
-                      );
-                    }}
-                  />
+                  <>
+                    {" ("}
+                    {translate("resources.tasks.regarding")}{" "}
+                    <TaskContacts task={task} />)
+                  </>
                 )}
               </div>
             </div>

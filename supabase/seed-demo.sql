@@ -184,7 +184,7 @@ insert into public.deals (id, name, company_id, contact_ids, stage, category, in
 --     its OPCO file, and contract 3 has an unsigned quote past its deadline.
 --
 update public.deals set
-    training_type = 'collective',
+    training_type = 'training',
     nb_trained_managers = 4,
     nb_trained_non_managers = 18,
     hours_delivered = 35,
@@ -213,7 +213,7 @@ update public.deals set
 where id = 1;
 
 update public.deals set
-    training_type = 'collective',
+    training_type = 'training',
     qualiopi = true,
     funding_type = 'hr_hse',
     quote_signed = true,
@@ -229,7 +229,7 @@ update public.deals set
 where id = 3;
 
 update public.deals set
-    training_type = 'collective',
+    training_type = 'training',
     qualiopi = true,
     funding_type = 'opco',
     quote_signed = false,
@@ -309,24 +309,24 @@ insert into public.deal_notes (deal_id, text, date) values
 -- 8. Meetings (tasks). `type` and `mode` use the `choices` labels
 --    (rdv_type / rdv_mode); `location` stays empty for the remote modes.
 --
-insert into public.tasks (contact_id, type, mode, location, text, due_date, done_date) values
-    (1,  'Rendez-vous de suivi',            'Présentiel',      'Siège Batilor, Lyon 7e',     'Présenter le chiffrage détaillé par agence pour le déploiement.', now() + interval '3 days', null),
-    (2,  'Rendez-vous de suivi',            'Présentiel',      'Chantier Villeurbanne',      'Observer une séance d''échauffement menée par l''équipe.', now() + interval '8 days', null),
-    (5,  'Rendez-vous découverte',          'Visioconférence', null,                         'Analyser les plannings de nuit sur les trois derniers mois.', now() + interval '2 days', null),
-    (4,  'Préparation d''une proposition',  'Téléphone',       null,                         'Valider le périmètre avant envoi de la proposition définitive.', now() - interval '5 days', now() - interval '5 days'),
-    (6,  'Lancement de mission',            'Présentiel',      'Novaterre, quai Malakoff',   'Comité de lancement avec les référents des 4 sites pilotes.', now() + interval '12 days', null),
-    (7,  'Rendez-vous de suivi',            'Visioconférence', null,                         'Caler le planning des diagnostics site par site.', now() + interval '6 days', null),
-    (8,  'Premier contact',                 'Téléphone',       null,                         'Comprendre les contraintes achats et le découpage en lots.', now() + interval '4 days', null),
-    (9,  'Rendez-vous découverte',          'Présentiel',      'Maison Delorme, Reims',      'Visiter l''atelier et cadrer le format de la sensibilisation.', now() + interval '15 days', null),
-    (11, 'Préparation d''une proposition',  'Visioconférence', null,                         'Présenter la proposition RPS avant passage en commission.', now() + interval '5 days', null),
-    (12, 'Premier contact',                 'Téléphone',       null,                         'Associer les organisations syndicales au cadrage.', now() + interval '9 days', null),
-    (14, 'Rendez-vous découverte',          'Visioconférence', null,                         'Recadrer le format des modules manageurs sur une journée.', now() + interval '7 days', null),
-    (17, 'Rendez-vous de suivi',            'Présentiel',      'Mairie de Sainte-Hélène',    'Relire ensemble le cahier des charges du marché.', now() + interval '2 days', null),
-    (16, 'Bilan annuel',                    'Présentiel',      'Mairie de Sainte-Hélène',    'Point d''avancement sur la mise à jour du DUERP.', now() + interval '30 days', null),
-    (18, 'Premier contact',                 'Salon',           'Salon Préventica, Lille',    'Reprendre contact sur le stand, budget à rouvrir.', now() + interval '45 days', null),
-    (19, 'Rendez-vous découverte',          'Présentiel',      'Agence de Marcq-en-Barœul',  'Suivre une tournée pour objectiver les temps de conduite.', now() + interval '18 days', null),
-    (3,  'Restitution',                     'Présentiel',      'Siège Batilor, Lyon 7e',     'Restituer les résultats du diagnostic en CSE.', now() - interval '30 days', now() - interval '30 days'),
-    (20, 'Rendez-vous de suivi',            'Téléphone',       null,                         'Remercier pour les recommandations et faire un point trimestriel.', now() - interval '10 days', now() - interval '10 days');
+insert into public.tasks (contact_ids, type, mode, location, text, due_date, done_date) values
+    (array[1],  'Rendez-vous de suivi',            'Présentiel',      'Siège Batilor, Lyon 7e',     'Présenter le chiffrage détaillé par agence pour le déploiement.', now() + interval '3 days', null),
+    (array[2],  'Rendez-vous de suivi',            'Présentiel',      'Chantier Villeurbanne',      'Observer une séance d''échauffement menée par l''équipe.', now() + interval '8 days', null),
+    (array[5],  'Rendez-vous découverte',          'Visioconférence', null,                         'Analyser les plannings de nuit sur les trois derniers mois.', now() + interval '2 days', null),
+    (array[4],  'Préparation d''une proposition',  'Téléphone',       null,                         'Valider le périmètre avant envoi de la proposition définitive.', now() - interval '5 days', now() - interval '5 days'),
+    (array[6],  'Lancement de mission',            'Présentiel',      'Novaterre, quai Malakoff',   'Comité de lancement avec les référents des 4 sites pilotes.', now() + interval '12 days', null),
+    (array[7],  'Rendez-vous de suivi',            'Visioconférence', null,                         'Caler le planning des diagnostics site par site.', now() + interval '6 days', null),
+    (array[8],  'Premier contact',                 'Téléphone',       null,                         'Comprendre les contraintes achats et le découpage en lots.', now() + interval '4 days', null),
+    (array[9],  'Rendez-vous découverte',          'Présentiel',      'Maison Delorme, Reims',      'Visiter l''atelier et cadrer le format de la sensibilisation.', now() + interval '15 days', null),
+    (array[11], 'Préparation d''une proposition',  'Visioconférence', null,                         'Présenter la proposition RPS avant passage en commission.', now() + interval '5 days', null),
+    (array[12], 'Premier contact',                 'Téléphone',       null,                         'Associer les organisations syndicales au cadrage.', now() + interval '9 days', null),
+    (array[14], 'Rendez-vous découverte',          'Visioconférence', null,                         'Recadrer le format des modules manageurs sur une journée.', now() + interval '7 days', null),
+    (array[17], 'Rendez-vous de suivi',            'Présentiel',      'Mairie de Sainte-Hélène',    'Relire ensemble le cahier des charges du marché.', now() + interval '2 days', null),
+    (array[16], 'Bilan annuel',                    'Présentiel',      'Mairie de Sainte-Hélène',    'Point d''avancement sur la mise à jour du DUERP.', now() + interval '30 days', null),
+    (array[18], 'Premier contact',                 'Salon',           'Salon Préventica, Lille',    'Reprendre contact sur le stand, budget à rouvrir.', now() + interval '45 days', null),
+    (array[19], 'Rendez-vous découverte',          'Présentiel',      'Agence de Marcq-en-Barœul',  'Suivre une tournée pour objectiver les temps de conduite.', now() + interval '18 days', null),
+    (array[3],  'Restitution',                     'Présentiel',      'Siège Batilor, Lyon 7e',     'Restituer les résultats du diagnostic en CSE.', now() - interval '30 days', now() - interval '30 days'),
+    (array[20], 'Rendez-vous de suivi',            'Téléphone',       null,                         'Remercier pour les recommandations et faire un point trimestriel.', now() - interval '10 days', now() - interval '10 days');
 
 --
 -- 9. Assessments ("états des lieux"). One row per company at a different stage
@@ -415,7 +415,7 @@ insert into public.assessments (
     'Le dispositif fonctionne sur les 4 agences pilotes : baisse mesurée des arrêts TMS et managers en confiance. L''enjeu est désormais l''essaimage et la mesure continue.',
     '{managerial_skills,structure_prevention,strengthen_culture}', '{raise_awareness,train,deploy,measure}',
     '{psmt_awareness,psmm_managers,impact_360_deployment,annual_barometer}',
-    '{psmm,impact_360,barometer}', '{all_employees,managers,cssct}',
+    '{psmm,psmt,barometer}', '{all_employees,managers,cssct}',
     '{under_three_months}', '{three_to_six_months}', '{over_twelve_months}',
     'Un dispositif homogène sur les 12 agences et un indicateur TMS consolidé au niveau groupe.',
     '{management_commitment,involved_managers,regular_steering,results_measurement}',
@@ -427,10 +427,10 @@ insert into public.assessments (
     '{management_decision,budget_approval}', (now() - interval '4 months')::date,
     'approved', 48000,
     jsonb_build_array(
-        jsonb_build_object('action', 'Planifier les sessions PSMM des 8 agences restantes', 'due_date', (now() + interval '25 days')::date),
+        jsonb_build_object('action', 'Planifier les sessions PSMT managers des 8 agences restantes', 'due_date', (now() + interval '25 days')::date),
         jsonb_build_object('action', 'Cadrer le questionnaire du baromètre annuel', 'due_date', (now() + interval '2 months')::date)
     ),
-    '{commercial_proposal,client_references,quote,barometer}', (now() + interval '20 days')::date, 'in_person',
+    '{brochure,client_references,quote,workshop_sheets}', (now() + interval '20 days')::date, 'in_person',
     5, 'Client installé, budget voté, ambassadeur interne. Potentiel de reconduction annuelle.',
     '{discovery_done,proposal_sent,support_approved}', 'Mission pilote clôturée, extension signée.',
     '{several_sites,manager_training,annual_barometer,three_year_support}', 'Les 8 agences restantes représentent environ 1 200 compagnons.',
@@ -468,7 +468,7 @@ insert into public.assessments (
     'Un absentéisme de nuit deux fois supérieur au jour, des cadres de santé en première ligne sans outillage, et une cellule d''écoute qui ne touche pas sa cible.',
     '{managerial_skills,reduce_psychosocial_risks,train_first_aiders}', '{raise_awareness,train,support}',
     '{psmm_managers,pssm_training}',
-    '{psmm,pssm,in_depth_diagnostic}', '{managers,hr,target_population}',
+    '{psmm,pssm,strategic_support}', '{managers,hr,target_population}',
     '{immediate}', '{three_to_six_months}',
     'Des cadres de santé capables d''intervenir tôt et un premier réseau de secouristes en santé mentale sur les trois établissements.',
     '{involved_managers,employee_participation,regular_steering}',
@@ -514,7 +514,7 @@ insert into public.assessments (
     'Accord QVCT signé, réseau de référents en place, baromètre existant : la maturité est là. Le besoin porte sur l''homogénéité du déploiement sur 24 sites et la montée en compétence du réseau.',
     '{structure_prevention,strengthen_culture,support_transformation}', '{train,deploy,measure,sustain}',
     '{psmm_managers,impact_360_deployment,annual_barometer,managers_club}',
-    '{impact_360,psmm,barometer,strategic_support}', '{all_employees,managers,qvct_leads,cse}',
+    '{psmt,psmm,barometer,strategic_support}', '{all_employees,managers,qvct_leads,cse}',
     '{under_three_months}', '{three_to_six_months,six_to_twelve_months}', '{over_twelve_months}',
     'Un socle commun sur les 24 sites, un réseau de référents autonome et un baromètre comparable d''une année sur l''autre.',
     '{management_commitment,internal_communication,regular_steering,results_measurement,ambassador_network}',
@@ -529,7 +529,7 @@ insert into public.assessments (
         jsonb_build_object('action', 'Former le réseau de 24 référents QVCT', 'due_date', (now() + interval '6 weeks')::date),
         jsonb_build_object('action', 'Caler le baromètre de mi-parcours', 'due_date', (now() + interval '4 months')::date)
     ),
-    '{commercial_proposal,agreement,psmm_program,barometer}', (now() + interval '12 days')::date, 'video',
+    '{custom_program,agreement,psmt_program,psmt_access}', (now() + interval '12 days')::date, 'video',
     5, 'Déploiement groupe engagé, accord QVCT à l''appui. Reconduction très probable.',
     '{discovery_done,proposal_sent,support_approved}', 'Convention signée, première vague en cours.',
     '{national_rollout,several_sites,annual_barometer,three_year_support,vitalo_app}', '24 sites, dont 6 en réorganisation à traiter en dernier.',
@@ -572,7 +572,7 @@ insert into public.assessments (
     'Un turnover de 28 % et des incivilités quotidiennes sur les plateaux téléphoniques, avec un encadrement de proximité non formé aux RPS. Le CSSCT est moteur.',
     '{reduce_psychosocial_risks,managerial_skills,improve_internal_dialogue}', '{raise_awareness,train,measure}',
     '{psmt_awareness,psmm_managers,annual_barometer}',
-    '{psmm,in_depth_diagnostic,thematic_workshops}', '{managers,cssct,target_population}', 'Conseillers des plateaux téléphoniques',
+    '{psmm,psychosocial_risks_training,qvct_group_workshops}', '{managers,cssct,target_population}', 'Conseillers des plateaux téléphoniques',
     '{immediate}', '{three_to_six_months}',
     'Des responsables de plateau formés au repérage, et un turnover ramené sous les 20 %.',
     '{involved_managers,employee_participation,regular_steering}',
@@ -647,7 +647,7 @@ begin
     update public.deals set trainer_ids = array[owner_id]
     where hours_delivered is not null and trainer_ids is null;
     update public.deal_notes    set sales_id = owner_id where sales_id is null;
-    update public.tasks         set sales_id = owner_id where sales_id is null;
+    update public.tasks         set sales_ids = array[owner_id] where sales_ids is null;
 
     -- Assessments carry no sales_id, but the closed one names who closed it and
     -- every planned next step names an owner.

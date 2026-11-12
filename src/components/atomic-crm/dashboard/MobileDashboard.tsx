@@ -2,6 +2,7 @@ import { useGetList, useTimeout } from "ra-core";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import type { Contact, ContactNote } from "../types";
+import { DashboardHero } from "./DashboardHero";
 import { DashboardStepper } from "./DashboardStepper";
 import { MeetingsCalendar } from "./MeetingsCalendar";
 import { Welcome } from "./Welcome";
@@ -62,6 +63,7 @@ export const MobileDashboard = () => {
     <Wrapper>
       <div className="flex flex-col gap-6 mt-1">
         {import.meta.env.VITE_IS_DEMO === "true" ? <Welcome /> : null}
+        <DashboardHero />
         <MeetingsCalendar />
       </div>
     </Wrapper>

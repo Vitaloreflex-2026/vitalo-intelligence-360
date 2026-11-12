@@ -45,14 +45,15 @@ export const frenchCrmMessages = {
         support_objectives_other: "Autre",
         journey_steps: "Étapes du parcours",
         recommended_path: "Parcours recommandé",
-        consultant_recommendations: "Recommandations du consultant",
+        consultant_recommendations: "Recommandations",
         consultant_recommendations_other: "Autre",
         target_audiences: "Publics concernés",
-        target_audience_other: "Population cible",
+        target_audience_other: "Population ciblée",
         deployment_short_term: "Court terme",
         deployment_medium_term: "Moyen terme",
         deployment_long_term: "Long terme",
         expected_benefits: "Bénéfices attendus",
+        selected_workshops: "Ateliers et conférences retenus",
         success_factors: "Facteurs clés de réussite",
         success_factors_other: "Autre",
         watch_points: "Points de vigilance",
@@ -70,7 +71,7 @@ export const frenchCrmMessages = {
         documents_to_send_other: "Autres",
         next_follow_up_date: "Date",
         next_follow_up_mode: "Mode",
-        opportunity_rating: "Évaluation de l'opportunité",
+        opportunity_rating: "Évaluation opportunité",
         opportunity_rating_comments: "Motivation de cette évaluation",
         follow_up_status: "Suivi du dossier",
         follow_up_comments: "Commentaires / Motif",
@@ -83,14 +84,14 @@ export const frenchCrmMessages = {
         next_action: "Prochaine action éventuelle",
       },
       diagnostic: {
-        subtitle: "Où en est l'entreprise aujourd'hui ?",
+        subtitle: "Situation de l'entreprise aujourd'hui",
         sections: {
           governance: "Gouvernance & engagement",
           existing_programs: "Dispositifs existants",
           managerial_maturity: "Maturité managériale",
           priority_issues: "Enjeux prioritaires",
-          company_strengths: "Les forces de l'entreprise",
-          identified_barriers: "Les freins identifiés",
+          company_strengths: "Forces de l'entreprise",
+          identified_barriers: "Freins identifiés",
           urgency: "Niveau d'urgence",
           client_priorities: "Les 3 priorités exprimées par le client",
           impact_profile: "Profil IMPACT 360°",
@@ -215,10 +216,10 @@ export const frenchCrmMessages = {
           support_objectives: "Objectifs prioritaires d'accompagnement",
           journey: "Parcours VitalÔ IMPACT 360° recommandé",
           recommended_path: "Parcours recommandé",
-          consultant_recommendations: "Recommandations du consultant",
+          consultant_recommendations: "Recommandations",
           target_audiences: "Publics concernés",
+          selected_workshops: "Ateliers et conférences retenus",
           deployment_priority: "Priorité de déploiement",
-          expected_benefits: "Bénéfices attendus",
           success_factors: "Facteurs clés de réussite",
           watch_points: "Points de vigilance",
         },
@@ -228,8 +229,6 @@ export const frenchCrmMessages = {
           journey: "Cochez les étapes pertinentes pour votre organisation",
           recommended_path:
             "Construisez ici le parcours adapté à vos besoins (exemple indicatif)",
-          expected_benefits:
-            "Quels résultats sont attendus pour votre organisation ?",
           watch_points:
             "Quelles difficultés pourraient freiner la réussite du projet ?",
         },
@@ -255,25 +254,23 @@ export const frenchCrmMessages = {
         },
         recommended_path: {
           psmt_awareness: "Sensibilisation PSMT",
-          psmm_managers: "Formation Managers (PSMM)",
+          psmm_managers: "Formation PSMT Manager",
           pssm_training: "Formation PSSM",
-          impact_360_deployment: "Déploiement VitalÔ IMPACT 360°",
-          annual_barometer: "Baromètre annuel (mesure & suivi)",
-          managers_club: "Club managers / référents QVCT",
+          impact_360_deployment: "Déploiement VitalÔ Impact 360°",
+          annual_barometer: "Baromètre annuel – Mesure et suivi",
+          managers_club: "Club managers / Référent QVCT",
         },
         consultant_recommendations: {
-          psmt: "PSMT (e-learning 2H)",
-          psmm: "PSMM (formation managers)",
-          pssm: "PSSM (Secouristes en santé mentale)",
-          impact_360: "VitalÔ IMPACT 360° (parcours global)",
-          vitalo_app: "VitalÔApp (plateforme digitale)",
-          in_depth_diagnostic: "Diagnostic approfondi",
-          barometer: "Baromètre (mesure interne)",
-          thematic_workshops: "Ateliers thématiques",
-          conference: "Conférence / Sensibilisation",
-          coaching: "Coaching",
           strategic_support: "Accompagnement stratégique",
-          other: "Autre",
+          mental_health_conferences: "Conférences santé mentale / bien-être",
+          psychosocial_risks_conference: "Conférence prévention RPS",
+          psychosocial_risks_training: "Formation RPS",
+          psmt: "Parcours PSMT",
+          psmm: "Parcours PSMT managers",
+          pssm: "PSSM module entreprise",
+          qvct_group_workshops: "Ateliers QVCT collectifs",
+          qvct_individual_workshops: "Ateliers QVCT individuels",
+          barometer: "Baromètre & tableaux de bord",
         },
         target_audiences: {
           all_employees: "Tous les collaborateurs",
@@ -283,7 +280,7 @@ export const frenchCrmMessages = {
           cse: "CSE",
           cssct: "CSSCT",
           qvct_leads: "Référents QVCT",
-          target_population: "Population cible",
+          target_population: "Population ciblée",
         },
         deployment_priority: {
           immediate: "Immédiat",
@@ -313,7 +310,7 @@ export const frenchCrmMessages = {
           next_steps: "Prochaines étapes",
           documents_to_send: "Documents à transmettre",
           next_follow_up: "Prochaine relance",
-          opportunity_rating: "Évaluation de l'opportunité",
+          opportunity_rating: "Évaluation opportunité",
           development_potential: "Potentiel de développement",
           follow_up_status: "Suivi du dossier",
           closing_checklist: "À ne pas oublier avant de clôturer le dossier",
@@ -321,7 +318,7 @@ export const frenchCrmMessages = {
         },
         hints: {
           interview_summary:
-            "Le consultant résume la situation du client et la recommandation principale.",
+            "On résume la situation du client et la recommandation principale.",
           next_steps: "Cette partie deviendra le cœur du suivi commercial.",
           development_potential: "Opportunités identifiées",
         },
@@ -357,16 +354,16 @@ export const frenchCrmMessages = {
           unknown: "Budget inconnu",
         },
         documents_to_send: {
-          brochure: "Plaquette",
-          commercial_proposal: "Proposition commerciale",
+          brochure: "Plaquette institutionnelle",
+          mental_health_modules_brochure: "Plaquette 3 modules santé mentale",
+          workshop_sheets: "Fiches atelier",
+          agreement: "Convention formation",
           psmt_program: "Programme PSMT",
-          psmm_program: "Programme PSMM",
-          pssm_documentation: "Documentation PSSM",
-          client_references: "Références clients",
+          psmt_access: "Connexion PSMT",
+          pssm_documentation: "Programme PSSM Entreprise",
+          custom_program: "Programme sur mesure (hors catalogue)",
           quote: "Devis",
-          agreement: "Convention",
-          barometer: "Baromètre",
-          workshops_conferences: "Ateliers / Conférences",
+          client_references: "Références clients",
           other: "Autres",
         },
         follow_up_modes: {
@@ -441,6 +438,7 @@ export const frenchCrmMessages = {
       name: "Entreprise |||| Entreprises",
       forcedCaseName: "Entreprise",
       fields: {
+        tags: "Étiquettes",
         name: "Nom de l'entreprise",
         website: "Site web",
         linkedin_url: "LinkedIn",
@@ -455,7 +453,7 @@ export const frenchCrmMessages = {
         address: "Adresse",
         city: "Ville",
         zipcode: "Code postal",
-        state_abbr: "État",
+        state_abbr: "Région",
         country: "Pays",
         description: "Description",
         context_links: "URLs de contexte",
@@ -478,7 +476,7 @@ export const frenchCrmMessages = {
       field_categories: {
         contact: "Contact",
         additional_info: "Informations supplémentaires",
-        address: "Localisation du siège",
+        address: "Adresse",
         context: "Contexte",
         training: "Formations",
       },
@@ -654,7 +652,8 @@ export const frenchCrmMessages = {
         stage: "Étape",
         sales_id: "Consultant / Formateur",
         trainer_ids: "Intervenant(e)s",
-        training_type: "Type de formation",
+        external_trainers: "Intervenant(e)s sans compte",
+        training_type: "Type de prestation",
         nb_trained_managers: "Personnes formées — directeurs / cadres",
         nb_trained_non_managers: "Personnes formées — non cadres",
         nb_trained_total: "Cumul des personnes formées",
@@ -696,7 +695,7 @@ export const frenchCrmMessages = {
       field_categories: {
         misc: "Divers",
         delivery: "Réalisation et facturation",
-        training: "Formation",
+        training: "Intervention",
         funding: "Financement",
         opco: "Détails OPCO",
         invoicing: "Facturation",
@@ -797,6 +796,10 @@ export const frenchCrmMessages = {
         success:
           "Utilisateur créé. Ils recevront prochainement un email pour définir leur mot de passe.",
         title: "Créer un nouvel utilisateur",
+        external_trainer_hint:
+          "Ce compte remplace %{name} : tous les contrats où elle est citée y seront rattachés.",
+        external_trainer_error:
+          "L'utilisateur a été créé, mais les contrats citant %{name} n'ont pas pu être rattachés à son compte.",
       },
       edit: {
         error: "Une erreur s'est produite. Veuillez réessayer.",
@@ -825,12 +828,12 @@ export const frenchCrmMessages = {
       fields: {
         text: "Description",
         due_date: "Date et heure",
-        duration_minutes: "Durée (min)",
+        end_time: "Heure de fin",
         type: "Type de rendez-vous",
         mode: "Mode de rendez-vous",
         location: "Lieu",
-        sales_id: "Consultant / Formateur",
-        contact_id: "Contact",
+        sales_ids: "Consultants / Formateurs",
+        contact_ids: "Contacts",
         due_short: "le",
       },
       action: {
@@ -851,7 +854,6 @@ export const frenchCrmMessages = {
       },
       sheet: {
         edit: "Modifier le rendez-vous",
-        edit_for: "Modifier le rendez-vous pour %{name}",
       },
       empty: "Aucun rendez-vous pour l'instant",
       empty_list_hint:
@@ -864,8 +866,14 @@ export const frenchCrmMessages = {
         tomorrow: "Demain",
         with_pending: "Avec des rendez-vous en attente",
       },
-      regarding_contact: "(Concernant : %{name})",
+      regarding: "Concernant :",
       updated: "Rendez-vous mis à jour",
+      validation: {
+        end_another_day:
+          "Le rendez-vous doit se terminer le jour où il commence",
+        end_before_start:
+          "L'heure de fin doit être postérieure à l'heure de début",
+      },
     },
     tags: {
       name: "Étiquette |||| Étiquettes",
@@ -880,6 +888,9 @@ export const frenchCrmMessages = {
         name_label: "Nom de l'étiquette",
         name_placeholder: "Saisir le nom de l'étiquette",
       },
+    },
+    company_tags: {
+      name: "Étiquette entreprise |||| Étiquettes entreprises",
     },
   },
   crm: {
@@ -943,8 +954,8 @@ export const frenchCrmMessages = {
       hse: "HSE",
     },
     training_type: {
-      collective: "Collectif",
-      individual_workshop: "Atelier individuel",
+      workshop: "Atelier",
+      training: "Formation",
       conference: "Conférence",
     },
     qvct_workshop_type: {
@@ -978,6 +989,13 @@ export const frenchCrmMessages = {
       reset_password: "Réinitialiser le mot de passe",
     },
     auth: {
+      confirm_email: {
+        title: "Activer votre compte",
+        recovery_title: "Réinitialiser votre mot de passe",
+        action: "Continuer",
+        invalid_link:
+          "Ce lien est invalide ou a expiré. Demandez-en un nouveau ci-dessous.",
+      },
       first_name: "Prénom",
       last_name: "Nom",
       confirm_password: "Confirmer le mot de passe",
@@ -1005,6 +1023,7 @@ export const frenchCrmMessages = {
       details: "Détails",
       last_activity_with_date: "dernière activité %{date}",
       load_more: "Charger plus",
+      location: "Localisation",
       misc: "Divers",
       past: "Passé",
       read_more: "En savoir plus",
@@ -1032,6 +1051,10 @@ export const frenchCrmMessages = {
       load_more: "Charger plus d'activité",
     },
     dashboard: {
+      hero: {
+        greeting: "Bonjour %{name}",
+        subtitle: "Voici un aperçu de votre journée.",
+      },
       calendar: {
         title: "Les rendez-vous de l'équipe",
         reschedule_error: "Impossible de déplacer ce rendez-vous",
@@ -1122,12 +1145,37 @@ export const frenchCrmMessages = {
         requires_renewal: "À renouveler chaque année",
         save_error: "Impossible d'enregistrer cette pièce",
       },
+      tags: {
+        hint: "Une étiquette ne peut être supprimée que lorsqu'aucun contact ne l'utilise. La suppression est immédiate.",
+        empty: "Aucune étiquette pour le moment.",
+        unused: "Inutilisée",
+        usage:
+          "Utilisée par %{smart_count} contact |||| Utilisée par %{smart_count} contacts",
+        delete_error: "Impossible de supprimer cette étiquette",
+      },
+      company_tags: {
+        hint: "Une étiquette entreprise ne peut être supprimée que lorsqu'aucune entreprise ne l'utilise. La suppression est immédiate.",
+        empty: "Aucune étiquette entreprise pour le moment.",
+        unused: "Inutilisée",
+        usage:
+          "Utilisée par %{smart_count} entreprise |||| Utilisée par %{smart_count} entreprises",
+        delete_error: "Impossible de supprimer cette étiquette",
+      },
+      external_trainers: {
+        hint: "Intervenant(e)s cité(e)s dans les contrats par leur nom uniquement. Quand l'une d'elles obtient un compte, créez-le d'ici : ses contrats y sont rattachés automatiquement.",
+        empty: "Aucun(e) intervenant(e) sans compte pour le moment.",
+        add: "Ajouter",
+        new_placeholder: "Prénom et nom",
+        create_account: "Créer son compte",
+        save_error: "Impossible d'enregistrer cet(te) intervenant(e)",
+      },
       preferences: "Préférences",
       title: "Paramètres",
       app_title: "Titre de l'application",
       sections: {
         branding: "Image de marque",
         documents: "Documents des utilisateurs",
+        external_trainers: "Intervenant(e)s sans compte",
       },
       validation: {
         duplicate: "%{display_name} en double : %{items}",

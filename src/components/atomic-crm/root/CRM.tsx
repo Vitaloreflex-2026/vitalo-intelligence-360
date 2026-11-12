@@ -13,6 +13,7 @@ import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persi
 import { Admin } from "@/components/admin/admin";
 import { ForgotPasswordPage } from "@/components/supabase/forgot-password-page";
 import { SetPasswordPage } from "@/components/supabase/set-password-page";
+import { ConfirmEmailPage } from "@/components/supabase/confirm-email-page";
 import { OAuthConsentPage } from "@/components/supabase/oauth-consent-page";
 
 import assessments from "../assessments";
@@ -250,6 +251,7 @@ const DesktopAdmin = (
           element={<ConfirmationRequired />}
         />
         <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
+        <Route path={ConfirmEmailPage.path} element={<ConfirmEmailPage />} />
         <Route
           path={ForgotPasswordPage.path}
           element={<ForgotPasswordPage />}
@@ -270,6 +272,7 @@ const DesktopAdmin = (
       <Resource name="tasks" />
       <Resource name="sales" {...sales} />
       <Resource name="tags" />
+      <Resource name="company_tags" />
     </Admin>
   );
 };
@@ -313,6 +316,7 @@ const MobileAdmin = (
             element={<ConfirmationRequired />}
           />
           <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
+          <Route path={ConfirmEmailPage.path} element={<ConfirmEmailPage />} />
           <Route
             path={ForgotPasswordPage.path}
             element={<ForgotPasswordPage />}
@@ -353,6 +357,7 @@ const MobileAdmin = (
         <Resource name="tasks" list={MobileTasksList} />
         <Resource name="sales" {...sales} />
         <Resource name="tags" />
+        <Resource name="company_tags" />
       </Admin>
     </PersistQueryClientProvider>
   );

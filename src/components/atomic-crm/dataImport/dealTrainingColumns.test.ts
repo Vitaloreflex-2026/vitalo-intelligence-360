@@ -5,7 +5,7 @@ import { toDealTrainingColumns } from "./dealTrainingColumns";
 import type { ImportRow } from "./types";
 
 const LABELS: Record<string, string> = {
-  "crm.training_type.collective": "Collectif",
+  "crm.training_type.training": "Formation",
   "crm.qvct_workshop_type.collective_onsite": "Collectif présentiel",
   "crm.funding_type.opco": "OPCO",
 };
@@ -46,14 +46,21 @@ describe("toDealTrainingColumns", () => {
     ).toBeUndefined();
   });
 
+  it("keeps the names of the trainers who have no account", () => {
+    expect(
+      map({ external_trainers: "Joëlle Fernandez, Lauriane Forest" })
+        .external_trainers,
+    ).toEqual(["Joëlle Fernandez", "Lauriane Forest"]);
+  });
+
   it("accepts an option as its stored id or as the label users see", () => {
     // Arrange / Act
-    const byId = map({ training_type: "collective", funding_type: "opco" });
-    const byLabel = map({ training_type: "Collectif", funding_type: "OPCO" });
+    const byId = map({ training_type: "training", funding_type: "opco" });
+    const byLabel = map({ training_type: "Formation", funding_type: "OPCO" });
 
     // Assert
-    expect(byId.training_type).toBe("collective");
-    expect(byLabel.training_type).toBe("collective");
+    expect(byId.training_type).toBe("training");
+    expect(byLabel.training_type).toBe("training");
     expect(byLabel.funding_type).toBe("opco");
   });
 

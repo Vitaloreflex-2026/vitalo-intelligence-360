@@ -33,18 +33,17 @@ export const SUPPORT_OBJECTIVE_CHOICES = buildChoices("support_objectives", [
 export const CONSULTANT_RECOMMENDATION_CHOICES = buildChoices(
   "consultant_recommendations",
   [
+    "strategic_support",
+    "mental_health_conferences",
+    "psychosocial_risks_conference",
+    "psychosocial_risks_training",
     "psmt",
+    // Legacy id, stored in the database: now labelled "PSMT managers".
     "psmm",
     "pssm",
-    "impact_360",
-    "vitalo_app",
-    "in_depth_diagnostic",
+    "qvct_group_workshops",
+    "qvct_individual_workshops",
     "barometer",
-    "thematic_workshops",
-    "conference",
-    "coaching",
-    "strategic_support",
-    "other",
   ],
 );
 
@@ -108,6 +107,7 @@ export const JOURNEY_STEPS: JourneyEntry[] = [
 /** The suggested path shown alongside the journey, as an indicative example. */
 export const RECOMMENDED_PATH_STEPS: JourneyEntry[] = [
   { id: "psmt_awareness", icon: Users, color: 1 },
+  // Legacy id, stored in the database: now labelled "PSMT managers".
   { id: "psmm_managers", icon: GraduationCap, color: 2 },
   { id: "pssm_training", icon: HeartHandshake, color: 3 },
   { id: "impact_360_deployment", icon: Rocket, color: 4 },

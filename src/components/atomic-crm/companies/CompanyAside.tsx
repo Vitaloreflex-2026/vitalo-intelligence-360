@@ -19,6 +19,7 @@ import { getTranslatedCompanySizeLabel } from "./getTranslatedCompanySizeLabel";
 import { sizes } from "./sizes";
 import { useGetSalesName } from "../sales/useGetSalesName";
 import { CompanyTrainingInfo } from "./CompanyTrainingInfo";
+import { TagsListEdit } from "../contacts/TagsListEdit";
 
 interface CompanyAsideProps {
   link?: string;
@@ -40,6 +41,10 @@ export const CompanyAside = ({ link = "edit" }: CompanyAsideProps) => {
       </div>
 
       <CompanyInfo record={record} />
+
+      <AsideSection title={translate("resources.companies.fields.tags")}>
+        <TagsListEdit resource="companies" />
+      </AsideSection>
 
       <AddressInfo record={record} />
 

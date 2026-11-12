@@ -27,6 +27,8 @@ import { CompanyAssessmentButton } from "../assessments/CompanyAssessmentButton"
 import { CompanyAssessmentProgress } from "../assessments/CompanyAssessmentProgress";
 import { Avatar } from "../contacts/Avatar";
 import { TagsList } from "../contacts/TagsList";
+import { TagsListEdit } from "../contacts/TagsListEdit";
+import { AsideSection } from "../misc/AsideSection";
 import { DealsIterator } from "../deals/DealsIterator";
 import { MobileContent } from "../layout/MobileContent";
 import MobileHeader from "../layout/MobileHeader";
@@ -82,6 +84,9 @@ const CompanyShowContentMobile = () => {
           </div>
         </div>
         <CompanyInfo record={record} />
+        <AsideSection title={translate("resources.companies.fields.tags")}>
+          <TagsListEdit resource="companies" />
+        </AsideSection>
         <AddressInfo record={record} />
         <ContextInfo record={record} />
         <CompanyTrainingInfo record={record} />

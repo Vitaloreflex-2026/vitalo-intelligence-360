@@ -8,8 +8,10 @@ import {
   DesktopLoading,
   DesktopError,
   BulkTagButton,
+  LocationFilter,
   NonAdminAccountManagerFilter,
 } from "./ContactList.stories";
+import { MobileLocationFilter } from "./ContactList.mobile.stories";
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -218,6 +220,52 @@ describe("ContactList", () => {
       await expect.element(screen.getByText("Grace Hopper")).toBeVisible();
       await expect
         .element(screen.getByText("Ada Lovelace"))
+        .not.toBeInTheDocument();
+    });
+  });
+
+  describe("location filter", () => {
+    beforeAll(() => {
+      page.viewport(1600, 900);
+    });
+
+    it("narrows the list down to the contacts whose company is in the picked city", async () => {
+      const screen = await render(<LocationFilter />);
+
+      await expect.element(screen.getByText("Grace Hopper")).toBeVisible();
+
+      await screen.getByRole("combobox", { name: "City" }).click();
+      await screen.getByRole("option", { name: "Lyon" }).click();
+
+      await expect.element(screen.getByText("Ada Lovelace")).toBeVisible();
+      await expect
+        .element(screen.getByText("Grace Hopper"))
+        .not.toBeInTheDocument();
+    });
+  });
+
+  describe("location filter on mobile", () => {
+    beforeAll(() => {
+      page.viewport(375, 667);
+    });
+
+    it("shows the picked city as a chip that removes the filter when tapped", async () => {
+      const screen = await render(<MobileLocationFilter />);
+
+      await screen.getByRole("button", { name: "Add filter" }).click();
+      await screen.getByRole("combobox", { name: "City" }).click();
+      await screen.getByRole("option", { name: "Lyon" }).click();
+      await screen.getByRole("button", { name: "Confirm" }).click();
+
+      await expect
+        .element(screen.getByText("Grace Hopper"))
+        .not.toBeInTheDocument();
+
+      await screen.getByRole("button", { name: "Lyon" }).click();
+
+      await expect.element(screen.getByText("Grace Hopper")).toBeVisible();
+      await expect
+        .element(screen.getByRole("button", { name: "Lyon" }))
         .not.toBeInTheDocument();
     });
   });

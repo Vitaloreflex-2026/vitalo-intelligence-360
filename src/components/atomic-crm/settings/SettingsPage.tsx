@@ -24,6 +24,8 @@ import { ColorSwatchInput } from "../misc/ColorSwatchInput";
 import ImageEditorField from "../misc/ImageEditorField";
 import { ConsultantColorsCard } from "./ConsultantColorsCard";
 import { DocumentTypesCard } from "./DocumentTypesCard";
+import { ExternalTrainersCard } from "./ExternalTrainersCard";
+import { TagsCard } from "./TagsCard";
 import {
   useConfigurationContext,
   useConfigurationUpdater,
@@ -45,6 +47,12 @@ const SECTIONS = [
   { id: "deals", label: "resources.deals.name", fallback: "Deals" },
   { id: "notes", label: "resources.notes.name", fallback: "Notes" },
   { id: "tasks", label: "resources.tasks.name", fallback: "Tasks" },
+  { id: "tags", label: "resources.tags.name", fallback: "Tags" },
+  {
+    id: "company_tags",
+    label: "resources.company_tags.name",
+    fallback: "Company tags",
+  },
   {
     id: "consultant-colors",
     label: "crm.settings.consultant_colors.title",
@@ -54,6 +62,11 @@ const SECTIONS = [
     id: "documents",
     label: "crm.settings.sections.documents",
     fallback: "User documents",
+  },
+  {
+    id: "external-trainers",
+    label: "crm.settings.sections.external_trainers",
+    fallback: "Trainers without an account",
   },
 ];
 
@@ -465,12 +478,18 @@ const SettingsFormFields = () => {
           </CardContent>
         </Card>
 
+        {/* Tags are their own table: deleting one saves immediately. */}
+        <TagsCard tagsResource="tags" usedBy="contacts" />
+        <TagsCard tagsResource="company_tags" usedBy="companies" />
+
         {/* Consultant colours live on the `sales` rows, not in the
             configuration record, so this card saves on its own. */}
         <ConsultantColorsCard />
 
         {/* Same arrangement: document types live in the `choices` table. */}
         <DocumentTypesCard />
+
+        <ExternalTrainersCard />
       </div>
 
       {/* Sticky save button */}
