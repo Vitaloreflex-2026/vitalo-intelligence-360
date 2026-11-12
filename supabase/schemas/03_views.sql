@@ -131,11 +131,14 @@ select
     (jsonb_path_query_array(co.email_jsonb, '$[*]."email"'))::text as email_fts,
     (jsonb_path_query_array(co.phone_jsonb, '$[*]."number"'))::text as phone_fts,
     c.name as company_name,
-    count(distinct t.id) filter (where t.done_date is null) as nb_tasks
+    count(distinct t.id) filter (where t.done_date is null) as nb_tasks,
+    -- Location of the contact's company, so contacts can be filtered by it.
+    c.city as company_city,
+    c.state_abbr as company_state_abbr
 from public.contacts co
     left join public.tasks t on co.id = t.contact_id
     left join public.companies c on co.company_id = c.id
-group by co.id, c.name;
+group by co.id, c.name, c.city, c.state_abbr;
 
 create or replace view public.init_state with (security_invoker = off) as
 select count(sub.id) as is_initialized

@@ -255,7 +255,7 @@ export const frenchCrmMessages = {
         },
         recommended_path: {
           psmt_awareness: "Sensibilisation PSMT",
-          psmm_managers: "Formation Managers (PSMM)",
+          psmm_managers: "Formation PSMT managers",
           pssm_training: "Formation PSSM",
           impact_360_deployment: "Déploiement VitalÔ IMPACT 360°",
           annual_barometer: "Baromètre annuel (mesure & suivi)",
@@ -263,7 +263,7 @@ export const frenchCrmMessages = {
         },
         consultant_recommendations: {
           psmt: "PSMT (e-learning 2H)",
-          psmm: "PSMM (formation managers)",
+          psmm: "PSMT managers (formation)",
           pssm: "PSSM (Secouristes en santé mentale)",
           impact_360: "VitalÔ IMPACT 360° (parcours global)",
           vitalo_app: "VitalÔApp (plateforme digitale)",
@@ -360,7 +360,7 @@ export const frenchCrmMessages = {
           brochure: "Plaquette",
           commercial_proposal: "Proposition commerciale",
           psmt_program: "Programme PSMT",
-          psmm_program: "Programme PSMM",
+          psmm_program: "Programme PSMT managers",
           pssm_documentation: "Documentation PSSM",
           client_references: "Références clients",
           quote: "Devis",
@@ -455,7 +455,7 @@ export const frenchCrmMessages = {
         address: "Adresse",
         city: "Ville",
         zipcode: "Code postal",
-        state_abbr: "État",
+        state_abbr: "Région",
         country: "Pays",
         description: "Description",
         context_links: "URLs de contexte",
@@ -654,6 +654,7 @@ export const frenchCrmMessages = {
         stage: "Étape",
         sales_id: "Consultant / Formateur",
         trainer_ids: "Intervenant(e)s",
+        external_trainers: "Intervenant(e)s sans compte",
         training_type: "Type de formation",
         nb_trained_managers: "Personnes formées — directeurs / cadres",
         nb_trained_non_managers: "Personnes formées — non cadres",
@@ -797,6 +798,10 @@ export const frenchCrmMessages = {
         success:
           "Utilisateur créé. Ils recevront prochainement un email pour définir leur mot de passe.",
         title: "Créer un nouvel utilisateur",
+        external_trainer_hint:
+          "Ce compte remplace %{name} : tous les contrats où elle est citée y seront rattachés.",
+        external_trainer_error:
+          "L'utilisateur a été créé, mais les contrats citant %{name} n'ont pas pu être rattachés à son compte.",
       },
       edit: {
         error: "Une erreur s'est produite. Veuillez réessayer.",
@@ -825,7 +830,7 @@ export const frenchCrmMessages = {
       fields: {
         text: "Description",
         due_date: "Date et heure",
-        duration_minutes: "Durée (min)",
+        end_time: "Heure de fin",
         type: "Type de rendez-vous",
         mode: "Mode de rendez-vous",
         location: "Lieu",
@@ -866,6 +871,12 @@ export const frenchCrmMessages = {
       },
       regarding_contact: "(Concernant : %{name})",
       updated: "Rendez-vous mis à jour",
+      validation: {
+        end_another_day:
+          "Le rendez-vous doit se terminer le jour où il commence",
+        end_before_start:
+          "L'heure de fin doit être postérieure à l'heure de début",
+      },
     },
     tags: {
       name: "Étiquette |||| Étiquettes",
@@ -978,6 +989,13 @@ export const frenchCrmMessages = {
       reset_password: "Réinitialiser le mot de passe",
     },
     auth: {
+      confirm_email: {
+        title: "Activer votre compte",
+        recovery_title: "Réinitialiser votre mot de passe",
+        action: "Continuer",
+        invalid_link:
+          "Ce lien est invalide ou a expiré. Demandez-en un nouveau ci-dessous.",
+      },
       first_name: "Prénom",
       last_name: "Nom",
       confirm_password: "Confirmer le mot de passe",
@@ -1005,6 +1023,7 @@ export const frenchCrmMessages = {
       details: "Détails",
       last_activity_with_date: "dernière activité %{date}",
       load_more: "Charger plus",
+      location: "Localisation",
       misc: "Divers",
       past: "Passé",
       read_more: "En savoir plus",
@@ -1130,12 +1149,21 @@ export const frenchCrmMessages = {
           "Utilisée par %{smart_count} contact |||| Utilisée par %{smart_count} contacts",
         delete_error: "Impossible de supprimer cette étiquette",
       },
+      external_trainers: {
+        hint: "Intervenant(e)s cité(e)s dans les contrats par leur nom uniquement. Quand l'une d'elles obtient un compte, créez-le d'ici : ses contrats y sont rattachés automatiquement.",
+        empty: "Aucun(e) intervenant(e) sans compte pour le moment.",
+        add: "Ajouter",
+        new_placeholder: "Prénom et nom",
+        create_account: "Créer son compte",
+        save_error: "Impossible d'enregistrer cet(te) intervenant(e)",
+      },
       preferences: "Préférences",
       title: "Paramètres",
       app_title: "Titre de l'application",
       sections: {
         branding: "Image de marque",
         documents: "Documents des utilisateurs",
+        external_trainers: "Intervenant(e)s sans compte",
       },
       validation: {
         duplicate: "%{display_name} en double : %{items}",

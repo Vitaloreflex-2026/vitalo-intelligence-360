@@ -10,12 +10,22 @@ import { ToggleFilterButton } from "@/components/admin/toggle-filter-button";
 import { Badge } from "@/components/ui/badge";
 
 import { FilterCategory } from "../filters/FilterCategory";
+import {
+  LocationFilter,
+  LocationFilterSummary,
+} from "../filters/LocationFilter";
 import { Status } from "../misc/Status";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import { ResponsiveFilters } from "../misc/ResponsiveFilters";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ActiveFilterButton } from "../misc/ActiveFilterButton";
 import { AccountManagerFilter } from "../sales/AccountManagerInput";
+
+// A contact has no address of its own: it is located through its company.
+const CONTACT_LOCATION_SOURCES = {
+  citySource: "company_city@ilike",
+  regionSource: "company_state_abbr@ilike",
+};
 
 export const ContactListFilter = () => {
   const { noteStatuses } = useConfigurationContext();
@@ -128,6 +138,8 @@ export const ContactListFilter = () => {
             />
           ))}
       </FilterCategory>
+
+      <LocationFilter {...CONTACT_LOCATION_SOURCES} />
 
       <FilterCategory
         icon={<CheckSquare />}
@@ -251,6 +263,8 @@ export const ContactListFilterSummary = () => {
             value={{ "tags@cs": `{${record.id}}` }}
           />
         ))}
+
+      <LocationFilterSummary {...CONTACT_LOCATION_SOURCES} />
 
       <ActiveFilterButton
         className="w-auto justify-between h-8"

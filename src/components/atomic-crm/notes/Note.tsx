@@ -90,7 +90,12 @@ export const Note = ({
   const handleNoteUpdate: SubmitHandler<FieldValues> = (values) => {
     update(
       resource,
-      { id: note.id, data: values, previousData: note },
+      {
+        id: note.id,
+        // An emptied date input yields null: the note keeps the date it had.
+        data: { ...values, date: values.date || note.date },
+        previousData: note,
+      },
       {
         onSuccess: () => {
           setEditing(false);

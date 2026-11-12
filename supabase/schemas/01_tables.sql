@@ -100,6 +100,9 @@ create table public.deals (
     -- and the activity dashboard, so every column here is reported on.
     -- `trainer_ids` holds public.sales ids (arrays cannot carry a foreign key).
     trainer_ids bigint[],
+    -- Trainers who have no CRM account: plain names, picked from the
+    -- `external_trainer` choices (the label itself is stored).
+    external_trainers text[],
     training_type text,
     nb_trained_managers integer,
     nb_trained_non_managers integer,

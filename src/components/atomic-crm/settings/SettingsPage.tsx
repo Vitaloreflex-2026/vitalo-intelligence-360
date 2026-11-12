@@ -24,6 +24,7 @@ import { ColorSwatchInput } from "../misc/ColorSwatchInput";
 import ImageEditorField from "../misc/ImageEditorField";
 import { ConsultantColorsCard } from "./ConsultantColorsCard";
 import { DocumentTypesCard } from "./DocumentTypesCard";
+import { ExternalTrainersCard } from "./ExternalTrainersCard";
 import { TagsCard } from "./TagsCard";
 import {
   useConfigurationContext,
@@ -56,6 +57,11 @@ const SECTIONS = [
     id: "documents",
     label: "crm.settings.sections.documents",
     fallback: "User documents",
+  },
+  {
+    id: "external-trainers",
+    label: "crm.settings.sections.external_trainers",
+    fallback: "Trainers without an account",
   },
 ];
 
@@ -476,6 +482,8 @@ const SettingsFormFields = () => {
 
         {/* Same arrangement: document types live in the `choices` table. */}
         <DocumentTypesCard />
+
+        <ExternalTrainersCard />
       </div>
 
       {/* Sticky save button */}

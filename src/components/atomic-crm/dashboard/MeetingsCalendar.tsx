@@ -313,6 +313,11 @@ export const MeetingsCalendar = () => {
           eventDurationEditable
           selectable
           selectMirror
+          // A meeting ends the day it starts: the form only asks for an end
+          // time, so a slot drawn across two day columns would hide its length.
+          selectAllow={(span) =>
+            span.allDay || span.start.toDateString() === span.end.toDateString()
+          }
           eventDrop={handleEventDrop}
           eventResize={handleEventResize}
           eventClick={handleEventClick}

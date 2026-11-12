@@ -46,6 +46,7 @@ export const DOCUMENT_CHOICES = buildChoices("documents_to_send", [
   "brochure",
   "commercial_proposal",
   "psmt_program",
+  // Legacy id, stored in the database: now labelled "PSMT managers".
   "psmm_program",
   "pssm_documentation",
   "client_references",

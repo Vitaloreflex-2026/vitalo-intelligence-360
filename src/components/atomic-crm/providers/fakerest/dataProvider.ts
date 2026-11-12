@@ -110,6 +110,8 @@ async function fetchAndUpdateCompanyData(
   }
 
   newData.company_name = company.name;
+  newData.company_city = company.city;
+  newData.company_state_abbr = company.state_abbr;
   return { ...params, data: newData };
 }
 
@@ -555,8 +557,8 @@ export const createDataProvider = ({
           return await processCompanyLogo(params);
         },
         afterUpdate: async (result, dataProvider) => {
-          // get all contacts of the company and for each contact, update the company_name
-          const { id, name } = result.data;
+          // get all contacts of the company and for each contact, update the company fields it mirrors
+          const { id, name, city, state_abbr } = result.data;
           const { data: contacts } = await dataProvider.getList("contacts", {
             filter: { company_id: id },
             pagination: { page: 1, perPage: 1000 },
@@ -566,7 +568,11 @@ export const createDataProvider = ({
           const contactIds = contacts.map((contact) => contact.id);
           await dataProvider.updateMany("contacts", {
             ids: contactIds,
-            data: { company_name: name },
+            data: {
+              company_name: name,
+              company_city: city,
+              company_state_abbr: state_abbr,
+            },
           });
           return result;
         },

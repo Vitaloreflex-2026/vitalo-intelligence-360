@@ -183,13 +183,17 @@ async function createNotes({
 async function createCompany({
   name,
   salesId,
+  city,
+  state_abbr,
 }: {
   name: string;
   salesId: string | number;
+  city?: string;
+  state_abbr?: string;
 }) {
   const { data, error } = await adminSupabase
     .from("companies")
-    .insert({ name, sales_id: salesId })
+    .insert({ name, sales_id: salesId, city, state_abbr })
     .select("id")
     .single();
 

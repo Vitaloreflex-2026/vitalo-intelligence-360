@@ -155,3 +155,16 @@ export const NonAdminAccountManagerFilter = () => (
     </ResourceContextProvider>
   </StoryWrapper>
 );
+
+const contactsAcrossCities = [
+  { ...successContacts[0], company_city: "Lyon" },
+  { ...successContacts[1], company_city: "Nantes" },
+];
+
+export const LocationFilter = () => (
+  <StoryWrapper data={{ contacts: contactsAcrossCities }}>
+    <ResourceContextProvider value="contacts">
+      <ContactList />
+    </ResourceContextProvider>
+  </StoryWrapper>
+);

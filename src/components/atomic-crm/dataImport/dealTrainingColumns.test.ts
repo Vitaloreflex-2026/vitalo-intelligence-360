@@ -46,6 +46,13 @@ describe("toDealTrainingColumns", () => {
     ).toBeUndefined();
   });
 
+  it("keeps the names of the trainers who have no account", () => {
+    expect(
+      map({ external_trainers: "Joëlle Fernandez, Lauriane Forest" })
+        .external_trainers,
+    ).toEqual(["Joëlle Fernandez", "Lauriane Forest"]);
+  });
+
   it("accepts an option as its stored id or as the label users see", () => {
     // Arrange / Act
     const byId = map({ training_type: "collective", funding_type: "opco" });

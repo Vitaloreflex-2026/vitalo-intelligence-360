@@ -54,6 +54,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/tasks/meetingEndTime.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/tasks/TasksListFilter.tsx",
           "type": "registry:component"
         },
@@ -175,6 +179,10 @@
         },
         {
           "path": "src/components/atomic-crm/settings/ProfilePage.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/settings/ExternalTrainersCard.tsx",
           "type": "registry:component"
         },
         {
@@ -670,6 +678,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/filters/LocationFilter.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/filters/FilterCategory.tsx",
           "type": "registry:component"
         },
@@ -723,6 +735,10 @@
         },
         {
           "path": "src/components/atomic-crm/deals/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/deals/externalTrainers.ts",
           "type": "registry:component"
         },
         {
@@ -1263,6 +1279,10 @@
         },
         {
           "path": "src/components/supabase/forgot-password-page.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/supabase/confirm-email-page.tsx",
           "type": "registry:component"
         },
         {

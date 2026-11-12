@@ -248,7 +248,7 @@ export const englishCrmMessages = {
         },
         recommended_path: {
           psmt_awareness: "PSMT awareness",
-          psmm_managers: "Manager training (PSMM)",
+          psmm_managers: "PSMT managers training",
           pssm_training: "PSSM training",
           impact_360_deployment: "VitalO IMPACT 360° deployment",
           annual_barometer: "Annual barometer (measure & follow-up)",
@@ -256,7 +256,7 @@ export const englishCrmMessages = {
         },
         consultant_recommendations: {
           psmt: "PSMT (2h e-learning)",
-          psmm: "PSMM (manager training)",
+          psmm: "PSMT managers (training)",
           pssm: "PSSM (mental health first aiders)",
           impact_360: "VitalO IMPACT 360° (full journey)",
           vitalo_app: "VitalOApp (digital platform)",
@@ -353,7 +353,7 @@ export const englishCrmMessages = {
           brochure: "Brochure",
           commercial_proposal: "Commercial proposal",
           psmt_program: "PSMT program",
-          psmm_program: "PSMM program",
+          psmm_program: "PSMT managers program",
           pssm_documentation: "PSSM documentation",
           client_references: "Client references",
           quote: "Quote",
@@ -645,6 +645,7 @@ export const englishCrmMessages = {
         stage: "Stage",
         sales_id: "Account manager",
         trainer_ids: "Trainers",
+        external_trainers: "Trainers without an account",
         training_type: "Training type",
         nb_trained_managers: "People trained — directors / managers",
         nb_trained_non_managers: "People trained — non-managers",
@@ -787,6 +788,10 @@ export const englishCrmMessages = {
         success:
           "User created. They will soon receive an email to set their password.",
         title: "Create a new user",
+        external_trainer_hint:
+          "This account replaces %{name}: every contract naming them will point to it.",
+        external_trainer_error:
+          "The user was created, but the contracts naming %{name} could not be moved onto the account.",
       },
       edit: {
         error: "An error occurred. Please try again.",
@@ -814,7 +819,7 @@ export const englishCrmMessages = {
       fields: {
         text: "Description",
         due_date: "Date and time",
-        duration_minutes: "Duration (min)",
+        end_time: "End time",
         type: "Meeting type",
         mode: "Meeting mode",
         location: "Location",
@@ -854,6 +859,10 @@ export const englishCrmMessages = {
       },
       regarding_contact: "(Re: %{name})",
       updated: "Meeting updated",
+      validation: {
+        end_another_day: "The meeting must end on the day it starts",
+        end_before_start: "The end time must be after the start time",
+      },
     },
     tags: {
       name: "Tag |||| Tags",
@@ -966,6 +975,13 @@ export const englishCrmMessages = {
       reset_password: "Reset Password",
     },
     auth: {
+      confirm_email: {
+        title: "Activate your account",
+        recovery_title: "Reset your password",
+        action: "Continue",
+        invalid_link:
+          "This link is invalid or has expired. Request a new one below.",
+      },
       first_name: "First name",
       last_name: "Last name",
       confirm_password: "Confirm password",
@@ -993,6 +1009,7 @@ export const englishCrmMessages = {
       details: "Details",
       last_activity_with_date: "last activity %{date}",
       load_more: "Load more",
+      location: "Location",
       misc: "Misc",
       past: "Past",
       read_more: "Read more",
@@ -1115,12 +1132,21 @@ export const englishCrmMessages = {
           "Used by %{smart_count} contact |||| Used by %{smart_count} contacts",
         delete_error: "This tag could not be deleted",
       },
+      external_trainers: {
+        hint: "Trainers listed on contracts by name only. Once one of them gets an account, create it from here: their contracts move onto it.",
+        empty: "No trainer without an account yet.",
+        add: "Add",
+        new_placeholder: "First and last name",
+        create_account: "Create their account",
+        save_error: "This trainer could not be saved",
+      },
       preferences: "Preferences",
       title: "Settings",
       app_title: "App Title",
       sections: {
         branding: "Branding",
         documents: "User documents",
+        external_trainers: "Trainers without an account",
       },
       validation: {
         duplicate: "Duplicate %{display_name}: %{items}",

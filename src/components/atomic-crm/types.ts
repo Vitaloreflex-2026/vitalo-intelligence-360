@@ -156,6 +156,8 @@ export type Contact = {
   phone_jsonb: PhoneNumberAndType[];
   nb_tasks?: number;
   company_name?: string;
+  company_city?: string;
+  company_state_abbr?: string;
   company_start_date?: string | null;
   decision_role?: string | null;
   relationship_status?: RelationshipStatus | null;
@@ -294,6 +296,8 @@ export type Deal = {
   // Training delivery, reported in the yearly BPF.
   /** `sales` ids of the consultants who delivered the training. */
   trainer_ids?: Identifier[] | null;
+  /** Names of the trainers who have no CRM account (`external_trainer` choices). */
+  external_trainers?: string[] | null;
   training_type?: TrainingType | null;
   nb_trained_managers?: number | null;
   nb_trained_non_managers?: number | null;
