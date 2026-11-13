@@ -61,11 +61,33 @@ import { DealListMobile } from "../deals/DealListMobile.tsx";
 import { CompanyShow } from "../companies/CompanyShow.tsx";
 import { NoteShowPage } from "../notes/NoteShowPage.tsx";
 
-// Store version. Bumping it makes ra-core wipe every "RaStoreCRM" key on the
-// next load, once per browser — the way to push a new default configuration
-// (deal stage labels, for instance) to clients that cached the previous one.
-// It also drops saved list filters and UI preferences, so bump deliberately.
-const defaultStore = localStorageStore("2", "CRM");
+// Instances deployed under the same origin (France and Quebec, on github.io)
+// share one localStorage, so the keys written from here are scoped to the
+// Supabase project the build talks to. A demo build has none.
+const STORAGE_SCOPE: string = import.meta.env.VITE_SUPABASE_URL ?? "demo";
+
+// Store version. Bumping it makes ra-core wipe every key of this instance's
+// store on the next load, once per browser — the way to push a new default
+// configuration (deal stage labels, for instance) to clients that cached the
+// previous one. It also drops saved list filters and UI preferences, so bump
+// deliberately.
+const defaultStore = localStorageStore("2", `CRM-${STORAGE_SCOPE}`);
+
+const QUERY_CACHE_KEY = `REACT_QUERY_OFFLINE_CACHE-${STORAGE_SCOPE}`;
+
+// The keys used before they were scoped are never read again: drop them, the
+// query cache can weigh megabytes. "RaStoreCRM." (with the dot) only matches
+// the old store, the scoped one starts with "RaStoreCRM-".
+try {
+  Object.keys(localStorage)
+    .filter(
+      (key) =>
+        key.startsWith("RaStoreCRM.") || key === "REACT_QUERY_OFFLINE_CACHE",
+    )
+    .forEach((key) => localStorage.removeItem(key));
+} catch {
+  // localStorage is unavailable (private browsing): nothing to drop.
+}
 
 export type CRMProps = {
   dataProvider?: CrmDataProvider;
@@ -296,6 +318,7 @@ const MobileAdmin = (
   });
   const asyncStoragePersister = createAsyncStoragePersister({
     storage: localStorage,
+    key: QUERY_CACHE_KEY,
   });
 
   return (
