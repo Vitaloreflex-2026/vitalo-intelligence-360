@@ -9,9 +9,11 @@ import { useConfigurationLoader } from "../root/useConfigurationLoader";
 import { MobileNavigation } from "./MobileNavigation";
 import { MobileTopBar } from "./MobileTopBar";
 import { PullToRefresh } from "./PullToRefresh";
+import { useReloadOnNewVersion } from "./useReloadOnNewVersion";
 
 export const MobileLayout = ({ children }: { children: ReactNode }) => {
   useConfigurationLoader();
+  useReloadOnNewVersion();
   return (
     <>
       <PullToRefresh />
