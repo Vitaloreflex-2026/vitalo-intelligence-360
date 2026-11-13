@@ -23,8 +23,12 @@ const getBaseAuthProvider = () =>
 
 // To speed up checks, we cache the initialization state
 // and the current sale in the local storage. They are cleared on logout.
-const IS_INITIALIZED_CACHE_KEY = "RaStore.auth.is_initialized";
-const CURRENT_SALE_CACHE_KEY = "RaStore.auth.current_sale";
+// The keys are scoped to the Supabase project: instances deployed under the
+// same origin (France and Quebec, on github.io) share one localStorage, and a
+// sale cached by one must not be reused by the other.
+const CACHE_SCOPE = import.meta.env.VITE_SUPABASE_URL;
+const IS_INITIALIZED_CACHE_KEY = `RaStore.auth.is_initialized.${CACHE_SCOPE}`;
+const CURRENT_SALE_CACHE_KEY = `RaStore.auth.current_sale.${CACHE_SCOPE}`;
 
 function getLocalStorage(): Storage | null {
   if (typeof window !== "undefined" && window.localStorage) {

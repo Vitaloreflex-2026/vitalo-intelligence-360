@@ -7,9 +7,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { MeetingNotifications } from "../notifications/MeetingNotifications";
 import { useConfigurationLoader } from "../root/useConfigurationLoader";
 import Header from "./Header";
+import { useReloadOnNewVersion } from "./useReloadOnNewVersion";
 
 export const Layout = ({ children }: { children: ReactNode }) => {
   useConfigurationLoader();
+  useReloadOnNewVersion();
   return (
     // The cream page lets the white cards stand out, as on the website.
     <div className="min-h-screen bg-vitalo-cream dark:bg-background">
