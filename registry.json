@@ -622,6 +622,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/layout/useReloadOnNewVersion.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/layout/useRefreshData.ts",
           "type": "registry:component"
         },
