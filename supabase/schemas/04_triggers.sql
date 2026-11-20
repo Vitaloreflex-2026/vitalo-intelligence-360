@@ -34,6 +34,12 @@ create or replace trigger remove_deleted_contact_from_tasks
     after delete on public.contacts
     for each row execute function public.remove_deleted_contact_from_tasks();
 
+-- Meetings and deals store consultants/trainers in arrays, which cannot cascade
+-- a delete: drop a deleted user from them. The meetings and deals are kept.
+create or replace trigger remove_deleted_sale_from_arrays
+    after delete on public.sales
+    for each row execute function public.remove_deleted_sale_from_arrays();
+
 -- Auto-fetch company logo from website favicon on save
 create or replace trigger company_saved
     before insert or update on public.companies

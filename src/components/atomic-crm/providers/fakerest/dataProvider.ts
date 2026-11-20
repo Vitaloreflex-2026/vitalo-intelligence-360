@@ -305,6 +305,10 @@ export const createDataProvider = ({
       // No mail is sent in demo mode.
       return { kind: "invite" as const };
     },
+    salesDelete: async (id: Identifier): Promise<void> => {
+      // ponytail: demo only drops the user; their records keep the stale id.
+      await dataProvider.delete("sales", { id });
+    },
     updatePassword: async (id: Identifier): Promise<true> => {
       const currentUser = await getIdentity();
       if (!currentUser) {
