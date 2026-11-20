@@ -180,6 +180,14 @@ const getDataProviderWithCustomMethods = () => {
         ical_urls,
       } = data;
 
+      // This custom method bypasses the `sales` beforeSave callback, so the
+      // avatar must be uploaded here. Otherwise the cropper's data URL lands
+      // inline in the row: megabytes in every `sales` read, and a cached
+      // current sale that overflows localStorage and breaks the login.
+      if (avatar) {
+        await uploadToBucket(avatar);
+      }
+
       const { data: updatedData, error } =
         await getSupabaseClient().functions.invoke<{
           data: Sale;
