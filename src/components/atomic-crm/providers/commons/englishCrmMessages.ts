@@ -803,6 +803,14 @@ export const englishCrmMessages = {
       action: {
         new: "New user",
       },
+      delete: {
+        action: "Delete user",
+        title: "Delete %{name}?",
+        content:
+          "Their account will be permanently deleted. Their companies, contacts, deals, notes and meetings are kept, without an owner.",
+        success: "User deleted",
+        error: "The user could not be deleted. Please try again.",
+      },
       reinvite: {
         action: "Resend invitation",
         password_link_sent:

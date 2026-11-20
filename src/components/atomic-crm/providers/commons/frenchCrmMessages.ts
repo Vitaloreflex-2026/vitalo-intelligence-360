@@ -810,6 +810,14 @@ export const frenchCrmMessages = {
       action: {
         new: "Nouvel utilisateur",
       },
+      delete: {
+        action: "Supprimer l'utilisateur",
+        title: "Supprimer %{name} ?",
+        content:
+          "Son compte sera supprimé définitivement. Ses entreprises, contacts, contrats, notes et rendez-vous sont conservés, mais n'auront plus de responsable.",
+        success: "Utilisateur supprimé",
+        error: "L'utilisateur n'a pas pu être supprimé. Veuillez réessayer.",
+      },
       reinvite: {
         action: "Renvoyer l'invitation",
         password_link_sent:

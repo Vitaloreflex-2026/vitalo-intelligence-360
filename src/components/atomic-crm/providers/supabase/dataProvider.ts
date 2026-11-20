@@ -180,6 +180,14 @@ const getDataProviderWithCustomMethods = () => {
         ical_urls,
       } = data;
 
+      // This custom method bypasses the `sales` beforeSave callback, so the
+      // avatar must be uploaded here. Otherwise the cropper's data URL lands
+      // inline in the row: megabytes in every `sales` read, and a cached
+      // current sale that overflows localStorage and breaks the login.
+      if (avatar) {
+        await uploadToBucket(avatar);
+      }
+
       const { data: updatedData, error } =
         await getSupabaseClient().functions.invoke<{
           data: Sale;
@@ -234,6 +242,21 @@ const getDataProviderWithCustomMethods = () => {
       }
 
       return data.data;
+    },
+    async salesDelete(id: Identifier): Promise<void> {
+      const { error } = await getSupabaseClient().functions.invoke("users", {
+        method: "DELETE",
+        body: { sales_id: id },
+      });
+
+      if (error) {
+        console.error("salesDelete.error", error);
+        const { status, message } = await parseFunctionError(
+          error,
+          "Failed to delete the user",
+        );
+        throw new HttpError(message, status);
+      }
     },
     async updatePassword(id: Identifier) {
       const { error } = await getSupabaseClient().functions.invoke(

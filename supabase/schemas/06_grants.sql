@@ -74,6 +74,9 @@ grant all on function public.set_task_sales_ids_default() to service_role;
 grant all on function public.remove_deleted_contact_from_tasks() to anon;
 grant all on function public.remove_deleted_contact_from_tasks() to authenticated;
 grant all on function public.remove_deleted_contact_from_tasks() to service_role;
+grant all on function public.remove_deleted_sale_from_arrays() to anon;
+grant all on function public.remove_deleted_sale_from_arrays() to authenticated;
+grant all on function public.remove_deleted_sale_from_arrays() to service_role;
 
 -- Table grants
 grant all on table public.assessments to anon;
