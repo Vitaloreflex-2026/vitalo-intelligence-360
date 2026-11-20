@@ -204,6 +204,6 @@ The app is live in production. Every push to `main` deploys production (`.github
 - The codebase is intentionally small (~15,000 LOC in `src/components/atomic-crm`) for easy customization
 - Modify files in `src/components/admin` and `src/components/ui` directly - they are meant to be customized
 - Unit tests can be added in the `src/` directory (test files are named `*.test.ts` or `*.test.tsx`)
-- User deletion is not supported to avoid data loss; use account disabling instead
+- Administrators can delete a user from its edit page (`users` edge function, `DELETE`). Their records are kept without an owner (`on delete set null` foreign keys, `remove_deleted_sale_from_arrays` trigger); prefer account disabling when the user may come back
 - Filter operators must be supported by the `supabaseAdapter` when using FakeRest
 - Optional terse output for solo work: the `concise-dev` style ships at `.claude/styles/concise-dev.md`. To enable it just for yourself, copy it into `.claude/output-styles/` (or `~/.claude/output-styles/`) and run `/output-style concise-dev`, or set `"outputStyle": "concise-dev"` in your own `.claude/settings.local.json`. It is not enabled in the committed `settings.json`.
