@@ -493,3 +493,16 @@ BEGIN
   RETURN OLD;
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION "public"."remove_deleted_sale_from_arrays"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO ''
+    AS $$
+BEGIN
+  UPDATE public.tasks SET sales_ids = array_remove(sales_ids, OLD.id)
+  WHERE sales_ids @> ARRAY[OLD.id];
+  UPDATE public.deals SET trainer_ids = array_remove(trainer_ids, OLD.id)
+  WHERE trainer_ids @> ARRAY[OLD.id];
+  RETURN OLD;
+END;
+$$;

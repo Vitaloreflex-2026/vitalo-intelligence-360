@@ -17,7 +17,7 @@ export type SignUpData = {
 };
 
 export type SalesFormData = {
-  avatar?: string;
+  avatar?: RAFile;
   email: string;
   password?: string;
   first_name: string;

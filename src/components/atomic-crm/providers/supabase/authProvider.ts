@@ -82,7 +82,12 @@ const getSale = async () => {
     return undefined;
   }
 
-  storage?.setItem(CURRENT_SALE_CACHE_KEY, JSON.stringify(dataSale));
+  try {
+    storage?.setItem(CURRENT_SALE_CACHE_KEY, JSON.stringify(dataSale));
+  } catch (error) {
+    // Storage full: the cache is only a speed-up, never a reason to fail.
+    console.warn("Could not cache the current sale", error);
+  }
   return dataSale;
 };
 

@@ -239,6 +239,44 @@ async function reinviteUser(req: Request, currentUserSale: any) {
   return reinviteResponse(sales_id, "invite");
 }
 
+/**
+ * Deletes a user's account. Deleting the auth user cascades to their `sales`
+ * row; the records they owned are kept without an owner (see the foreign keys
+ * and the remove_deleted_sale_from_arrays trigger).
+ */
+async function deleteUser(req: Request, currentUserSale: any) {
+  if (!currentUserSale.administrator) {
+    return createErrorResponse(401, "Not Authorized");
+  }
+
+  const { sales_id } = await req.json();
+  // An administrator deleting themselves could leave the CRM with nobody able
+  // to manage users.
+  if (sales_id === currentUserSale.id) {
+    return createErrorResponse(400, "You cannot delete your own account");
+  }
+
+  const { data: sale } = await supabaseAdmin
+    .from("sales")
+    .select("user_id")
+    .eq("id", sales_id)
+    .single();
+
+  if (!sale) {
+    return createErrorResponse(404, "Not Found");
+  }
+
+  const { error } = await supabaseAdmin.auth.admin.deleteUser(sale.user_id);
+  if (error) {
+    console.error(`Error deleting user, error=${error.message}`);
+    return createErrorResponse(500, "Failed to delete the user");
+  }
+
+  return new Response(JSON.stringify({ data: { id: sales_id } }), {
+    headers: { "Content-Type": "application/json", ...corsHeaders },
+  });
+}
+
 function reinviteResponse(sales_id: string, kind: "invite" | "recovery") {
   return new Response(JSON.stringify({ data: { id: sales_id, kind } }), {
     headers: { "Content-Type": "application/json", ...corsHeaders },
@@ -374,6 +412,10 @@ Deno.serve(async (req: Request) =>
 
         if (req.method === "PATCH") {
           return patchUser(req, currentUserSale);
+        }
+
+        if (req.method === "DELETE") {
+          return deleteUser(req, currentUserSale);
         }
 
         return createErrorResponse(405, "Method Not Allowed");
